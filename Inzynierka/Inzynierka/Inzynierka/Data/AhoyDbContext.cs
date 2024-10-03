@@ -25,47 +25,97 @@ namespace Inzynierka.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            /*base.OnModelCreating(builder);
-            builder.Entity<Users>().ToTable("Users");
-            builder.Entity<Roles>().ToTable("Roles");
-            builder.Entity<Charters>().ToTable("Charters");
-            builder.Entity<CruiseJoinRequest>().ToTable("CruiseJoinRequest");
-            builder.Entity<Cruises>().ToTable("Cruises");
-            builder.Entity<Yachts>().ToTable("Yachts");
-            //builder.Entity<YachtTypes>().ToTable("YachtTypes");
-            builder.Entity<YachtSale>().ToTable("YachtSale");*/
+            /* base.OnModelCreating(builder);
+             builder.Entity<Users>().ToTable("Users");
+             builder.Entity<Roles>().ToTable("Roles");
+             builder.Entity<Charters>().ToTable("Charters");
+             builder.Entity<CruiseJoinRequest>().ToTable("CruiseJoinRequest");
+             builder.Entity<Cruises>().ToTable("Cruises");
+             builder.Entity<Yachts>().ToTable("Yachts");
+             //builder.Entity<YachtTypes>().ToTable("YachtTypes");
+             builder.Entity<YachtSale>().ToTable("YachtSale");*/
+
+            builder.Entity<Roles>(eb =>
+            {
+                eb.Property(r => r.name)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasAnnotation("Index", "IX_RoleName"); // Dodanie indeksu na nazwę roli
+
+                eb.Property(r => r.description)
+                    .HasMaxLength(255)
+                    .HasDefaultValue("No description available."); // Domyślna wartość dla opisu roli
+
+                eb.Property(r => r.certificates)
+                    .IsRequired(false);
+            });
+
 
             builder.Entity<Users>(eb =>
             {
+                eb.Property(u => u.username)
+                  .IsRequired()
+                  .HasMaxLength(255)
+                  .IsUnicode(false); // Możemy ustawić brak Unicode dla poprawy wydajności
+
+                eb.Property(u => u.password)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                eb.Property(u => u.email)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .IsUnicode(false) // Ustawienie braku Unicode dla emaili
+                    .HasAnnotation("Index", "IX_Email") // Dodanie indeksu na email
+                    .HasAnnotation("RegularExpression", @"^[^@\s]+@[^@\s]+\.[^@\s]+$"); // Walidacja wzorca dla emaila
+
+                eb.Property(u => u.phone_number)
+                    .HasMaxLength(20)
+                    .HasAnnotation("RegularExpression", @"^\+?\d{1,15}$"); // Dodanie wzorca dla numeru telefonu
+
+                eb.Property(u => u.first_name)
+                    .HasMaxLength(100);
+
+                eb.Property(u => u.last_name)
+                    .HasMaxLength(100);
+
+                eb.Property(u => u.ProfilePicture)
+                    .IsRequired(false);
+
+                eb.HasIndex(u => u.username).IsUnique(); // Ustawienie unikalności dla username
                 eb.HasOne(u => u.Role)
                     .WithMany(r => r.Users)
                     .HasForeignKey(u => u.RoleId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
+
             builder.Entity<Cruises>(eb =>
             {
+
+
+                // Relacja z Yacht (wiele Cruises dla jednego Yacht)
                 eb.HasOne(c => c.Yacht)
                     .WithMany(y => y.Cruises)
                     .HasForeignKey(c => c.YachtId)
                     .OnDelete(DeleteBehavior.Cascade);
-            });
 
-            builder.Entity<Cruises>(eb =>
-            {
+                // Relacja z Capitan (wiele Cruises dla jednego Capitan - użytkownik)
                 eb.HasOne(c => c.Capitan)
                     .WithMany(u => u.Cruises)
                     .HasForeignKey(c => c.CapitanId)
                     .OnDelete(DeleteBehavior.Cascade);
-            });
-            builder.Entity<Cruises>(eb =>
-            {
+
+                // Relacja many-to-many z Users
                 eb.HasMany(c => c.Users)
                     .WithMany(u => u.Cruises);
             });
 
             builder.Entity<CruiseJoinRequest>(eb =>
             {
+                eb.Property(c => c.status).IsRequired().HasMaxLength(50);
+                eb.Property(c => c.date).IsRequired();
+
                 // Definiowanie relacji wiele-do-jednego z Cruise
                 eb.HasOne(c => c.Cruise)
                   .WithMany(c => c.CruiseJoinRequests)
@@ -84,6 +134,10 @@ namespace Inzynierka.Data
 
             builder.Entity<Charters>(eb =>
             {
+                eb.Property(c => c.price).IsRequired();
+                eb.Property(c => c.currency).HasMaxLength(3).IsRequired();
+                eb.Property(c => c.status).HasMaxLength(50);
+
                 // Relacja do Yachts (wiele Charters dla jednego Yacht)
                 eb.HasOne(c => c.Yacht)
                     .WithMany(y => y.Charters)
@@ -100,12 +154,6 @@ namespace Inzynierka.Data
                 .WithMany(u => u.Charters)
                 .HasForeignKey(y => y.OwnerId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-                // Opcjonalnie: inne właściwości, np. walidacje
-                eb.Property(c => c.price).IsRequired();
-                eb.Property(c => c.currency).HasMaxLength(3); // Możesz użyć string zamiast char dla waluty
-                eb.Property(c => c.status).HasMaxLength(50);
-
             });
 
 
@@ -134,12 +182,78 @@ namespace Inzynierka.Data
                 //Sold Yachts można dać tabele jechty sprzedane
 
                 // Dodatkowe konfiguracje
-                eb.Property(ys => ys.date).IsRequired();
+                eb.Property(ys => ys.saleDate).IsRequired();
                 eb.Property(ys => ys.price).IsRequired();
                 eb.Property(ys => ys.currency).IsRequired().HasMaxLength(3); // Zmieniono na string
                 eb.Property(ys => ys.location).HasMaxLength(100);
                 eb.Property(ys => ys.availabilityStatus).HasMaxLength(50);
             });
+
+
+            builder.Entity<Yachts>(eb =>
+            {
+                // Właściwości podstawowe
+                eb.Property(y => y.name)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .IsUnicode(false); // Nazwa jachtu, brak Unicode dla wydajności
+
+                eb.Property(y => y.description)
+                    .HasMaxLength(1000); // Opis może być dłuższy, np. do 1000 znaków
+
+                eb.Property(y => y.type)
+                    .IsRequired()
+                    .HasMaxLength(100); // Typ jachtu (np. żaglowy, motorowy)
+
+                eb.Property(y => y.manufacturer)
+                    .HasMaxLength(100); // Producent jachtu
+
+                eb.Property(y => y.model)
+                    .HasMaxLength(100); // Model jachtu
+
+                eb.Property(y => y.year)
+                    .IsRequired(); // Rok produkcji jachtu
+
+                eb.Property(y => y.length)
+                    .IsRequired(); // Długość jachtu
+
+                eb.Property(y => y.width)
+                    .IsRequired(); // Szerokość jachtu
+
+                eb.Property(y => y.crew)
+                    .IsRequired(); // Liczba członków załogi
+
+                eb.Property(y => y.cabins)
+                    .IsRequired(); // Liczba kabin
+
+                eb.Property(y => y.beds)
+                    .IsRequired(); // Liczba łóżek
+
+                eb.Property(y => y.toilets)
+                    .IsRequired(); // Liczba toalet
+
+                eb.Property(y => y.showers)
+                    .IsRequired(); // Liczba pryszniców
+
+                eb.Property(y => y.price)
+                    .IsRequired(); // Cena jachtu
+
+                eb.Property(y => y.currency)
+                    .IsRequired()
+                    .HasMaxLength(3); // Waluta, np. "EUR", "USD", dlatego zmieniamy na string o max długości 3
+
+                eb.Property(y => y.location)
+                    .HasMaxLength(100); // Lokalizacja jachtu
+
+                eb.Property(y => y.availabilityStatus)
+                    .HasMaxLength(50)
+                    .HasDefaultValue("Available"); // Domyślny status dostępności
+
+                // Zdjęcia jachtu
+                eb.Property(y => y.image)
+                    .IsRequired(false); // Przechowywanie zdjęć w formacie byte[]
+            });
+
 
         }
     }

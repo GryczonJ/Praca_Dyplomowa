@@ -5,11 +5,13 @@ namespace Inzynierka.Data
     public class YachtSale
     {
         public int Id { get; set; }
-        public DateTime date { get; set; }
+        public DateTime saleDate { get; set; } // Zmieniono nazwę na bardziej opisową
         public int price { get; set; }
-        public char currency { get; set; }//string
+        public string currency { get; set; } // Zmieniono na string
         public string location { get; set; }
-        public string availabilityStatus { get; set; }//status
+        public string availabilityStatus { get; set; } // status dostępności
+        public string transactionStatus { get; set; } = "Pending"; // Dodano status transakcji
+        public string notes { get; set; } // Dodatkowe uwagi do transakcji
 
         // foreing key
         public int YachtId { get; set; }

@@ -10,7 +10,7 @@
         //price
         public int price { get; set; }
         //currency
-        public char currency { get; set; }//string
+        public string currency { get; set; }
         //status
         public string status { get; set; }
 

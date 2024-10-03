@@ -145,3 +145,4 @@ C:\Users\Ja\source\repos\inzynierka\Inzynierka\Inzynierka\Inzynierka\obj\Debug\n
 C:\Users\Ja\source\repos\inzynierka\Inzynierka\Inzynierka\Inzynierka\obj\Debug\net8.0\Inzynierka.pdb
 C:\Users\Ja\source\repos\inzynierka\Inzynierka\Inzynierka\Inzynierka\obj\Debug\net8.0\Inzynierka.genruntimeconfig.cache
 C:\Users\Ja\source\repos\inzynierka\Inzynierka\Inzynierka\Inzynierka\obj\Debug\net8.0\ref\Inzynierka.dll
+C:\Users\Ja\source\repos\inzynierka\Inzynierka\Inzynierka\Inzynierka\bin\Debug\net8.0\System.Text.Json.dll
