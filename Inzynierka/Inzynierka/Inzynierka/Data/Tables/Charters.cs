@@ -1,29 +1,37 @@
-﻿namespace Inzynierka.Data.Tables
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Inzynierka.Data.Tables
 {
     public class Charters
     {
         public int Id { get; set; }
         //start_date
-        public DateTime start_date { get; set; }
+        public DateTime startDate { get; set; }
         //end_date
-        public DateTime end_date { get; set; }
+        public DateTime endDate { get; set; }
         //price
-        public int price { get; set; }
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal price { get; set; }
+
+        public string location { get; set; }
+        public string description { get; set; }
+
         //currency
         public string currency { get; set; }
         //status
         public string status { get; set; }
 
         //foreing key
-        public int YachtId { get; set; }
         public Yachts Yacht { get; set; }
-
-        public int UserId { get; set; }
-        public Users User { get; set; }
-
-        public int OwnerId { get; set; }
-        public Users Owner { get; set; }
+        public int YachtId { get; set; }
         
-        public List<Reservation> Reservations { get; set; }// relation with Reservation table, one to many
+
+        public Users Owner { get; set; }
+        public int OwnerId { get; set; }
+
+        //reference
+        public List<Reservation> Reservations { get; set; } = new List<Reservation>(); // relation with Reservation table, one to many
+        public List<Comments> Comments { get; set; } = new List<Comments>(); // relation with Comments table, one to many
+        public List<Reports> Reports { get; set; } = new List<Reports>(); // relation with Reports table, one to many
     }
 }

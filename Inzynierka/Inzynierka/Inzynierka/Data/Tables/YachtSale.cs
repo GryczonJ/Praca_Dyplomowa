@@ -10,7 +10,7 @@ namespace Inzynierka.Data.Tables
 
         [Column(TypeName = "decimal(18, 2)")]
         public decimal price { get; set; }// SalePrice
-        public string currency { get; set; } // waluta
+        public string currency { get; set; } // Waluta
         public string location { get; set; }
         public string availabilityStatus { get; set; } // status dostępności
         public string status { get; set; } = "Pending"; // Dodano status transakcji (Pending, Accepted, Rejected) transactionStatus
@@ -25,5 +25,12 @@ namespace Inzynierka.Data.Tables
 
         public int OwnerId { get; set; }
         public Users Owner { get; set; }
+
+        // reference
+        public List<Reports> Reports { get; set; } = new List<Reports>(); // relation with Reports table, one to many
+        public List<Image> Images { get; set; } = new List<Image>(); // relation with Image table, one to many 
+        public List<Comments> Comments { get; set; } = new List<Comments>(); // relation with Comments table, one to many
+        public List<favoriteCruises> favoriteCruises { get; set; } = new List<favoriteCruises>(); // relation with favoriteCruises table, one to many
+        public List<favoriteYachtsForSale> favoriteYachtsForSale { get; set; } = new List<favoriteYachtsForSale>(); // relation with favoriteYachtsForSale table, one to many
     }
 }

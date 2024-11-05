@@ -20,6 +20,10 @@ namespace Inzynierka.Data
         public DbSet<YachtSale> YachtSale { get; set; }
         public DbSet<CruisesParticipants> CruisesParticipants { get; set; }
         public DbSet<Reservation> Reservation { get; set; }
+        public DbSet<Reports> Reports { get; set; }
+        public DbSet<Comments> Comments { get; set; }
+        public DbSet<Notifications> Notifications { get; set; }
+        public DbSet<Image> Messages { get; set; }
 
         public AhoyDbContext(DbContextOptions<AhoyDbContext> options)
             : base(options)
