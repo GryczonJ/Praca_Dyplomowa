@@ -1,10 +1,10 @@
-﻿namespace Inzynierka.Data
+﻿namespace Inzynierka.Data.Tables
 {
     public class CruiseJoinRequest
     {
         public int Id { get; set; }
-        public string status { get; set; }
-        public DateTime date { get; set; }
+        public string status { get; set; }// RequestStatus
+        public DateTime date { get; set; }// RequestDate
 
         // foreing key
         public int CruiseId { get; set; }

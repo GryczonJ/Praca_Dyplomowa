@@ -1,4 +1,4 @@
-﻿namespace Inzynierka.Data
+﻿namespace Inzynierka.Data.Tables
 {
     public class Roles
     {

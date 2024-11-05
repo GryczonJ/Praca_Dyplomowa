@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Inzynierka.Data.Tables;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Inzynierka.Data
@@ -17,6 +18,8 @@ namespace Inzynierka.Data
         public DbSet<Yachts> Yachts { get; set; }
         //public DbSet<YachtTypes> YachtTypes { get; set; }
         public DbSet<YachtSale> YachtSale { get; set; }
+        public DbSet<CruisesParticipants> CruisesParticipants { get; set; }
+        public DbSet<Reservation> Reservation { get; set; }
 
         public AhoyDbContext(DbContextOptions<AhoyDbContext> options)
             : base(options)
@@ -79,9 +82,6 @@ namespace Inzynierka.Data
                 eb.Property(u => u.last_name)
                     .HasMaxLength(100);
 
-                eb.Property(u => u.ProfilePicture)
-                    .IsRequired(false);
-
                 eb.HasIndex(u => u.username).IsUnique(); // Ustawienie unikalności dla username
                 eb.HasOne(u => u.Role)
                     .WithMany(r => r.Users)
@@ -92,8 +92,6 @@ namespace Inzynierka.Data
 
             builder.Entity<Cruises>(eb =>
             {
-
-
                 // Relacja z Yacht (wiele Cruises dla jednego Yacht)
                 eb.HasOne(c => c.Yacht)
                     .WithMany(y => y.Cruises)
@@ -105,10 +103,6 @@ namespace Inzynierka.Data
                     .WithMany(u => u.Cruises)
                     .HasForeignKey(c => c.CapitanId)
                     .OnDelete(DeleteBehavior.Cascade);
-
-                // Relacja many-to-many z Users
-                eb.HasMany(c => c.Users)
-                    .WithMany(u => u.Cruises);
             });
 
             builder.Entity<CruiseJoinRequest>(eb =>
@@ -235,13 +229,6 @@ namespace Inzynierka.Data
                 eb.Property(y => y.showers)
                     .IsRequired(); // Liczba pryszniców
 
-                eb.Property(y => y.price)
-                    .IsRequired(); // Cena jachtu
-
-                eb.Property(y => y.currency)
-                    .IsRequired()
-                    .HasMaxLength(3); // Waluta, np. "EUR", "USD", dlatego zmieniamy na string o max długości 3
-
                 eb.Property(y => y.location)
                     .HasMaxLength(100); // Lokalizacja jachtu
 
@@ -254,6 +241,19 @@ namespace Inzynierka.Data
                     .IsRequired(false); // Przechowywanie zdjęć w formacie byte[]
             });
 
+            builder.Entity< CruisesParticipants>(eb =>
+            {
+                eb.HasKey(cp => new { cp.UsersId, cp.CruisesId });
+                eb.HasOne(cp => cp.Users)
+                    .WithMany(u => u.CruisesParticipants)
+                    .HasForeignKey(cp => cp.UsersId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                eb.HasOne(cp => cp.Cruises)
+                    .WithMany(c => c.CruisesParticipants)
+                    .HasForeignKey(cp => cp.CruisesId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            }); // poprawnie wykonana relacja many-to-many
 
         }
     }

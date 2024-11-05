@@ -1,10 +1,10 @@
-﻿namespace Inzynierka.Data
+﻿namespace Inzynierka.Data.Tables
 {
     public class Charters
     {
         public int Id { get; set; }
-       //start_date
-       public DateTime start_date { get; set; }
+        //start_date
+        public DateTime start_date { get; set; }
         //end_date
         public DateTime end_date { get; set; }
         //price
@@ -23,5 +23,7 @@
 
         public int OwnerId { get; set; }
         public Users Owner { get; set; }
+        
+        public List<Reservation> Reservations { get; set; }// relation with Reservation table, one to many
     }
 }

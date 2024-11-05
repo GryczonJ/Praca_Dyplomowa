@@ -1,4 +1,4 @@
-﻿namespace Inzynierka.Data
+﻿namespace Inzynierka.Data.Tables
 {
     public class Yachts
     {
@@ -16,10 +16,9 @@
         public int beds { get; set; }
         public int toilets { get; set; }
         public int showers { get; set; }
-        public int price { get; set; }
-        public char currency { get; set; }//string
         public string location { get; set; }
-        public string availabilityStatus  { get; set; }//status
+        public string availabilityStatus { get; set; }//status
+        public int capacity { get; set; }// wyporność
         public List<byte[]> image { get; set; }
 
         // foreing key
@@ -29,5 +28,6 @@
         public List<Cruises> Cruises { get; set; }
         public List<Charters> Charters { get; set; }
         public List<YachtSale> YachtSale { get; set; }
+        //public List<Image> photos { get; set; }
     }
 }

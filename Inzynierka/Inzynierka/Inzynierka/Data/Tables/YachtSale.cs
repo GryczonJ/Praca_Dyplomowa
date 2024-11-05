@@ -1,16 +1,19 @@
-﻿using System.Data;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
 
-namespace Inzynierka.Data
+namespace Inzynierka.Data.Tables
 {
     public class YachtSale
     {
         public int Id { get; set; }
         public DateTime saleDate { get; set; } // Zmieniono nazwę na bardziej opisową
-        public int price { get; set; }
-        public string currency { get; set; } // Zmieniono na string
+
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal price { get; set; }// SalePrice
+        public string currency { get; set; } // waluta
         public string location { get; set; }
         public string availabilityStatus { get; set; } // status dostępności
-        public string transactionStatus { get; set; } = "Pending"; // Dodano status transakcji
+        public string status { get; set; } = "Pending"; // Dodano status transakcji (Pending, Accepted, Rejected) transactionStatus
         public string notes { get; set; } // Dodatkowe uwagi do transakcji
 
         // foreing key
