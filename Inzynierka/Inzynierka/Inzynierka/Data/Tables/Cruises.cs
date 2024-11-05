@@ -9,7 +9,8 @@ namespace Inzynierka.Data.Tables
     {
         public int Id { get; set; }
         public string name { get; set; }
-        public string destination { get; set; }
+        public string description { get; set; }
+        public string destination { get; set; }// cel rejsu
         public DateTime start_date { get; set; }
         public DateTime end_date { get; set; }
 
