@@ -3,7 +3,6 @@
     public class Roles
     {
         public int Id { get; set; }
-        public string name { get; set; }
         public List<byte[]> certificates { get; set; }
 
         // foreing key

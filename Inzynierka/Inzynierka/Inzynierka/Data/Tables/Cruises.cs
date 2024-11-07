@@ -36,6 +36,6 @@ namespace Inzynierka.Data.Tables
         public List<CruiseJoinRequest> CruiseJoinRequests { get; set; } = new List<CruiseJoinRequest>(); // One cruise can have many join requests
         public List<Reports> Reports { get; set; } = new List<Reports>();// One cruise can have many reports
         public List<Comments> Comments { get; set; } = new List<Comments>();// One cruise can have many comments
-        public List<favoriteCruises> favoriteCruises { get; set; } = new List<favoriteCruises>();// One cruise can have many favorite cruises
+        public List<FavoriteCruises> FavoriteCruises { get; set; } = new List<FavoriteCruises>();// One cruise can have many favorite cruises
     }
 }

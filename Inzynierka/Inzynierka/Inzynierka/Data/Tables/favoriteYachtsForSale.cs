@@ -1,6 +1,6 @@
 ﻿namespace Inzynierka.Data.Tables
 {
-    public class favoriteYachtsForSale
+    public class FavoriteYachtsForSale
     {
         public Users User { get; set; }
         public int UserId { get; set; }

@@ -33,8 +33,8 @@
         public List<Reservation> Reservation { get; set; } = new List<Reservation>(); // One user can have many reservations
         public List<Reports> Reports { get; set; } = new List<Reports>(); // One user can have many reports
         
-        public List<favoriteCruises> favoriteCruises { get; set; } = new List<favoriteCruises>(); // One user can have many favorite cruises
-        public List<favoriteYachtsForSale> favoriteYachtsForSale { get; set; } = new List<favoriteYachtsForSale>(); // One user can have many favorite yachts
+        public List<FavoriteCruises> FavoriteCruises { get; set; } = new List<FavoriteCruises>(); // One user can have many favorite cruises
+        public List<FavoriteYachtsForSale> FavoriteYachtsForSale { get; set; } = new List<FavoriteYachtsForSale>(); // One user can have many favorite yachts
 
         public List<Notifications> Notifications { get; set; } = new List<Notifications>(); // One user can have many notifications
         public List<YachtSale> YachtSale { get; set; } = new List<YachtSale>(); // One user can sell many yachts

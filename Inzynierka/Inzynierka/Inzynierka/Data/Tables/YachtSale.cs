@@ -30,7 +30,6 @@ namespace Inzynierka.Data.Tables
         public List<Reports> Reports { get; set; } = new List<Reports>(); // relation with Reports table, one to many
         public List<Image> Images { get; set; } = new List<Image>(); // relation with Image table, one to many 
         public List<Comments> Comments { get; set; } = new List<Comments>(); // relation with Comments table, one to many
-        public List<favoriteCruises> favoriteCruises { get; set; } = new List<favoriteCruises>(); // relation with favoriteCruises table, one to many
-        public List<favoriteYachtsForSale> favoriteYachtsForSale { get; set; } = new List<favoriteYachtsForSale>(); // relation with favoriteYachtsForSale table, one to many
+        public List<FavoriteYachtsForSale> FavoriteYachtsForSale { get; set; } = new List<FavoriteYachtsForSale>(); // relation with FavoriteYachtsForSale table, one to many
     }
 }
