@@ -10,9 +10,9 @@
 
         // foreing key
         public Users Moderator { get; set; }
-        public int ModeratorId { get; set; }
+        public Guid ModeratorId { get; set; }
         public Users SuspectUser { get; set; }
-        public int SuspectUserId { get; set; }
+        public Guid SuspectUserId { get; set; }
 
         public Cruises SuspectCruise { get; set; }
         public int SuspectCruiseId { get; set; }

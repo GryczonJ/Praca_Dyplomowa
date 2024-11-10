@@ -9,10 +9,10 @@
 
         // foreing key
         public Users Creator { get; set; }
-        public int CreatorId { get; set; }
+        public Guid CreatorId { get; set; }
 
         public Users Profile { get; set; }
-        public int ProfileId { get; set; }
+        public Guid ProfileId { get; set; }
 
         public Charters Charter { get; set; }
         public int CharterId { get; set; }

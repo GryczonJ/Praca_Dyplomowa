@@ -28,7 +28,7 @@ namespace Inzynierka.Data.Tables
 
         // One-to-many relationship with Capitan
         public Users Capitan { get; set; }
-        public int CapitanId { get; set; }
+        public Guid CapitanId { get; set; }
        
         // Referncja
         // Many-to-many relationship with Users

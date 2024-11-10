@@ -1,6 +1,8 @@
 ﻿using Inzynierka.Data.Tables;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace Inzynierka.Data
 {
@@ -8,7 +10,7 @@ namespace Inzynierka.Data
     /// AhoyDbContext
     /// ApplicationDbContext
     /// </summary>
-    public class AhoyDbContext : IdentityDbContext
+    public class AhoyDbContext : IdentityDbContext<Users, IdentityRole<Guid>, Guid>
     {
         public DbSet<Charters> Charters { get; set; }
         public DbSet<Comments> Comments { get; set; }
@@ -40,22 +42,28 @@ namespace Inzynierka.Data
                 eb.Property(c => c.status).HasMaxLength(50);
                 eb.Property(c => c.location).HasMaxLength(255); // Ustal maksymalną długość dla pola location
 
-                // Relacja do Yachts (wiele Charters dla jednego Yacht)
+                // Relacja wiele-do-jednego z tabelą Yachts
                 eb.HasOne(c => c.Yacht)
                     .WithMany(y => y.Charters)
                     .HasForeignKey(c => c.YachtId)
                     .OnDelete(DeleteBehavior.Cascade);
 
-                // Relacja do Users (wiele Charters dla jednego User)
-                eb.HasOne(c => c.User)
+                // Relacja wiele-do-jednego z tabelą Users (z OwnerId)
+                eb.HasOne(c => c.Owner)
                     .WithMany(u => u.Charters)
-                    .HasForeignKey(c => c.UserId)
-                    .OnDelete(DeleteBehavior.Restrict); // Możesz zmienić DeleteBehavior według potrzeb
+                    .HasForeignKey(c => c.OwnerId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
-                eb.HasOne(y => y.Owner)
-                .WithMany(u => u.Charters)
-                .HasForeignKey(y => y.OwnerId)
-                .OnDelete(DeleteBehavior.Restrict);
+
+                eb.HasMany(c => c.Comments)
+                    .WithOne(r => r.Charter)
+                    .HasForeignKey(r => r.CharterId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                eb.HasMany(c => c.Reports)
+                    .WithOne(r => r.SuspectCharter)
+                    .HasForeignKey(r => r.SuspectCharterId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             builder.Entity<Comments>(eb =>
@@ -70,6 +78,18 @@ namespace Inzynierka.Data
                 eb.Property(c => c.Rating)
                     .IsRequired()
                     .HasDefaultValue(0); // Opcjonalnie, ustaw wartość domyślną dla Rating  
+
+                // Relacja wiele-do-jednego z tabelą Users (Creator)
+                eb.HasOne(c => c.Creator) // Komentarz ma jednego twórcę
+                    .WithMany(u => u.CommentsAsCreator) // Użytkownik może mieć wiele komentarzy jako twórca
+                    .HasForeignKey(c => c.CreatorId) // Klucz obcy do twórcy
+                    .OnDelete(DeleteBehavior.Restrict); // Usunięcie użytkownika nie usuwa komentarzyy
+
+                // Relacja wiele-do-jednego z tabelą Users ()
+                eb.HasOne(c => c.Profile) // Komentarz należy do jednego profilu
+                    .WithMany(u => u.CommentsAsProfile) // Użytkownik może mieć wiele komentarzy jako profil
+                    .HasForeignKey(c => c.ProfileId) // Klucz obcy do profilu
+                    .OnDelete(DeleteBehavior.Restrict); // Usunięcie użytkownika nie usuwa komentarzy
             });
 
             builder.Entity<CruiseJoinRequest>(eb =>
@@ -77,19 +97,21 @@ namespace Inzynierka.Data
                 eb.Property(c => c.status).IsRequired().HasMaxLength(50);
                 eb.Property(c => c.date).IsRequired();
 
+
+
                 // Definiowanie relacji wiele-do-jednego z Cruise
                 eb.HasOne(c => c.Cruise)
                   .WithMany(c => c.CruiseJoinRequests)
                   .HasForeignKey(c => c.CruiseId);
 
-                // Definiowanie relacji jeden-do-jednego z User (osoba składająca prośbę)
+                // Relacja jeden-do-wielu z Users - osoba składająca prośbę
                 eb.HasOne(c => c.User)
-                  .WithMany()
+                  .WithMany(u=>u.CruiseJoinRequests)
                   .HasForeignKey(c => c.UserId);
 
-                // Definiowanie relacji jeden-do-jednego z Capitan
+                // Relacja jeden-do-wielu z Users - kapitan
                 eb.HasOne(c => c.Capitan)
-                  .WithMany()
+                  .WithMany(u => u.CruiseJoinRequestsAsCapitan)
                   .HasForeignKey(c => c.CapitanId);
             });
 
@@ -125,6 +147,8 @@ namespace Inzynierka.Data
                 eb.Property(c => c.maxParticipants)
                     .IsRequired(); // Określenie, że liczba uczestników jest obowiązkowa
 
+
+
                 // Relacja z Yacht (wiele Cruises dla jednego Yacht)
                 eb.HasOne(c => c.Yacht)
                     .WithMany(y => y.Cruises)
@@ -136,11 +160,23 @@ namespace Inzynierka.Data
                     .WithMany(u => u.Cruises)
                     .HasForeignKey(c => c.CapitanId)
                     .OnDelete(DeleteBehavior.Cascade);
+
+                eb.HasMany(c => c.Reports)
+                    .WithOne(r => r.SuspectCruise)
+                    .HasForeignKey(r => r.SuspectCruiseId)
+                    .OnDelete(DeleteBehavior.Cascade); // Jeśli chcesz, aby usunięcie rejsu powodowało usunięcie raportów
+
+                eb.HasMany(c => c.Comments)
+                  .WithOne(cm => cm.Cruises)
+                  .HasForeignKey(cm => cm.CruisesId)
+                  .OnDelete(DeleteBehavior.Cascade); // Jeśli chcesz, aby usunięcie rejsu powodowało usunięcie komentarzy
             });
 
             builder.Entity<CruisesParticipants>(eb =>
             {
                 eb.HasKey(cp => new { cp.UsersId, cp.CruisesId });
+
+
 
                 // Definicja relacji z tabelą Users
                 eb.HasOne(cp => cp.Users)
@@ -160,6 +196,7 @@ namespace Inzynierka.Data
                 // Definicja klucza głównego jako kombinacja UserId i CruiseId
                 eb.HasKey(fc => new { fc.UserId, fc.CruiseId });
 
+
                 // Relacja z tabelą Users
                 eb.HasOne(fc => fc.User)
                     .WithMany(u => u.FavoriteCruises)
@@ -177,6 +214,7 @@ namespace Inzynierka.Data
             {
                 // Definicja klucza głównego jako kombinacja UserId i YachtSaleId
                 eb.HasKey(fy => new { fy.UserId, fy.YachtSaleId });
+
 
                 // Relacja z tabelą Users
                 eb.HasOne(fy => fy.User)
@@ -196,6 +234,19 @@ namespace Inzynierka.Data
                  eb.Property(i => i.link)
                     .IsRequired()  // Zakładając, że link będzie wymagany
                     .HasMaxLength(500);  // Określenie maksymalnej długości linku, np. 500 znaków
+                
+                
+                // Konfiguracja relacji z tabelą Users
+                eb.HasMany(i => i.Users)
+                    .WithOne(u => u.Photos)
+                    .HasForeignKey(u => u.PhotosId)
+                    .OnDelete(DeleteBehavior.Cascade);  // Usuwanie kaskadowe - jeśli obraz zostanie usunięty, powiązani użytkownicy będą zaktualizowani
+
+                // Konfiguracja relacji z tabelą Yachts
+                eb.HasMany(i => i.Yachts)
+                    .WithOne(y => y.Image)
+                    .HasForeignKey(y => y.ImageId)
+                    .OnDelete(DeleteBehavior.Cascade);  // Usuwanie kaskadowe
             });
 
             builder.Entity<Notifications>(eb =>
@@ -215,12 +266,18 @@ namespace Inzynierka.Data
                     .IsRequired();
 
                 // Ustawienie właściwości ReadDate jako wymaganej
-                eb.Property(n => n.ReadDate)
-                    .IsRequired(false);
+                eb.Property(n => n.ReadDate);
 
                 // Ustawienie UserId jako wymagane
                 eb.Property(n => n.UserId)
                     .IsRequired();
+
+
+                // Konfiguracja relacji jeden-do-wielu z tabelą Users
+                eb.HasOne(n => n.User)
+                    .WithMany(u => u.Notifications)
+                    .HasForeignKey(n => n.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);  // Kaskadowe usuwanie powiązanych powiadomień
             });
 
             builder.Entity<Reports>(eb =>
@@ -242,6 +299,25 @@ namespace Inzynierka.Data
                 // Ustawienie właściwości date jako wymaganej
                 eb.Property(r => r.date)
                     .IsRequired();
+
+
+                // Relacja jeden-do-wielu z tabelą Comments
+                eb.HasOne(r => r.SuspectComment)
+                   .WithMany(c => c.Reports)
+                   .HasForeignKey(r => r.SuspectCommentId)
+                   .OnDelete(DeleteBehavior.Cascade); // Usunięcie komentarza usuwa powiązane raporty
+
+                // Relacja wiele-do-jednego z tabelą Users (Moderator)
+                eb.HasOne(r => r.Moderator)
+                  .WithMany(u => u.ModeratorReports)
+                  .HasForeignKey(r => r.ModeratorId)
+                  .OnDelete(DeleteBehavior.Restrict); // Usunięcie użytkownika nie usuwa raportów
+
+                // Relacja wiele-do-jednego z tabelą Users (SuspectUser)
+                eb.HasOne(r => r.SuspectUser)
+                  .WithMany(u => u.SuspectUserReports)
+                  .HasForeignKey(r => r.SuspectUserId)
+                  .OnDelete(DeleteBehavior.Restrict); // Usunięcie użytkownika nie usuwa raportów
             });
 
             builder.Entity<Reservation>(eb =>
@@ -261,18 +337,44 @@ namespace Inzynierka.Data
 
                 // Ustawienie właściwości CharterId i UserId jako wymaganych
                 eb.Property(r => r.CharterId).IsRequired();
+
                 eb.Property(r => r.UserId).IsRequired();
+
+
+                // Relacja jeden-do-wielu z tabelą Charters
+                eb.HasOne(r => r.Charter)
+                    .WithMany(c => c.Reservations)
+                    .HasForeignKey(r => r.CharterId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // Relacja jeden-do-wielu z tabelą Users
+                eb.HasOne(r => r.User)
+                    .WithMany(u => u.Reservation)
+                    .HasForeignKey(r => r.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             builder.Entity<Roles>(eb =>
             {
                 eb.Property(r => r.certificates)
                     .IsRequired(false);
+
+                // Relacja jeden-do-wielu z tabelą Users
+                eb.HasMany(r => r.Users)
+                    .WithOne(u => u.Role) // Każdy użytkownik ma jedną rolę
+                    .HasForeignKey(u => u.RoleId)
+                    .OnDelete(DeleteBehavior.Restrict); // Usuwanie roli nie usuwa użytkowników
+
+                // Relacja jeden-do-wielu z tabelą Reports
+                eb.HasMany(r => r.Reports)
+                    .WithOne(rep => rep.DocumentVerification) // Raport ma przypisaną rolę dokumentującą
+                    .HasForeignKey(rep => rep.DocumentVerificationId)
+                    .OnDelete(DeleteBehavior.Restrict); // Usuwanie roli nie spowoduje usunięcia raportów
             });
 
             builder.Entity<Users>(eb =>
             {
-                eb.Property(u => u.username)
+                /*eb.Property(u => u.username)
                   .IsRequired()
                   .HasMaxLength(255)
                   .IsUnicode(false); // Możemy ustawić brak Unicode dla poprawy wydajności
@@ -290,7 +392,7 @@ namespace Inzynierka.Data
 
                 eb.Property(u => u.phoneNumber)
                     .HasMaxLength(20)
-                    .HasAnnotation("RegularExpression", @"^\+?\d{1,15}$"); // Dodanie wzorca dla numeru telefonu
+                    .HasAnnotation("RegularExpression", @"^\+?\d{1,15}$"); // Dodanie wzorca dla numeru telefonu*/
 
                 eb.Property(u => u.firstName)
                     .HasMaxLength(100);
@@ -298,11 +400,7 @@ namespace Inzynierka.Data
                 eb.Property(u => u.lastName)
                     .HasMaxLength(100);
 
-                eb.HasIndex(u => u.username).IsUnique(); // Ustawienie unikalności dla username
-                eb.HasOne(u => u.Role)
-                    .WithMany(r => r.Users)
-                    .HasForeignKey(u => u.RoleId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                //eb.HasIndex(u => u.username).IsUnique(); // Ustawienie unikalności dla username
             });
 
             builder.Entity<Yachts>(eb =>
@@ -355,10 +453,38 @@ namespace Inzynierka.Data
 
                 eb.Property(y => y.capacity)
                     .IsRequired(); // Wyporność jachtu
+
+                // Relacja jeden do wielu z tabelą Comments
+                eb.HasMany(y => y.Comments)
+                  .WithOne(c => c.Yachts)
+                  .HasForeignKey(c => c.YachtsId)
+                  .OnDelete(DeleteBehavior.Restrict); // Usunięcie Yachts nie usuwa powiązanych Comments
+
+                // Relacja jeden do wielu z tabelą Reports
+                eb.HasMany(y => y.Reports)
+                  .WithOne(r => r.SuspectYacht)
+                  .HasForeignKey(r => r.SuspectYachtId)
+                  .OnDelete(DeleteBehavior.Restrict); // Usunięcie Yachts nie usuwa powiązanych Reports
+                
+                // Konfiguracja relacji z tabelą Users (Owner)
+                eb.HasOne(y => y.Owner)
+                  .WithMany(u => u.Yachts)
+                  .HasForeignKey(y => y.OwnerId)
+                  .OnDelete(DeleteBehavior.Restrict); // Usunięcie użytkownika nie usuwa powiązanych jachtów
             });
 
             builder.Entity<YachtSale>(eb =>
             {
+                //Sold Yachts można dać tabele jechty sprzedane
+                // Dodatkowe konfiguracje
+                eb.Property(ys => ys.saleDate).IsRequired();
+                eb.Property(ys => ys.price).IsRequired();
+                eb.Property(ys => ys.currency).IsRequired().HasMaxLength(3); // Zmieniono na string
+                eb.Property(ys => ys.location).HasMaxLength(100);
+                eb.Property(ys => ys.availabilityStatus).HasMaxLength(50);
+                eb.Property(ys => ys.notes).HasMaxLength(500); // Dodatkowe uwagi - maksymalna długość
+
+
                 // Relacja jeden do wielu z tabelą Yachts
                 eb.HasOne(ys => ys.Yacht)
                   .WithMany(y => y.YachtSale)
@@ -367,30 +493,24 @@ namespace Inzynierka.Data
 
                 // Relacja jeden do wielu z tabelą Users (kupujący)
                 eb.HasOne(ys => ys.BuyerUser)
-                  .WithMany(u => u.YachtSale)
+                  .WithMany(u => u.YachtSalesAsSeller)
                   .HasForeignKey(ys => ys.BuyerUserId)
                   .OnDelete(DeleteBehavior.Restrict); // Usunięcie kupującego nie usuwa YachtSale
 
                 // Relacja jeden do wielu z tabelą Users (właściciel)
                 eb.HasOne(ys => ys.Owner)
-                  .WithMany(u => u.YachtSale)
+                  .WithMany(u => u.YachtSalesAsBuyer)
                   .HasForeignKey(ys => ys.OwnerId)
                   .OnDelete(DeleteBehavior.Restrict); // Usunięcie właściciela nie usuwa YachtSale
 
-                //Sold Yachts można dać tabele jechty sprzedane
-
-                // Dodatkowe konfiguracje
-                eb.Property(ys => ys.saleDate).IsRequired();
-                eb.Property(ys => ys.price).IsRequired();
-                eb.Property(ys => ys.currency).IsRequired().HasMaxLength(3); // Zmieniono na string
-                eb.Property(ys => ys.location).HasMaxLength(100);
-                eb.Property(ys => ys.availabilityStatus).HasMaxLength(50);
-                eb.Property(ys => ys.notes).HasMaxLength(500); // Dodatkowe uwagi - maksymalna długość
+                // Nowa relacja jeden-do-wielu z tabelą Reports
+                eb.HasMany(ys => ys.Reports)
+                  .WithOne(r => r.SuspectYachtSale)
+                  .HasForeignKey(r => r.SuspectYachtSaleId)
+                  .OnDelete(DeleteBehavior.Restrict); // Usunięcie YachtSale nie usuwa powiązanych Reports
             });
 
-
-           
-
+            base.OnModelCreating(builder);
         }
     }
 }

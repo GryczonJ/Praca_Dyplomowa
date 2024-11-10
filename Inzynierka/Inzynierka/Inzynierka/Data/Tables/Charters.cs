@@ -27,11 +27,12 @@ namespace Inzynierka.Data.Tables
         
 
         public Users Owner { get; set; }
-        public int OwnerId { get; set; }
+        public Guid OwnerId { get; set; }
 
         //reference
         public List<Reservation> Reservations { get; set; } = new List<Reservation>(); // relation with Reservation table, one to many
         public List<Comments> Comments { get; set; } = new List<Comments>(); // relation with Comments table, one to many
         public List<Reports> Reports { get; set; } = new List<Reports>(); // relation with Reports table, one to many
+
     }
 }

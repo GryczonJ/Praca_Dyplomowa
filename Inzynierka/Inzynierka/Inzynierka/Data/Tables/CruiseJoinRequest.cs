@@ -11,9 +11,9 @@
         public int CruiseId { get; set; }
 
         public Users User { get; set; }
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
 
         public Users Capitan { get; set; }
-        public int CapitanId { get; set; }
+        public Guid CapitanId { get; set; }
     }
 }

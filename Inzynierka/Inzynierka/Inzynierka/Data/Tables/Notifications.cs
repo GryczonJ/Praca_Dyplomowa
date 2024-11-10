@@ -6,10 +6,10 @@
         public string status { get; set; }// RequestStatus
         public DateTime CreateDate { get; set; }// RequestDate
         public string message { get; set; }// RequestMessage
-        public DateTime ReadDate { get; set; }// RequestDate
+        public DateTime? ReadDate { get; set; }// RequestDate
 
         // foreing key
         public Users User { get; set; }// RequestUser
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
     }
 }

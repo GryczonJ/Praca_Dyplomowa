@@ -21,7 +21,7 @@
 
         // foreing key
         public Users Owner { get; set; }
-        public int OwnerId { get; set; }
+        public Guid OwnerId { get; set; }
         
         public Image Image { get; set; }
         public int ImageId { get; set; }
