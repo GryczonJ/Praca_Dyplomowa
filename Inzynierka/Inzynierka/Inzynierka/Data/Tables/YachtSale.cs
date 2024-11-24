@@ -20,7 +20,7 @@ namespace Inzynierka.Data.Tables
         public int YachtId { get; set; }
         public Yachts Yacht { get; set; }
 
-        public Guid BuyerUserId { get; set; }// kupujący
+        public Guid? BuyerUserId { get; set; }// kupujący
         public Users BuyerUser { get; set; }
 
         public Guid OwnerId { get; set; }

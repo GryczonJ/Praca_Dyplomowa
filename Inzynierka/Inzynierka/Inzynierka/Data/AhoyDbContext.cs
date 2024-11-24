@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Reflection.Emit;
 
 namespace Inzynierka.Data
@@ -46,24 +47,24 @@ namespace Inzynierka.Data
                 eb.HasOne(c => c.Yacht)
                     .WithMany(y => y.Charters)
                     .HasForeignKey(c => c.YachtId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 // Relacja wiele-do-jednego z tabelą Users (z OwnerId)
                 eb.HasOne(c => c.Owner)
                     .WithMany(u => u.Charters)
                     .HasForeignKey(c => c.OwnerId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.NoAction);
 
 
                 eb.HasMany(c => c.Comments)
                     .WithOne(r => r.Charter)
                     .HasForeignKey(r => r.CharterId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 eb.HasMany(c => c.Reports)
                     .WithOne(r => r.SuspectCharter)
                     .HasForeignKey(r => r.SuspectCharterId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.NoAction);
             });
 
             builder.Entity<Comments>(eb =>
@@ -83,13 +84,13 @@ namespace Inzynierka.Data
                 eb.HasOne(c => c.Creator) // Komentarz ma jednego twórcę
                     .WithMany(u => u.CommentsAsCreator) // Użytkownik może mieć wiele komentarzy jako twórca
                     .HasForeignKey(c => c.CreatorId) // Klucz obcy do twórcy
-                    .OnDelete(DeleteBehavior.Restrict); // Usunięcie użytkownika nie usuwa komentarzyy
+                    .OnDelete(DeleteBehavior.NoAction); // Usunięcie użytkownika nie usuwa komentarzyy
 
                 // Relacja wiele-do-jednego z tabelą Users ()
                 eb.HasOne(c => c.Profile) // Komentarz należy do jednego profilu
                     .WithMany(u => u.CommentsAsProfile) // Użytkownik może mieć wiele komentarzy jako profil
                     .HasForeignKey(c => c.ProfileId) // Klucz obcy do profilu
-                    .OnDelete(DeleteBehavior.Restrict); // Usunięcie użytkownika nie usuwa komentarzy
+                    .OnDelete(DeleteBehavior.NoAction); // Usunięcie użytkownika nie usuwa komentarzy
             });
 
             builder.Entity<CruiseJoinRequest>(eb =>
@@ -102,17 +103,20 @@ namespace Inzynierka.Data
                 // Definiowanie relacji wiele-do-jednego z Cruise
                 eb.HasOne(c => c.Cruise)
                   .WithMany(c => c.CruiseJoinRequests)
-                  .HasForeignKey(c => c.CruiseId);
+                  .HasForeignKey(c => c.CruiseId)
+                  .OnDelete(DeleteBehavior.NoAction); // Brak kaskadowego usuwania
 
                 // Relacja jeden-do-wielu z Users - osoba składająca prośbę
                 eb.HasOne(c => c.User)
                   .WithMany(u=>u.CruiseJoinRequests)
-                  .HasForeignKey(c => c.UserId);
+                  .HasForeignKey(c => c.UserId)
+                  .OnDelete(DeleteBehavior.NoAction); // Brak kaskadowego usuwania
 
                 // Relacja jeden-do-wielu z Users - kapitan
                 eb.HasOne(c => c.Capitan)
                   .WithMany(u => u.CruiseJoinRequestsAsCapitan)
-                  .HasForeignKey(c => c.CapitanId);
+                  .HasForeignKey(c => c.CapitanId)
+                  .OnDelete(DeleteBehavior.NoAction);
             });
 
             builder.Entity<Cruises>(eb =>
@@ -153,23 +157,23 @@ namespace Inzynierka.Data
                 eb.HasOne(c => c.Yacht)
                     .WithMany(y => y.Cruises)
                     .HasForeignKey(c => c.YachtId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 // Relacja z Capitan (wiele Cruises dla jednego Capitan - użytkownik)
                 eb.HasOne(c => c.Capitan)
                     .WithMany(u => u.Cruises)
                     .HasForeignKey(c => c.CapitanId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 eb.HasMany(c => c.Reports)
                     .WithOne(r => r.SuspectCruise)
                     .HasForeignKey(r => r.SuspectCruiseId)
-                    .OnDelete(DeleteBehavior.Cascade); // Jeśli chcesz, aby usunięcie rejsu powodowało usunięcie raportów
+                    .OnDelete(DeleteBehavior.NoAction); // Jeśli chcesz, aby usunięcie rejsu powodowało usunięcie raportów
 
                 eb.HasMany(c => c.Comments)
                   .WithOne(cm => cm.Cruises)
                   .HasForeignKey(cm => cm.CruisesId)
-                  .OnDelete(DeleteBehavior.Cascade); // Jeśli chcesz, aby usunięcie rejsu powodowało usunięcie komentarzy
+                  .OnDelete(DeleteBehavior.NoAction); // Jeśli chcesz, aby usunięcie rejsu powodowało usunięcie komentarzy
             });
 
             builder.Entity<CruisesParticipants>(eb =>
@@ -182,13 +186,13 @@ namespace Inzynierka.Data
                 eb.HasOne(cp => cp.Users)
                     .WithMany(u => u.CruisesParticipants)
                     .HasForeignKey(cp => cp.UsersId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 // Definicja relacji z tabelą Cruises
                 eb.HasOne(cp => cp.Cruises)
                     .WithMany(c => c.CruisesParticipants)
                     .HasForeignKey(cp => cp.CruisesId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.NoAction);
             });
 
             builder.Entity<FavoriteCruises>(eb =>
@@ -201,13 +205,13 @@ namespace Inzynierka.Data
                 eb.HasOne(fc => fc.User)
                     .WithMany(u => u.FavoriteCruises)
                     .HasForeignKey(fc => fc.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 // Relacja z tabelą Cruises
                 eb.HasOne(fc => fc.Cruise)
                     .WithMany(c => c.FavoriteCruises)
                     .HasForeignKey(fc => fc.CruiseId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.NoAction);
             });
 
             builder.Entity<FavoriteYachtsForSale>(eb =>
@@ -220,13 +224,13 @@ namespace Inzynierka.Data
                 eb.HasOne(fy => fy.User)
                     .WithMany(u => u.FavoriteYachtsForSale)
                     .HasForeignKey(fy => fy.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 // Relacja z tabelą YachtSale
                 eb.HasOne(fy => fy.YachtForSale)
                     .WithMany(y => y.FavoriteYachtsForSale)
                     .HasForeignKey(fy => fy.YachtSaleId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.NoAction);
             });
 
             builder.Entity<Image>(eb =>
@@ -240,13 +244,13 @@ namespace Inzynierka.Data
                 eb.HasMany(i => i.Users)
                     .WithOne(u => u.Photos)
                     .HasForeignKey(u => u.PhotosId)
-                    .OnDelete(DeleteBehavior.Cascade);  // Usuwanie kaskadowe - jeśli obraz zostanie usunięty, powiązani użytkownicy będą zaktualizowani
+                    .OnDelete(DeleteBehavior.NoAction);  // Usuwanie kaskadowe - jeśli obraz zostanie usunięty, powiązani użytkownicy będą zaktualizowani
 
                 // Konfiguracja relacji z tabelą Yachts
                 eb.HasMany(i => i.Yachts)
                     .WithOne(y => y.Image)
                     .HasForeignKey(y => y.ImageId)
-                    .OnDelete(DeleteBehavior.Cascade);  // Usuwanie kaskadowe
+                    .OnDelete(DeleteBehavior.NoAction);  // Usuwanie kaskadowe
             });
 
             builder.Entity<Notifications>(eb =>
@@ -277,7 +281,7 @@ namespace Inzynierka.Data
                 eb.HasOne(n => n.User)
                     .WithMany(u => u.Notifications)
                     .HasForeignKey(n => n.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);  // Kaskadowe usuwanie powiązanych powiadomień
+                    .OnDelete(DeleteBehavior.NoAction);  // Kaskadowe usuwanie powiązanych powiadomień
             });
 
             builder.Entity<Reports>(eb =>
@@ -305,19 +309,19 @@ namespace Inzynierka.Data
                 eb.HasOne(r => r.SuspectComment)
                    .WithMany(c => c.Reports)
                    .HasForeignKey(r => r.SuspectCommentId)
-                   .OnDelete(DeleteBehavior.Cascade); // Usunięcie komentarza usuwa powiązane raporty
+                   .OnDelete(DeleteBehavior.NoAction); // Usunięcie komentarza usuwa powiązane raporty
 
                 // Relacja wiele-do-jednego z tabelą Users (Moderator)
                 eb.HasOne(r => r.Moderator)
                   .WithMany(u => u.ModeratorReports)
                   .HasForeignKey(r => r.ModeratorId)
-                  .OnDelete(DeleteBehavior.Restrict); // Usunięcie użytkownika nie usuwa raportów
+                  .OnDelete(DeleteBehavior.NoAction); // Usunięcie użytkownika nie usuwa raportów
 
                 // Relacja wiele-do-jednego z tabelą Users (SuspectUser)
                 eb.HasOne(r => r.SuspectUser)
                   .WithMany(u => u.SuspectUserReports)
                   .HasForeignKey(r => r.SuspectUserId)
-                  .OnDelete(DeleteBehavior.Restrict); // Usunięcie użytkownika nie usuwa raportów
+                  .OnDelete(DeleteBehavior.NoAction); // Usunięcie użytkownika nie usuwa raportów
             });
 
             builder.Entity<Reservation>(eb =>
@@ -345,13 +349,13 @@ namespace Inzynierka.Data
                 eb.HasOne(r => r.Charter)
                     .WithMany(c => c.Reservations)
                     .HasForeignKey(r => r.CharterId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 // Relacja jeden-do-wielu z tabelą Users
                 eb.HasOne(r => r.User)
                     .WithMany(u => u.Reservation)
                     .HasForeignKey(r => r.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.NoAction);
             });
 
             builder.Entity<Roles>(eb =>
@@ -363,13 +367,13 @@ namespace Inzynierka.Data
                 eb.HasMany(r => r.Users)
                     .WithOne(u => u.Role) // Każdy użytkownik ma jedną rolę
                     .HasForeignKey(u => u.RoleId)
-                    .OnDelete(DeleteBehavior.Restrict); // Usuwanie roli nie usuwa użytkowników
+                    .OnDelete(DeleteBehavior.NoAction); // Usuwanie roli nie usuwa użytkowników
 
                 // Relacja jeden-do-wielu z tabelą Reports
                 eb.HasMany(r => r.Reports)
                     .WithOne(rep => rep.DocumentVerification) // Raport ma przypisaną rolę dokumentującą
                     .HasForeignKey(rep => rep.DocumentVerificationId)
-                    .OnDelete(DeleteBehavior.Restrict); // Usuwanie roli nie spowoduje usunięcia raportów
+                    .OnDelete(DeleteBehavior.NoAction); // Usuwanie roli nie spowoduje usunięcia raportów
             });
 
             builder.Entity<Users>(eb =>
@@ -458,19 +462,19 @@ namespace Inzynierka.Data
                 eb.HasMany(y => y.Comments)
                   .WithOne(c => c.Yachts)
                   .HasForeignKey(c => c.YachtsId)
-                  .OnDelete(DeleteBehavior.Restrict); // Usunięcie Yachts nie usuwa powiązanych Comments
+                  .OnDelete(DeleteBehavior.NoAction); // Usunięcie Yachts nie usuwa powiązanych Comments
 
                 // Relacja jeden do wielu z tabelą Reports
                 eb.HasMany(y => y.Reports)
                   .WithOne(r => r.SuspectYacht)
                   .HasForeignKey(r => r.SuspectYachtId)
-                  .OnDelete(DeleteBehavior.Restrict); // Usunięcie Yachts nie usuwa powiązanych Reports
+                  .OnDelete(DeleteBehavior.NoAction); // Usunięcie Yachts nie usuwa powiązanych Reports
                 
                 // Konfiguracja relacji z tabelą Users (Owner)
                 eb.HasOne(y => y.Owner)
                   .WithMany(u => u.Yachts)
                   .HasForeignKey(y => y.OwnerId)
-                  .OnDelete(DeleteBehavior.Restrict); // Usunięcie użytkownika nie usuwa powiązanych jachtów
+                  .OnDelete(DeleteBehavior.NoAction); // Usunięcie użytkownika nie usuwa powiązanych jachtów
             });
 
             builder.Entity<YachtSale>(eb =>
@@ -489,28 +493,39 @@ namespace Inzynierka.Data
                 eb.HasOne(ys => ys.Yacht)
                   .WithMany(y => y.YachtSale)
                   .HasForeignKey(ys => ys.YachtId)
-                  .OnDelete(DeleteBehavior.Cascade); // Usunięcie Yacht usuwa powiązane YachtSales
+                  .OnDelete(DeleteBehavior.NoAction); // Usunięcie Yacht usuwa powiązane YachtSales
 
                 // Relacja jeden do wielu z tabelą Users (kupujący)
                 eb.HasOne(ys => ys.BuyerUser)
                   .WithMany(u => u.YachtSalesAsSeller)
                   .HasForeignKey(ys => ys.BuyerUserId)
-                  .OnDelete(DeleteBehavior.Restrict); // Usunięcie kupującego nie usuwa YachtSale
+                  .OnDelete(DeleteBehavior.NoAction); // Usunięcie kupującego nie usuwa YachtSale
 
                 // Relacja jeden do wielu z tabelą Users (właściciel)
                 eb.HasOne(ys => ys.Owner)
                   .WithMany(u => u.YachtSalesAsBuyer)
                   .HasForeignKey(ys => ys.OwnerId)
-                  .OnDelete(DeleteBehavior.Restrict); // Usunięcie właściciela nie usuwa YachtSale
+                  .OnDelete(DeleteBehavior.NoAction); // Usunięcie właściciela nie usuwa YachtSale
 
                 // Nowa relacja jeden-do-wielu z tabelą Reports
                 eb.HasMany(ys => ys.Reports)
                   .WithOne(r => r.SuspectYachtSale)
                   .HasForeignKey(r => r.SuspectYachtSaleId)
-                  .OnDelete(DeleteBehavior.Restrict); // Usunięcie YachtSale nie usuwa powiązanych Reports
+                  .OnDelete(DeleteBehavior.NoAction); // Usunięcie YachtSale nie usuwa powiązanych Reports
             });
 
             base.OnModelCreating(builder);
+            SeedData(builder);
+        }
+        private void SeedData(ModelBuilder modelBuilder)
+        {
+            //Przykładowe dane do tabeli DBAnime
+/*
+            modelBuilder.Entity<Roles>().HasData(
+                 new Roles
+                 {
+                     Id = 0  
+                 });*/
         }
     }
 }

@@ -5,19 +5,19 @@ namespace Inzynierka.Data.Tables
 {
     public class Users : IdentityUser<Guid>
     {
-        public int    age { get; set; } = 0;
-        public string surname { get; set; }
-        public string aboutMe { get; set; }
-        public string firstName { get; set; }
-        public string lastName { get; set; }
+        public int   age { get; set; } = 0;
+        public string surName { get; set; } = "Kowalski";
+        public string aboutMe { get; set; } = "Nazywam sie Jan Kowalski";
+        public string firstName { get; set; } = "Jan";
+        public string lastName { get; set; } = "Janina";
         public bool banned { get; set; } = false;
         public bool Public { get; set; } = true;
 
         // Foreign key
         public Roles Role { get; set; }
-        public int RoleId { get; set; } 
+        public int? RoleId { get; set; }
         public Image Photos { get; set; }
-        public int PhotosId { get; set; }
+        public int? PhotosId { get; set; }
 
         //reference
         // Many-to-many relationship with Cruises

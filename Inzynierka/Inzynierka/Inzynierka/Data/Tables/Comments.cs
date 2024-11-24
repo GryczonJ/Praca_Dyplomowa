@@ -12,16 +12,16 @@
         public Guid CreatorId { get; set; }
 
         public Users Profile { get; set; }
-        public Guid ProfileId { get; set; }
+        public Guid? ProfileId { get; set; }
 
         public Charters Charter { get; set; }
-        public int CharterId { get; set; }
+        public int? CharterId { get; set; }
 
         public Cruises Cruises { get; set; }
-        public int CruisesId { get; set; }
+        public int? CruisesId { get; set; }
 
         public Yachts Yachts { get; set; }
-        public int YachtsId { get; set; }
+        public int? YachtsId { get; set; }
         
         // reference
 

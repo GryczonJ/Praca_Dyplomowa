@@ -11,6 +11,6 @@
         public Charters Charter { get; set; }
         public int CharterId { get; set; }
         public Users User { get; set; }
-        public Guid UserId { get; set; }
+        public Guid? UserId { get; set; }
     }
 }

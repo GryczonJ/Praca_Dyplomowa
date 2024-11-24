@@ -81,7 +81,7 @@ namespace Inzynierka.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CharterId")
+                    b.Property<int?>("CharterId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreateDate")
@@ -90,7 +90,7 @@ namespace Inzynierka.Migrations
                     b.Property<Guid>("CreatorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("CruisesId")
+                    b.Property<int?>("CruisesId")
                         .HasColumnType("int");
 
                     b.Property<string>("Message")
@@ -98,7 +98,7 @@ namespace Inzynierka.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<Guid>("ProfileId")
+                    b.Property<Guid?>("ProfileId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Rating")
@@ -109,7 +109,7 @@ namespace Inzynierka.Migrations
                     b.Property<int?>("YachtSaleId")
                         .HasColumnType("int");
 
-                    b.Property<int>("YachtsId")
+                    b.Property<int?>("YachtsId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -414,7 +414,8 @@ namespace Inzynierka.Migrations
                     b.Property<int>("CharterId")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("UserId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("endDate")
@@ -496,13 +497,13 @@ namespace Inzynierka.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("PhotosId")
+                    b.Property<int?>("PhotosId")
                         .HasColumnType("int");
 
                     b.Property<bool>("Public")
                         .HasColumnType("bit");
 
-                    b.Property<int>("RoleId")
+                    b.Property<int?>("RoleId")
                         .HasColumnType("int");
 
                     b.Property<string>("SecurityStamp")
@@ -535,7 +536,7 @@ namespace Inzynierka.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("surname")
+                    b.Property<string>("surName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -564,7 +565,7 @@ namespace Inzynierka.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("BuyerUserId")
+                    b.Property<Guid?>("BuyerUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("OwnerId")
@@ -835,13 +836,13 @@ namespace Inzynierka.Migrations
                     b.HasOne("Inzynierka.Data.Tables.Users", "Owner")
                         .WithMany("Charters")
                         .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Inzynierka.Data.Tables.Yachts", "Yacht")
                         .WithMany("Charters")
                         .HasForeignKey("YachtId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Owner");
@@ -854,26 +855,23 @@ namespace Inzynierka.Migrations
                     b.HasOne("Inzynierka.Data.Tables.Charters", "Charter")
                         .WithMany("Comments")
                         .HasForeignKey("CharterId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Inzynierka.Data.Tables.Users", "Creator")
                         .WithMany("CommentsAsCreator")
                         .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Inzynierka.Data.Tables.Cruises", "Cruises")
                         .WithMany("Comments")
                         .HasForeignKey("CruisesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Inzynierka.Data.Tables.Users", "Profile")
                         .WithMany("CommentsAsProfile")
                         .HasForeignKey("ProfileId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Inzynierka.Data.Tables.YachtSale", null)
                         .WithMany("Comments")
@@ -882,8 +880,7 @@ namespace Inzynierka.Migrations
                     b.HasOne("Inzynierka.Data.Tables.Yachts", "Yachts")
                         .WithMany("Comments")
                         .HasForeignKey("YachtsId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Charter");
 
@@ -901,19 +898,19 @@ namespace Inzynierka.Migrations
                     b.HasOne("Inzynierka.Data.Tables.Users", "Capitan")
                         .WithMany("CruiseJoinRequestsAsCapitan")
                         .HasForeignKey("CapitanId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Inzynierka.Data.Tables.Cruises", "Cruise")
                         .WithMany("CruiseJoinRequests")
                         .HasForeignKey("CruiseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Inzynierka.Data.Tables.Users", "User")
                         .WithMany("CruiseJoinRequests")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Capitan");
@@ -928,13 +925,13 @@ namespace Inzynierka.Migrations
                     b.HasOne("Inzynierka.Data.Tables.Users", "Capitan")
                         .WithMany("Cruises")
                         .HasForeignKey("CapitanId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Inzynierka.Data.Tables.Yachts", "Yacht")
                         .WithMany("Cruises")
                         .HasForeignKey("YachtId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Capitan");
@@ -947,13 +944,13 @@ namespace Inzynierka.Migrations
                     b.HasOne("Inzynierka.Data.Tables.Cruises", "Cruises")
                         .WithMany("CruisesParticipants")
                         .HasForeignKey("CruisesId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Inzynierka.Data.Tables.Users", "Users")
                         .WithMany("CruisesParticipants")
                         .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Cruises");
@@ -966,13 +963,13 @@ namespace Inzynierka.Migrations
                     b.HasOne("Inzynierka.Data.Tables.Cruises", "Cruise")
                         .WithMany("FavoriteCruises")
                         .HasForeignKey("CruiseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Inzynierka.Data.Tables.Users", "User")
                         .WithMany("FavoriteCruises")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Cruise");
@@ -985,13 +982,13 @@ namespace Inzynierka.Migrations
                     b.HasOne("Inzynierka.Data.Tables.Users", "User")
                         .WithMany("FavoriteYachtsForSale")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Inzynierka.Data.Tables.YachtSale", "YachtForSale")
                         .WithMany("FavoriteYachtsForSale")
                         .HasForeignKey("YachtSaleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -1011,7 +1008,7 @@ namespace Inzynierka.Migrations
                     b.HasOne("Inzynierka.Data.Tables.Users", "User")
                         .WithMany("Notifications")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -1022,31 +1019,31 @@ namespace Inzynierka.Migrations
                     b.HasOne("Inzynierka.Data.Tables.Roles", "DocumentVerification")
                         .WithMany("Reports")
                         .HasForeignKey("DocumentVerificationId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Inzynierka.Data.Tables.Users", "Moderator")
                         .WithMany("ModeratorReports")
                         .HasForeignKey("ModeratorId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Inzynierka.Data.Tables.Charters", "SuspectCharter")
                         .WithMany("Reports")
                         .HasForeignKey("SuspectCharterId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Inzynierka.Data.Tables.Comments", "SuspectComment")
                         .WithMany("Reports")
                         .HasForeignKey("SuspectCommentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Inzynierka.Data.Tables.Cruises", "SuspectCruise")
                         .WithMany("Reports")
                         .HasForeignKey("SuspectCruiseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Inzynierka.Data.Tables.Roles", "SuspectRole")
@@ -1058,19 +1055,19 @@ namespace Inzynierka.Migrations
                     b.HasOne("Inzynierka.Data.Tables.Users", "SuspectUser")
                         .WithMany("SuspectUserReports")
                         .HasForeignKey("SuspectUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Inzynierka.Data.Tables.Yachts", "SuspectYacht")
                         .WithMany("Reports")
                         .HasForeignKey("SuspectYachtId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Inzynierka.Data.Tables.YachtSale", "SuspectYachtSale")
                         .WithMany("Reports")
                         .HasForeignKey("SuspectYachtSaleId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("DocumentVerification");
@@ -1097,13 +1094,13 @@ namespace Inzynierka.Migrations
                     b.HasOne("Inzynierka.Data.Tables.Charters", "Charter")
                         .WithMany("Reservations")
                         .HasForeignKey("CharterId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Inzynierka.Data.Tables.Users", "User")
                         .WithMany("Reservation")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Charter");
@@ -1116,14 +1113,12 @@ namespace Inzynierka.Migrations
                     b.HasOne("Inzynierka.Data.Tables.Image", "Photos")
                         .WithMany("Users")
                         .HasForeignKey("PhotosId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Inzynierka.Data.Tables.Roles", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Photos");
 
@@ -1135,19 +1130,18 @@ namespace Inzynierka.Migrations
                     b.HasOne("Inzynierka.Data.Tables.Users", "BuyerUser")
                         .WithMany("YachtSalesAsSeller")
                         .HasForeignKey("BuyerUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Inzynierka.Data.Tables.Users", "Owner")
                         .WithMany("YachtSalesAsBuyer")
                         .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Inzynierka.Data.Tables.Yachts", "Yacht")
                         .WithMany("YachtSale")
                         .HasForeignKey("YachtId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("BuyerUser");
@@ -1162,13 +1156,13 @@ namespace Inzynierka.Migrations
                     b.HasOne("Inzynierka.Data.Tables.Image", "Image")
                         .WithMany("Yachts")
                         .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Inzynierka.Data.Tables.Users", "Owner")
                         .WithMany("Yachts")
                         .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Image");

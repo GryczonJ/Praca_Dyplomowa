@@ -145,4 +145,8 @@ C:\Users\Ja\source\repos\inzynierka\Inzynierka\Inzynierka\Inzynierka\obj\Debug\n
 C:\Users\Ja\source\repos\inzynierka\Inzynierka\Inzynierka\Inzynierka\obj\Debug\net8.0\Inzynierka.pdb
 C:\Users\Ja\source\repos\inzynierka\Inzynierka\Inzynierka\Inzynierka\obj\Debug\net8.0\Inzynierka.genruntimeconfig.cache
 C:\Users\Ja\source\repos\inzynierka\Inzynierka\Inzynierka\Inzynierka\obj\Debug\net8.0\ref\Inzynierka.dll
-C:\Users\Ja\source\repos\inzynierka\Inzynierka\Inzynierka\Inzynierka\bin\Debug\net8.0\System.Text.Json.dll
+C:\Users\Ja\source\repos\inzynierka\Inzynierka\Inzynierka\Inzynierka\bin\Debug\net8.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Users\Ja\source\repos\inzynierka\Inzynierka\Inzynierka\Inzynierka\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\Ja\source\repos\inzynierka\Inzynierka\Inzynierka\Inzynierka\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Ja\source\repos\inzynierka\Inzynierka\Inzynierka\Inzynierka\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
+C:\Users\Ja\source\repos\inzynierka\Inzynierka\Inzynierka\Inzynierka\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
