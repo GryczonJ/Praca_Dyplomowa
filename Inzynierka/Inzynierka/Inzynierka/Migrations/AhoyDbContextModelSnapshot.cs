@@ -335,8 +335,8 @@ namespace Inzynierka.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DocumentVerificationId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("DocumentVerificationId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ModeratorId")
                         .HasColumnType("uniqueidentifier");
@@ -350,8 +350,8 @@ namespace Inzynierka.Migrations
                     b.Property<int>("SuspectCruiseId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SuspectRoleId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("SuspectRoleId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("SuspectUserId")
                         .HasColumnType("uniqueidentifier");
@@ -440,18 +440,33 @@ namespace Inzynierka.Migrations
 
             modelBuilder.Entity("Inzynierka.Data.Tables.Roles", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("certificates")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
                 });
 
             modelBuilder.Entity("Inzynierka.Data.Tables.Users", b =>
@@ -503,9 +518,6 @@ namespace Inzynierka.Migrations
                     b.Property<bool>("Public")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("RoleId")
-                        .HasColumnType("int");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -551,8 +563,6 @@ namespace Inzynierka.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.HasIndex("PhotosId");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -696,34 +706,6 @@ namespace Inzynierka.Migrations
                     b.ToTable("Yachts");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles", (string)null);
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
@@ -775,12 +757,10 @@ namespace Inzynierka.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -816,12 +796,10 @@ namespace Inzynierka.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -1017,7 +995,7 @@ namespace Inzynierka.Migrations
             modelBuilder.Entity("Inzynierka.Data.Tables.Reports", b =>
                 {
                     b.HasOne("Inzynierka.Data.Tables.Roles", "DocumentVerification")
-                        .WithMany("Reports")
+                        .WithMany("VeryficationReports")
                         .HasForeignKey("DocumentVerificationId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
@@ -1047,9 +1025,9 @@ namespace Inzynierka.Migrations
                         .IsRequired();
 
                     b.HasOne("Inzynierka.Data.Tables.Roles", "SuspectRole")
-                        .WithMany()
+                        .WithMany("SuspectReports")
                         .HasForeignKey("SuspectRoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Inzynierka.Data.Tables.Users", "SuspectUser")
@@ -1115,14 +1093,7 @@ namespace Inzynierka.Migrations
                         .HasForeignKey("PhotosId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("Inzynierka.Data.Tables.Roles", "Role")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.Navigation("Photos");
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("Inzynierka.Data.Tables.YachtSale", b =>
@@ -1172,7 +1143,7 @@ namespace Inzynierka.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
+                    b.HasOne("Inzynierka.Data.Tables.Roles", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1199,7 +1170,7 @@ namespace Inzynierka.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
+                    b.HasOne("Inzynierka.Data.Tables.Roles", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1257,9 +1228,9 @@ namespace Inzynierka.Migrations
 
             modelBuilder.Entity("Inzynierka.Data.Tables.Roles", b =>
                 {
-                    b.Navigation("Reports");
+                    b.Navigation("SuspectReports");
 
-                    b.Navigation("Users");
+                    b.Navigation("VeryficationReports");
                 });
 
             modelBuilder.Entity("Inzynierka.Data.Tables.Users", b =>

@@ -11,7 +11,7 @@ namespace Inzynierka.Data
     /// AhoyDbContext
     /// ApplicationDbContext
     /// </summary>
-    public class AhoyDbContext : IdentityDbContext<Users, IdentityRole<Guid>, Guid>
+    public class AhoyDbContext : IdentityDbContext<Users, Roles, Guid>
     {
         public DbSet<Charters> Charters { get; set; }
         public DbSet<Comments> Comments { get; set; }
@@ -364,15 +364,20 @@ namespace Inzynierka.Data
                     .IsRequired(false);
 
                 // Relacja jeden-do-wielu z tabelą Users
-                eb.HasMany(r => r.Users)
+               /* eb.HasMany(r => r.Users)
                     .WithOne(u => u.Role) // Każdy użytkownik ma jedną rolę
                     .HasForeignKey(u => u.RoleId)
                     .OnDelete(DeleteBehavior.NoAction); // Usuwanie roli nie usuwa użytkowników
-
+*/
                 // Relacja jeden-do-wielu z tabelą Reports
-                eb.HasMany(r => r.Reports)
+                eb.HasMany(r => r.VeryficationReports)
                     .WithOne(rep => rep.DocumentVerification) // Raport ma przypisaną rolę dokumentującą
                     .HasForeignKey(rep => rep.DocumentVerificationId)
+                    .OnDelete(DeleteBehavior.NoAction); // Usuwanie roli nie spowoduje usunięcia raportów
+                // Relacja jeden-do-wielu z tabelą Reports
+                eb.HasMany(r => r.SuspectReports)
+                    .WithOne(rep => rep.SuspectRole) // Raport ma przypisaną rolę dokumentującą
+                    .HasForeignKey(rep => rep.SuspectRoleId)
                     .OnDelete(DeleteBehavior.NoAction); // Usuwanie roli nie spowoduje usunięcia raportów
             });
 

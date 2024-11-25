@@ -14,8 +14,8 @@ namespace Inzynierka.Data.Tables
         public bool Public { get; set; } = true;
 
         // Foreign key
-        public Roles Role { get; set; }
-        public int? RoleId { get; set; }
+        //public Roles Role { get; set; }
+        //public Guid? RoleId { get; set; }
         public Image Photos { get; set; }
         public int? PhotosId { get; set; }
 

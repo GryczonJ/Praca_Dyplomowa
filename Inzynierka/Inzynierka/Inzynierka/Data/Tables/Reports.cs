@@ -21,7 +21,7 @@
         public int SuspectYachtId  { get; set; }
 
         public Roles DocumentVerification { get; set; }
-        public int DocumentVerificationId { get; set; }
+        public Guid DocumentVerificationId { get; set; }
 
         public YachtSale SuspectYachtSale { get; set; }
         public int SuspectYachtSaleId { get; set; }
@@ -32,7 +32,7 @@
         public int SuspectCommentId { get; set; }
 
         public Roles SuspectRole { get; set; }
-        public int SuspectRoleId { get; set; }
+        public Guid SuspectRoleId { get; set; }
 
         // reference
         
