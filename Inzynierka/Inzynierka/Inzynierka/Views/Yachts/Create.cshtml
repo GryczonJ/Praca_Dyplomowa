@@ -10,6 +10,18 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <ul class="text-danger">
+                @foreach (var state in ViewData.ModelState)
+                {
+                    foreach (var error in state.Value.Errors)
+                    {
+                        <li>@error.ErrorMessage</li>
+                    }
+                }
+            </ul>
+        }
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -87,13 +99,13 @@
                 <input asp-for="capacity" class="form-control" />
                 <span asp-validation-for="capacity" class="text-danger"></span>
             </div>
-            <div class="form-group">
+           @*  <div class="form-group">
                 <label asp-for="OwnerId" class="control-label"></label>
                 <select asp-for="OwnerId" class ="form-control" asp-items="ViewBag.OwnerId"></select>
-            </div>
+            </div> *@
             <div class="form-group">
-                <label asp-for="ImageId" class="control-label"></label>
-                <select asp-for="ImageId" class ="form-control" asp-items="ViewBag.ImageId"></select>
+                <label asp-for="ImageLink" class="control-label">Lub wprowadź link do nowego obrazu</label>
+                <input asp-for="ImageLink" class="form-control" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

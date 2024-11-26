@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Inzynierka.Data;
 using Inzynierka.Data.Tables;
+using System.Security.Claims;
 
 namespace Inzynierka.Controllers
 {
@@ -59,8 +60,37 @@ namespace Inzynierka.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,name,description,type,manufacturer,model,year,length,width,crew,cabins,beds,toilets,showers,location,capacity,OwnerId,ImageId")] Yachts yachts)
+        public async Task<IActionResult> Create([Bind("Id,name,description,type,manufacturer,model,year,length,width,crew,cabins,beds,toilets,showers,location,capacity,OwnerId,ImageId,ImageLink")] Yachts yachts)
         {
+            // Pobranie zalogowanego użytkownika jako string
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Sprawdzenie, czy wartość istnieje
+            if (userIdString != null && Guid.TryParse(userIdString, out Guid ownerId))
+            {
+                yachts.OwnerId = ownerId;
+            }
+            else
+            {
+                // Obsługa błędu: brak lub nieprawidłowy identyfikator użytkownika
+                //ModelState.AddModelError(string.Empty, "Nie można przypisać użytkownika jako właściciela.");
+                // Obsługa błędu: brak lub nieprawidłowy identyfikator użytkownika
+                ModelState.AddModelError(string.Empty, "Nie jesteś zalogowany jako właściciel. Proszę zalogować się.");
+                return View(yachts);
+            }
+
+            // Jeśli użytkownik wprowadził nowy link do obrazu
+            if (!string.IsNullOrWhiteSpace(yachts.ImageLink))
+            {
+                var newImage = new Image { link = yachts.ImageLink };
+                _context.Image.Add(newImage);
+                await _context.SaveChangesAsync();
+
+                // Przypisz ID nowo utworzonego obrazu do jachtu
+                yachts.ImageId = newImage.Id;
+            }
+
+            ModelState.Clear();
             if (ModelState.IsValid)
             {
                 _context.Add(yachts);
@@ -75,6 +105,7 @@ namespace Inzynierka.Controllers
         // GET: Yachts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+
             if (id == null)
             {
                 return NotFound();
@@ -95,8 +126,37 @@ namespace Inzynierka.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,name,description,type,manufacturer,model,year,length,width,crew,cabins,beds,toilets,showers,location,capacity,OwnerId,ImageId")] Yachts yachts)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,name,description,type,manufacturer,model,year,length,width,crew,cabins,beds,toilets,showers,location,capacity,OwnerId,ImageId,ImageLink")] Yachts yachts)
         {
+            // Pobranie zalogowanego użytkownika jako string
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Sprawdzenie, czy wartość istnieje
+            if (userIdString != null && Guid.TryParse(userIdString, out Guid ownerId))
+            {
+                yachts.OwnerId = ownerId;
+            }
+            else
+            {
+                // Obsługa błędu: brak lub nieprawidłowy identyfikator użytkownika
+                //ModelState.AddModelError(string.Empty, "Nie można przypisać użytkownika jako właściciela.");
+                // Obsługa błędu: brak lub nieprawidłowy identyfikator użytkownika
+                ModelState.AddModelError(string.Empty, "Nie jesteś zalogowany jako właściciel. Proszę zalogować się.");
+                return View(yachts);
+            }
+            // Jeśli użytkownik wprowadził nowy link do obrazu
+            if (!string.IsNullOrWhiteSpace(yachts.ImageLink))
+            {
+                var newImage = new Image { link = yachts.ImageLink };
+                _context.Image.Add(newImage);
+                await _context.SaveChangesAsync();
+
+                // Przypisz ID nowo utworzonego obrazu do jachtu
+                yachts.ImageId = newImage.Id;
+            }
+
+            ModelState.Clear();
+
             if (id != yachts.Id)
             {
                 return NotFound();

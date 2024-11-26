@@ -1,4 +1,6 @@
-﻿namespace Inzynierka.Data.Tables
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Inzynierka.Data.Tables
 {
     public class Yachts
     {
@@ -23,8 +25,9 @@
         public Users Owner { get; set; }
         public Guid OwnerId { get; set; }
         
-        public Image Image { get; set; }
+        
         public int? ImageId { get; set; }
+        public Image? Image { get; set; }
 
         // reference
         public List<Cruises> Cruises { get; set; } = new List<Cruises>(); // relation with Cruises table, one to many
@@ -32,5 +35,9 @@
         public List<YachtSale> YachtSale { get; set; } = new List<YachtSale>();// relation with YachtSale table, one to many
         public List<Reports> Reports { get; set; }= new List<Reports>();// relation with Reports table, one to many
         public List<Comments> Comments { get; set; } = new List<Comments>();// relation with Comments table, one to many
+
+        // Tymczasowa właściwość dla linku do obrazu
+        [NotMapped]
+        public string ImageLink { get; set; }
     }
 }
