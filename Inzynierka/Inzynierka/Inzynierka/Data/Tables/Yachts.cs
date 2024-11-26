@@ -24,7 +24,7 @@
         public Guid OwnerId { get; set; }
         
         public Image Image { get; set; }
-        public int ImageId { get; set; }
+        public int? ImageId { get; set; }
 
         // reference
         public List<Cruises> Cruises { get; set; } = new List<Cruises>(); // relation with Cruises table, one to many

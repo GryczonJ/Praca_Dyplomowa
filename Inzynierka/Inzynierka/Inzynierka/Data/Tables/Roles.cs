@@ -4,7 +4,8 @@ using System.Data;
 namespace Inzynierka.Data.Tables
 {
     public class Roles: IdentityRole<Guid>
-    { 
+    {
+
         public List<byte[]>? certificates { get; set; }
 
         // foreing key

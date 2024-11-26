@@ -24,7 +24,7 @@ builder.Services.AddControllersWithViews();*/
 
 builder.Services.AddIdentity<Users, Roles>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = false; // Wymaganie potwierdzenia konta
+    options.SignIn.RequireConfirmedAccount = true; // Wymaganie potwierdzenia konta
 })
 .AddEntityFrameworkStores<AhoyDbContext>()
 .AddDefaultTokenProviders()
@@ -65,4 +65,16 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
+/*using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Roles>>();
+    var roles = new[] { "Kapitan", "User", "Moderacja" };
+    foreach (var role in roles)
+    {
+        if(!await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(new Roles(role));
+        }
+    }
+}  */ 
 app.Run();
