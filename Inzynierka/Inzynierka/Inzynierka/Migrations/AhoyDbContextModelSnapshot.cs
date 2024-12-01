@@ -176,7 +176,7 @@ namespace Inzynierka.Migrations
                     b.Property<Guid>("CapitanId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("YachtId")
+                    b.Property<int?>("YachtId")
                         .HasColumnType("int");
 
                     b.Property<string>("currency")
@@ -909,8 +909,7 @@ namespace Inzynierka.Migrations
                     b.HasOne("Inzynierka.Data.Tables.Yachts", "Yacht")
                         .WithMany("Cruises")
                         .HasForeignKey("YachtId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Capitan");
 

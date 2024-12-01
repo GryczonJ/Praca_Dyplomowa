@@ -1,14 +1,17 @@
-﻿@model IEnumerable<Inzynierka.Data.Tables.Yachts>
+﻿@* @model IEnumerable<Inzynierka.Data.Tables.Yachts>
+ *@
+ @model Inzynierka.Models.YachtsIndexViewModel
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Jachty</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+@* 
 <table class="table">
     <thead>
         <tr>
@@ -115,7 +118,7 @@
                 @Html.DisplayFor(modelItem => item.capacity)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Owner.Id)
+                @Html.DisplayFor(modelItem => item.Owner.Email)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Image.link)
@@ -127,5 +130,73 @@
             </td>
         </tr>
 }
+    </tbody>
+</table> *@
+
+<h1>Twoje jachty</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.UserYachts.First().name)</th>
+            <th>@Html.DisplayNameFor(model => model.UserYachts.First().description)</th>
+            <th>@Html.DisplayNameFor(model => model.UserYachts.First().Owner.Email)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.UserYachts.Count() > 0){
+            @foreach (var yacht in Model.UserYachts)
+            {
+                <tr>
+                    <td>@yacht.name</td>
+                    <td>@yacht.description</td>
+                    <td>@yacht.Owner.Email</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@yacht.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@yacht.Id">Details</a>|
+                        <a asp-action="Delete" asp-route-id="@yacht.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+        else{
+			<tr>
+				<td colspan="4">Nie posiadasz żadnych jachtów</td>
+			</tr>
+		}
+    </tbody>
+</table>
+
+<h1>Jachty innych użytkowników</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.OtherYachts.First().name)</th>
+            <th>@Html.DisplayNameFor(model => model.OtherYachts.First().description)</th>
+            <th>@Html.DisplayNameFor(model => model.OtherYachts.First().Owner.Email)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.OtherYachts.Count() > 0)
+        {
+            @foreach (var yacht in Model.OtherYachts)
+            {
+                <tr>
+                    <td>@yacht.name</td>
+                    <td>@yacht.description</td>
+                    <td>@yacht.Owner.Email</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@yacht.Id">Details</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4">Nie posiadasz żadnych jachtów</td>
+            </tr>
+        }
     </tbody>
 </table>

@@ -25,10 +25,41 @@ builder.Services.AddControllersWithViews();*/
 builder.Services.AddIdentity<Users, Roles>(options =>
 {
     options.SignIn.RequireConfirmedAccount = true; // Wymaganie potwierdzenia konta
+
+    // Konfiguracja wymagań dotyczących hasła
+    options.Password.RequireDigit = true; // Wymaga co najmniej jednej cyfry w haśle
+    options.Password.RequiredLength = 8; // Minimalna długość hasła to 8 znaków
+    options.Password.RequireNonAlphanumeric = true; // Wymaga co najmniej jednego znaku specjalnego w haśle
+    options.Password.RequireUppercase = true; // Wymaga co najmniej jednej wielkiej litery w haśle
+    options.Password.RequireLowercase = true; // Wymaga co najmniej jednej małej litery w haśle
+
+    // Konfiguracja zasad blokowania konta
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5); // Konto zostanie zablokowane na 5 minut po przekroczeniu limitu nieudanych prób logowania
+    options.Lockout.MaxFailedAccessAttempts = 5; // Maksymalna liczba nieudanych prób logowania to 5
+    options.Lockout.AllowedForNewUsers = true; // Nowi użytkownicy również mogą mieć blokowane konto
+
+    // Konfiguracja wymagań dotyczących użytkownika
+    options.User.RequireUniqueEmail = true; // Wymaga unikalnego adresu e-mail dla każdego użytkownika
+    /*options.User.AllowedUserNameCharacters =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+"; */ // Dozwolone znaki w nazwach użytkowników
+
+    // Konfiguracja wymagań dotyczących rejestracji i logowania
+    //options.SignIn.RequireConfirmedAccount = true; // Wymaga, aby konto użytkownika było potwierdzone przed zalogowaniem
+    //options.SignIn.RequireConfirmedEmail = true; // Wymaga potwierdzenia adresu e-mail przed zalogowaniem
 })
+
 .AddEntityFrameworkStores<AhoyDbContext>()
 .AddDefaultTokenProviders()
 .AddDefaultUI();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(10); // Czas trwania sesji (10 minut)
+    options.SlidingExpiration = true; // Odnawia czas wygaśnięcia przy każdej aktywności użytkownika
+    options.LoginPath = "/Account/Login"; // Ścieżka do strony logowania
+    options.LogoutPath = "/Account/Logout"; // Ścieżka do wylogowania
+    options.AccessDeniedPath = "/Account/AccessDenied"; // Ścieżka do strony dostępu zabronionego
+});
 
 builder.Services.AddAuthorization(); // Rejestracja us�ug autoryzacji
 builder.Services.AddControllersWithViews(); // Rejestracja us�ug MVC

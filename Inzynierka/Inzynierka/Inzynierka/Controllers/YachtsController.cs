@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Inzynierka.Data;
 using Inzynierka.Data.Tables;
 using System.Security.Claims;
+using Inzynierka.Models;
 
 namespace Inzynierka.Controllers
 {
@@ -21,10 +22,37 @@ namespace Inzynierka.Controllers
         }
 
         // GET: Yachts
+        /* public async Task<IActionResult> Index()
+         {
+             var ahoyDbContext = _context.Yachts.Include(y => y.Image).Include(y => y.Owner);
+             return View(await ahoyDbContext.ToListAsync());
+         }*/
+
+        // GET: Yachts
         public async Task<IActionResult> Index()
         {
-            var ahoyDbContext = _context.Yachts.Include(y => y.Image).Include(y => y.Owner);
-            return View(await ahoyDbContext.ToListAsync());
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // ID zalogowanego użytkownika
+            var userIdGuid = Guid.Parse(userId);
+
+            var userYachts = await _context.Yachts
+                .Where(y => y.OwnerId == userIdGuid)
+                .Include(y => y.Image)
+                .Include(y => y.Owner) // Dodanie Ownera
+                .ToListAsync();
+
+            var otherYachts = await _context.Yachts
+                .Where(y => y.OwnerId != userIdGuid)
+                .Include(y => y.Image)
+                .Include(y => y.Owner) // Dodanie Ownera
+                .ToListAsync();
+
+            var model = new YachtsIndexViewModel
+            {
+                UserYachts = userYachts,
+                OtherYachts = otherYachts
+            };
+
+            return View(model);
         }
 
         // GET: Yachts/Details/5
@@ -212,12 +240,22 @@ namespace Inzynierka.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var yachts = await _context.Yachts.FindAsync(id);
-            if (yachts != null)
-            {
-                _context.Yachts.Remove(yachts);
-            }
+            // Usuń wszystkie powiązane rejsy
+            
+           // var yachts = await _context.Yachts.FindAsync(id);
+            // Pobierz jacht wraz z powiązanymi rejsami
+            var yacht = await _context.Yachts
+                .Include(y => y.Cruises) // Załaduj powiązane rejsy
+                .FirstOrDefaultAsync(y => y.Id == id);
 
+            if (yacht != null)
+            {
+                _context.Yachts.Remove(yacht);
+            }
+            if (yacht.Cruises != null) 
+            {
+                _context.Cruises.RemoveRange(yacht.Cruises);
+            }   
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

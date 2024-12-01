@@ -23,8 +23,8 @@ namespace Inzynierka.Data.Tables
         //Foreign key
 
         // Foreign key to Yacht
-        public Yachts Yacht { get; set; }
-        public int YachtId { get; set; }
+        public Yachts? Yacht { get; set; }
+        public int? YachtId { get; set; }
 
         // One-to-many relationship with Capitan
         public Users Capitan { get; set; }

@@ -157,7 +157,7 @@ namespace Inzynierka.Data
                 eb.HasOne(c => c.Yacht)
                     .WithMany(y => y.Cruises)
                     .HasForeignKey(c => c.YachtId)
-                    .OnDelete(DeleteBehavior.NoAction);
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 // Relacja z Capitan (wiele Cruises dla jednego Capitan - użytkownik)
                 eb.HasOne(c => c.Capitan)
