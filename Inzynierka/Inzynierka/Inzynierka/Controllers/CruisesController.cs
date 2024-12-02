@@ -30,88 +30,132 @@ namespace Inzynierka.Controllers
         {
             // Pobranie identyfikatora zalogowanego użytkownika
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Guid? userId = Guid.TryParse(userIdString, out Guid parsedUserId) ? parsedUserId : null;
 
-            if (userIdString == null || !Guid.TryParse(userIdString, out Guid userId))
+            List<Cruises> myCruises = new List<Cruises>();
+            List<Cruises> otherCruises = new List<Cruises>();
+
+            if (userId != null)
             {
-                return RedirectToAction("Login", "Account"); // Przekierowanie do logowania, jeśli użytkownik nie jest zalogowany
+                // Rejsy użytkownika (gdzie użytkownik jest kapitanem)
+                myCruises = await _context.Cruises
+                    .Include(c => c.Capitan)
+                    .Include(c => c.Yacht)
+                    .Where(c => c.CapitanId == userId)
+                    .ToListAsync();
+
+                // Rejsy pozostałe (nie prowadzone przez użytkownika)
+                otherCruises = await _context.Cruises
+                    .Include(c => c.Capitan)
+                    .Include(c => c.Yacht)
+                    .Where(c => c.CapitanId != userId)
+                    .ToListAsync();
+            }
+            else
+            {
+                // Jeśli użytkownik nie jest zalogowany, pokazujemy wszystkie rejsy
+                otherCruises = await _context.Cruises
+                    .Include(c => c.Capitan)
+                    .Include(c => c.Yacht)
+                    .ToListAsync();
             }
 
-            // Rejsy użytkownika (gdzie użytkownik jest kapitanem)
-            var myCruises = await _context.Cruises
-                .Include(c => c.Capitan)
-                .Include(c => c.Yacht)
-                .Where(c => c.CapitanId == userId)
-                .ToListAsync();
-
-            // Rejsy pozostałe (nie prowadzone przez użytkownika)
-            var otherCruises = await _context.Cruises
-                .Include(c => c.Capitan)
-                .Include(c => c.Yacht)
-                .Where(c => c.CapitanId != userId)
-                .ToListAsync();
-
             // Przekazanie obu list do widoku jako krotki
-            return View((myCruises.AsEnumerable(), otherCruises.AsEnumerable()));
+            //return View((myCruises, otherCruises));
+            return View(((IEnumerable<Cruises>)myCruises, (IEnumerable<Cruises>)otherCruises));
         }
 
 
         [HttpPost]
         public async Task<IActionResult> JoinCruise(int cruiseId)
         {
-            // Pobranie identyfikatora zalogowanego użytkownika
-            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = GetLoggedInUserId();
+            if (userId == null) return RedirectToAction("Login", "Account");
 
-            if (userIdString == null || !Guid.TryParse(userIdString, out Guid userId))
+            if (await IsUserAlreadyParticipantOrPendingAsync(userId.Value, cruiseId))
             {
-                return RedirectToAction("Login", "Account"); // Przekierowanie do logowania, jeśli użytkownik nie jest zalogowany
-            }
-
-            // Sprawdzenie, czy istnieje już zgłoszenie
-            var existingRequest = await _context.CruiseJoinRequest
-                .FirstOrDefaultAsync(r => r.CruiseId == cruiseId && r.UserId == userId);
-
-            if (existingRequest != null)
-            {
-                TempData["Error"] = "Już złożyłeś prośbę o dołączenie do tego rejsu.";
-                //return RedirectToAction(nameof(Details));
+                TempData["Error"] = "Jesteś już uczestnikiem lub złożyłeś zgłoszenie.";
                 return RedirectToAction(nameof(Details), new { id = cruiseId });
-
             }
 
-            // Pobranie danych o kapitanie
-            var cruise = await _context.Cruises
-                .Include(c => c.Capitan)
-                .FirstOrDefaultAsync(c => c.Id == cruiseId);
-
+            var cruise = await GetCruiseWithCaptainAsync(cruiseId);
             if (cruise == null)
             {
                 TempData["Error"] = "Rejs nie istnieje.";
-                //return RedirectToAction(nameof(Details));
                 return RedirectToAction(nameof(Details), new { id = cruiseId });
-
             }
 
-            // Utworzenie zgłoszenia
+            await CreateJoinRequestAsync(userId.Value, cruise);
+
+            TempData["Success"] = "Prośba o dołączenie została wysłana.";
+            return RedirectToAction(nameof(Details), new { id = cruiseId });
+        }
+
+        private Guid? GetLoggedInUserId()
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return Guid.TryParse(userIdString, out Guid userId) ? userId : null;
+        }
+
+        private async Task<bool> IsUserAlreadyParticipantOrPendingAsync(Guid userId, int cruiseId)
+        {
+            return await _context.CruisesParticipants.AnyAsync(cp => cp.UsersId == userId && cp.CruisesId == cruiseId)
+                || await _context.CruiseJoinRequest.AnyAsync(cjr => cjr.UserId == userId && cjr.CruiseId == cruiseId);
+        }
+
+        private async Task<Cruises> GetCruiseWithCaptainAsync(int cruiseId)
+        {
+            return await _context.Cruises
+                .Include(c => c.Capitan)
+                .FirstOrDefaultAsync(c => c.Id == cruiseId);
+        }
+
+        private async Task CreateJoinRequestAsync(Guid userId, Cruises cruise)
+        {
             var joinRequest = new CruiseJoinRequest
             {
-                CruiseId = cruiseId,
+                CruiseId = cruise.Id,
                 UserId = userId,
                 CapitanId = cruise.Capitan.Id,
                 status = "Pending",
                 date = DateTime.UtcNow
             };
-
             _context.CruiseJoinRequest.Add(joinRequest);
             await _context.SaveChangesAsync();
+        }
 
-            TempData["Success"] = "Prośba o dołączenie została wysłana.";
-            //return RedirectToAction(nameof(Details));
+        [HttpPost]
+        public async Task<IActionResult> LeaveCruise(int cruiseId)
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userIdString == null || !Guid.TryParse(userIdString, out Guid userId))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var participation = await _context.CruisesParticipants
+                .FirstOrDefaultAsync(cp => cp.UsersId == userId && cp.CruisesId == cruiseId);
+
+            if (participation != null)
+            {
+                _context.CruisesParticipants.Remove(participation);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Zrezygnowałeś z rejsu.";
+            }
+            else
+            {
+                TempData["Error"] = "Nie jesteś uczestnikiem tego rejsu.";
+            }
+
             return RedirectToAction(nameof(Details), new { id = cruiseId });
         }
 
         // GET: Cruises/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Guid? userId = Guid.TryParse(userIdString, out Guid parsedUserId) ? parsedUserId : null;
+            
             if (id == null)
             {
                 return NotFound();
@@ -121,10 +165,20 @@ namespace Inzynierka.Controllers
                 .Include(c => c.Capitan)
                 .Include(c => c.Yacht)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (cruises == null)
             {
                 return NotFound();
             }
+
+            bool isMember = userId != null && await _context.CruisesParticipants
+            .AnyAsync(cp => cp.UsersId == userId && cp.CruisesId == id);
+
+            bool isPending = userId != null && await _context.CruiseJoinRequest
+                .AnyAsync(cjr => cjr.UserId == userId && cjr.CruiseId == id);
+
+            ViewData["IsMember"] = isMember;
+            ViewData["IsPending"] = isPending;
 
             return View(cruises);
         }
