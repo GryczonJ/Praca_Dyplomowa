@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\Ja\\source\\repos\\inzynierka\\Inzynierka\\Inzynierka\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A21FB057-935D-401A-9CC4-1849B62D05FC}|Inzynierka\\Inzynierka.csproj|c:\\users\\ja\\source\\repos\\inzynierka\\inzynierka\\inzynierka\\inzynierka\\controllers\\cruisescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A21FB057-935D-401A-9CC4-1849B62D05FC}|Inzynierka\\Inzynierka.csproj|solutionrelative:inzynierka\\controllers\\cruisescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A21FB057-935D-401A-9CC4-1849B62D05FC}|Inzynierka\\Inzynierka.csproj|c:\\users\\ja\\source\\repos\\inzynierka\\inzynierka\\inzynierka\\inzynierka\\views\\cruises\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{A21FB057-935D-401A-9CC4-1849B62D05FC}|Inzynierka\\Inzynierka.csproj|solutionrelative:inzynierka\\views\\cruises\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A21FB057-935D-401A-9CC4-1849B62D05FC}|Inzynierka\\Inzynierka.csproj|c:\\users\\ja\\source\\repos\\inzynierka\\inzynierka\\inzynierka\\inzynierka\\views\\cruises\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{A21FB057-935D-401A-9CC4-1849B62D05FC}|Inzynierka\\Inzynierka.csproj|solutionrelative:inzynierka\\views\\cruises\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{A21FB057-935D-401A-9CC4-1849B62D05FC}|Inzynierka\\Inzynierka.csproj|c:\\users\\ja\\source\\repos\\inzynierka\\inzynierka\\inzynierka\\inzynierka\\views\\yachtsales\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A21FB057-935D-401A-9CC4-1849B62D05FC}|Inzynierka\\Inzynierka.csproj|solutionrelative:inzynierka\\views\\yachtsales\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A21FB057-935D-401A-9CC4-1849B62D05FC}|Inzynierka\\Inzynierka.csproj|c:\\users\\ja\\source\\repos\\inzynierka\\inzynierka\\inzynierka\\inzynierka\\controllers\\yachtsalescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A21FB057-935D-401A-9CC4-1849B62D05FC}|Inzynierka\\Inzynierka.csproj|solutionrelative:inzynierka\\controllers\\yachtsalescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 9,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -54,41 +54,41 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\Ja\\source\\repos\\inzynierka\\Inzynierka\\Inzynierka\\Inzynierka\\Views\\Cruises\\Index.cshtml",
               "RelativeDocumentMoniker": "Inzynierka\\Views\\Cruises\\Index.cshtml",
               "ToolTip": "C:\\Users\\Ja\\source\\repos\\inzynierka\\Inzynierka\\Inzynierka\\Inzynierka\\Views\\Cruises\\Index.cshtml",
               "RelativeToolTip": "Inzynierka\\Views\\Cruises\\Index.cshtml",
-              "ViewState": "AQIAAC0AAACgzczMzIwjwDkAAAAZAAAA",
+              "ViewState": "AQIAACEAAAAAAAAAAAAAAC4AAAAsAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-12-02T09:33:38.753Z",
+              "WhenOpened": "2024-12-06T19:45:45.011Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Ja\\source\\repos\\inzynierka\\Inzynierka\\Inzynierka\\Inzynierka\\Views\\YachtSales\\Index.cshtml",
+              "RelativeDocumentMoniker": "Inzynierka\\Views\\YachtSales\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Ja\\source\\repos\\inzynierka\\Inzynierka\\Inzynierka\\Inzynierka\\Views\\YachtSales\\Index.cshtml",
+              "RelativeToolTip": "Inzynierka\\Views\\YachtSales\\Index.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-12-06T19:45:19.441Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "C:\\Users\\Ja\\source\\repos\\inzynierka\\Inzynierka\\Inzynierka\\Inzynierka\\Views\\Cruises\\Details.cshtml",
-              "RelativeDocumentMoniker": "Inzynierka\\Views\\Cruises\\Details.cshtml",
-              "ToolTip": "C:\\Users\\Ja\\source\\repos\\inzynierka\\Inzynierka\\Inzynierka\\Inzynierka\\Views\\Cruises\\Details.cshtml",
-              "RelativeToolTip": "Inzynierka\\Views\\Cruises\\Details.cshtml",
-              "ViewState": "AQIAAEEAAAAAAAAAAAARwAQAAABCAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-12-02T08:48:52.776Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "CruisesController.cs",
-              "DocumentMoniker": "C:\\Users\\Ja\\source\\repos\\inzynierka\\Inzynierka\\Inzynierka\\Inzynierka\\Controllers\\CruisesController.cs",
-              "RelativeDocumentMoniker": "Inzynierka\\Controllers\\CruisesController.cs",
-              "ToolTip": "C:\\Users\\Ja\\source\\repos\\inzynierka\\Inzynierka\\Inzynierka\\Inzynierka\\Controllers\\CruisesController.cs",
-              "RelativeToolTip": "Inzynierka\\Controllers\\CruisesController.cs",
-              "ViewState": "AQIAACcAAACgmZmZmVklwEAAAAAtAAAA",
+              "Title": "YachtSalesController.cs",
+              "DocumentMoniker": "C:\\Users\\Ja\\source\\repos\\inzynierka\\Inzynierka\\Inzynierka\\Inzynierka\\Controllers\\YachtSalesController.cs",
+              "RelativeDocumentMoniker": "Inzynierka\\Controllers\\YachtSalesController.cs",
+              "ToolTip": "C:\\Users\\Ja\\source\\repos\\inzynierka\\Inzynierka\\Inzynierka\\Inzynierka\\Controllers\\YachtSalesController.cs",
+              "RelativeToolTip": "Inzynierka\\Controllers\\YachtSalesController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-02T08:45:44.83Z",
+              "WhenOpened": "2024-12-06T19:45:11.893Z",
               "EditorCaption": ""
             }
           ]

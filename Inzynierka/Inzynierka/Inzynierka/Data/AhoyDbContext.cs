@@ -490,7 +490,7 @@ namespace Inzynierka.Data
                 eb.Property(ys => ys.price).IsRequired();
                 eb.Property(ys => ys.currency).IsRequired().HasMaxLength(3); // Zmieniono na string
                 eb.Property(ys => ys.location).HasMaxLength(100);
-                eb.Property(ys => ys.availabilityStatus).HasMaxLength(50);
+                //eb.Property(ys => ys.availabilityStatus).HasMaxLength(50);
                 eb.Property(ys => ys.notes).HasMaxLength(500); // Dodatkowe uwagi - maksymalna długość
 
 

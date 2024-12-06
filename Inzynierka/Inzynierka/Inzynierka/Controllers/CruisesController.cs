@@ -32,6 +32,8 @@ namespace Inzynierka.Controllers
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             Guid? userId = Guid.TryParse(userIdString, out Guid parsedUserId) ? parsedUserId : null;
 
+            bool isLogged = false;
+
             List<Cruises> myCruises = new List<Cruises>();
             List<Cruises> otherCruises = new List<Cruises>();
 
@@ -50,6 +52,7 @@ namespace Inzynierka.Controllers
                     .Include(c => c.Yacht)
                     .Where(c => c.CapitanId != userId)
                     .ToListAsync();
+                isLogged = true;
             }
             else
             {
@@ -59,7 +62,7 @@ namespace Inzynierka.Controllers
                     .Include(c => c.Yacht)
                     .ToListAsync();
             }
-
+            ViewData["isLogged"] = isLogged;
             // Przekazanie obu list do widoku jako krotki
             //return View((myCruises, otherCruises));
             return View(((IEnumerable<Cruises>)myCruises, (IEnumerable<Cruises>)otherCruises));
@@ -177,8 +180,12 @@ namespace Inzynierka.Controllers
             bool isPending = userId != null && await _context.CruiseJoinRequest
                 .AnyAsync(cjr => cjr.UserId == userId && cjr.CruiseId == id);
 
+            // Sprawdzenie, czy użytkownik jest właścicielem rejsu
+            bool isOwner = userId != null && cruises.CapitanId == userId;
+
             ViewData["IsMember"] = isMember;
             ViewData["IsPending"] = isPending;
+            ViewData["Owner"] = isOwner;
 
             return View(cruises);
         }

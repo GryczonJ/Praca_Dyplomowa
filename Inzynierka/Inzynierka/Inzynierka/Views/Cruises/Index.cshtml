@@ -2,9 +2,18 @@
 
 @{
     ViewData["Title"] = "Index";
+    bool isLogged = ViewData["isLogged"] != null && (bool)ViewData["isLogged"];
 }
 
 <h1>Rejsy</h1>
+
+ @if (isLogged == true)
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+} 
+
 @if (Model.MyCruises.Any())
 {
     <h2>Moje Rejsy</h2>
@@ -35,7 +44,7 @@
                     <td>@item.currency</td>
                     <td>@item.status</td>
                     <td>@item.maxParticipants</td>
-                    <td>@item.Capitan?.Email ?? "Brak danych"</td>
+                    <td>@item.Capitan?.Email"</td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.Id">Edytuj</a> |
                         <a asp-action="Details" asp-route-id="@item.Id">Szczegóły</a>

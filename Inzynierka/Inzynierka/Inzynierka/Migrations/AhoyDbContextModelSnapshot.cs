@@ -584,11 +584,6 @@ namespace Inzynierka.Migrations
                     b.Property<int>("YachtId")
                         .HasColumnType("int");
 
-                    b.Property<string>("availabilityStatus")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<string>("currency")
                         .IsRequired()
                         .HasMaxLength(3)

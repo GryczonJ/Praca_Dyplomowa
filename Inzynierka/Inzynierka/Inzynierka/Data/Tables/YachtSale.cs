@@ -12,7 +12,7 @@ namespace Inzynierka.Data.Tables
         public decimal price { get; set; }// SalePrice
         public string currency { get; set; } // Waluta
         public string location { get; set; }
-        public string availabilityStatus { get; set; } // status dostępności
+        //public string availabilityStatus { get; set; } // status dostępności
         public string status { get; set; } = "Pending"; // Dodano status transakcji (Pending, Accepted, Rejected) transactionStatus
         public string notes { get; set; } // Dodatkowe uwagi do transakcji
 
@@ -21,7 +21,7 @@ namespace Inzynierka.Data.Tables
         public Yachts Yacht { get; set; }
 
         public Guid? BuyerUserId { get; set; }// kupujący
-        public Users BuyerUser { get; set; }
+        public Users? BuyerUser { get; set; }
 
         public Guid OwnerId { get; set; }
         public Users Owner { get; set; }

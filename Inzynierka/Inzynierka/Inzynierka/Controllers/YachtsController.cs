@@ -20,6 +20,11 @@ namespace Inzynierka.Controllers
         {
             _context = context;
         }
+        private Guid? GetLoggedInUserId()
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return Guid.TryParse(userIdString, out Guid userId) ? userId : null;
+        }
 
         // GET: Yachts
         /* public async Task<IActionResult> Index()
@@ -29,35 +34,90 @@ namespace Inzynierka.Controllers
          }*/
 
         // GET: Yachts
+        /* public async Task<IActionResult> Index()
+         {
+             var userIdGuid = GetLoggedInUserId();
+
+             List<Yachts> userYachts = new List<Yachts>();
+             List<Yachts> otherYachts;
+
+             bool isLogged = false; 
+
+             if (userIdGuid != null)
+             {
+                 // Pobranie jachtów użytkownika
+                 userYachts = await _context.Yachts
+                     .Where(y => y.OwnerId == userIdGuid)
+                     .Include(y => y.Image)
+                     .Include(y => y.Owner) // Dodanie Ownera
+                     .ToListAsync();
+                 isLogged = true;
+             }
+
+             // Pobranie jachtów innych użytkowników
+             otherYachts = await _context.Yachts
+                 .Where(y => y.OwnerId != userIdGuid)
+                 .Include(y => y.Image)
+                 .Include(y => y.Owner) // Dodanie Ownera
+                 .ToListAsync();
+
+             // Przekazanie danych do modelu widoku
+             var model = new YachtsIndexViewModel
+             {
+                 UserYachts = userYachts,
+                 OtherYachts = otherYachts
+             };
+
+             ViewData["isLogged"] = isLogged;
+
+             return View(model);
+         }*/
+
         public async Task<IActionResult> Index()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // ID zalogowanego użytkownika
-            var userIdGuid = Guid.Parse(userId);
+            var userIdGuid = GetLoggedInUserId();
 
-            var userYachts = await _context.Yachts
-                .Where(y => y.OwnerId == userIdGuid)
-                .Include(y => y.Image)
-                .Include(y => y.Owner) // Dodanie Ownera
-                .ToListAsync();
+            List<YachtSale> userSales = new List<YachtSale>();
+            List<YachtSale> otherSales;
 
-            var otherYachts = await _context.Yachts
-                .Where(y => y.OwnerId != userIdGuid)
-                .Include(y => y.Image)
-                .Include(y => y.Owner) // Dodanie Ownera
-                .ToListAsync();
+            bool isLogged = false;
 
-            var model = new YachtsIndexViewModel
+            if (userIdGuid != null)
             {
-                UserYachts = userYachts,
-                OtherYachts = otherYachts
+                // Pobranie ofert sprzedaży użytkownika
+                userSales = await _context.YachtSale
+                    .Where(s => s.OwnerId == userIdGuid)
+                    .Include(s => s.Yacht)
+                    .Include(s => s.Owner)
+                    .ToListAsync();
+                isLogged = true;
+            }
+
+            // Pobranie ofert sprzedaży innych użytkowników
+            otherSales = await _context.YachtSale
+                .Where(s => s.OwnerId != userIdGuid)
+                .Include(s => s.Yacht)
+                .Include(s => s.Owner)
+                .ToListAsync();
+
+            // Przekazanie danych do modelu widoku
+            var model = new YachtSalesIndexViewModel
+            {
+                UserSales = userSales,
+                OtherSales = otherSales
             };
+
+            ViewData["isLogged"] = isLogged;
 
             return View(model);
         }
 
+
+
         // GET: Yachts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var userId = GetLoggedInUserId();
             if (id == null)
             {
                 return NotFound();
@@ -71,7 +131,8 @@ namespace Inzynierka.Controllers
             {
                 return NotFound();
             }
-
+            bool isOwner = userId != null && yachts.Owner.Id == userId;
+            ViewData["Owner"] = isOwner;
             return View(yachts);
         }
 

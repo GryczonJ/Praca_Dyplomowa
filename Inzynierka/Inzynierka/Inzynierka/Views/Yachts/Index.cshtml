@@ -1,17 +1,16 @@
-﻿@* @model IEnumerable<Inzynierka.Data.Tables.Yachts>
- *@
- @model Inzynierka.Models.YachtsIndexViewModel
+﻿@model Inzynierka.Models.YachtsIndexViewModel
 
 @{
     ViewData["Title"] = "Index";
+    bool isLogged = ViewData["isLogged"] != null && (bool)ViewData["isLogged"];
 }
 
 <h1>Jachty</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
+@if (isLogged==true){
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 <h1>Twoje jachty</h1>
 <table class="table">
     <thead>

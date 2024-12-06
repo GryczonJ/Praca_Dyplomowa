@@ -98,6 +98,26 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Ja/source/repos/inzynierka/Inzynierka/Inzynierka/Inzynierka/Views/YachtSales/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcWWFjaHRTYWxlc1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Ja/source/repos/inzynierka/Inzynierka/Inzynierka/Inzynierka/Views/YachtSales/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcWWFjaHRTYWxlc1xEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Ja/source/repos/inzynierka/Inzynierka/Inzynierka/Inzynierka/Views/YachtSales/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcWWFjaHRTYWxlc1xEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Ja/source/repos/inzynierka/Inzynierka/Inzynierka/Inzynierka/Views/YachtSales/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcWWFjaHRTYWxlc1xFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Ja/source/repos/inzynierka/Inzynierka/Inzynierka/Inzynierka/Views/YachtSales/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcWWFjaHRTYWxlc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Ja/source/repos/inzynierka/Inzynierka/Inzynierka/Inzynierka/Views/Yachts/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcWWFjaHRzXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
