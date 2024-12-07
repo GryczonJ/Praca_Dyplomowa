@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Inzynierka.Data;
 using Inzynierka.Data.Tables;
 using System.Security.Claims;
+using Inzynierka.Models;
 
 namespace Inzynierka.Controllers
 {
@@ -27,15 +28,54 @@ namespace Inzynierka.Controllers
         }
 
         // GET: YachtSales
+        /* public async Task<IActionResult> Index()
+         {
+             *//*if(GetLoggedInUserId() == null)
+             {
+                 return NotFound();
+             }*//*
+             var ahoyDbContext = _context.YachtSale.Include(y => y.BuyerUser).Include(y => y.Owner).Include(y => y.Yacht);
+             return View(await ahoyDbContext.ToListAsync());
+         }*/
         public async Task<IActionResult> Index()
         {
-            /*if(GetLoggedInUserId() == null)
+            var userIdGuid = GetLoggedInUserId();
+
+            List<YachtSale> userSales = new List<YachtSale>();
+            List<YachtSale> otherSales;
+
+            bool isLogged = false;
+
+            if (userIdGuid != null)
             {
-                return NotFound();
-            }*/
-            var ahoyDbContext = _context.YachtSale.Include(y => y.BuyerUser).Include(y => y.Owner).Include(y => y.Yacht);
-            return View(await ahoyDbContext.ToListAsync());
+                // Pobranie ofert sprzedaży użytkownika
+                userSales = await _context.YachtSale
+                    .Where(s => s.OwnerId == userIdGuid)
+                    .Include(s => s.Yacht)
+                    .Include(s => s.Owner)
+                    .ToListAsync();
+                isLogged = true;
+            }
+
+            // Pobranie ofert sprzedaży innych użytkowników
+            otherSales = await _context.YachtSale
+                .Where(s => s.OwnerId != userIdGuid)
+                .Include(s => s.Yacht)
+                .Include(s => s.Owner)
+                .ToListAsync();
+
+            // Przekazanie danych do modelu widoku
+            var model = new YachtSalesIndexViewModel
+            {
+                UserSales = userSales,
+                OtherSales = otherSales
+            };
+
+            ViewData["isLogged"] = isLogged;
+
+            return View(model);
         }
+
 
         // GET: YachtSales/Details/5
         public async Task<IActionResult> Details(int? id)

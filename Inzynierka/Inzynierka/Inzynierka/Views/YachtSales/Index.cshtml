@@ -1,77 +1,68 @@
-﻿@model IEnumerable<Inzynierka.Data.Tables.YachtSale>
+﻿@model YachtSalesIndexViewModel
 
 @{
     ViewData["Title"] = "Index";
+    bool isLogged = (bool)ViewData["isLogged"];
 }
 
-<h1>Index</h1>
+<h1>Oferty sprzedaży jachtów</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (isLogged)
+{
+    <h2>Moje oferty sprzedaży</h2>
+    <p><a asp-action="Create">Dodaj nową ofertę</a></p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.UserSales.First().Yacht.name)</th>
+                <th>@Html.DisplayNameFor(model => model.UserSales.First().price)</th>
+                <th>@Html.DisplayNameFor(model => model.UserSales.First().currency)</th>
+                <th>@Html.DisplayNameFor(model => model.UserSales.First().location)</th>
+                <th>@Html.DisplayNameFor(model => model.UserSales.First().notes)</th>
+                <th>Akcje</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sale in Model.UserSales)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => sale.Yacht.name)</td>
+                    <td>@Html.DisplayFor(modelItem => sale.price)</td>
+                    <td>@Html.DisplayFor(modelItem => sale.currency)</td>
+                    <td>@Html.DisplayFor(modelItem => sale.location)</td>
+                    <td>@Html.DisplayFor(modelItem => sale.notes)</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@sale.Id">Edytuj</a> |
+                        <a asp-action="Details" asp-route-id="@sale.Id">Szczegóły</a> |
+                        <a asp-action="Delete" asp-route-id="@sale.Id">Usuń</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<h2>Dostępne oferty sprzedaży</h2>
 <table class="table">
     <thead>
         <tr>
-           @*  <th>
-                @Html.DisplayNameFor(model => model.saleDate)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.currency)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.location)
-            </th>
-           @*  <th>
-                @Html.DisplayNameFor(model => model.availabilityStatus)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.notes)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Yacht)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Owner)
-            </th>
-            <th></th>
+            <th>@Html.DisplayNameFor(model => model.OtherSales.First().Yacht.name)</th>
+            <th>@Html.DisplayNameFor(model => model.OtherSales.First().price)</th>
+            <th>@Html.DisplayNameFor(model => model.OtherSales.First().currency)</th>
+            <th>@Html.DisplayNameFor(model => model.OtherSales.First().location)</th>
+            <th>@Html.DisplayNameFor(model => model.OtherSales.First().notes)</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-           @*  <td>
-                @Html.DisplayFor(modelItem => item.saleDate)
-            </td> *@
-            <td>
-                @Html.DisplayFor(modelItem => item.price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.currency)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.location)
-            </td>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.availabilityStatus)
-            </td> *@
-            <td>
-                @Html.DisplayFor(modelItem => item.notes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Yacht.name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Owner.firstName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var sale in Model.OtherSales)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => sale.Yacht.name)</td>
+                <td>@Html.DisplayFor(modelItem => sale.price)</td>
+                <td>@Html.DisplayFor(modelItem => sale.currency)</td>
+                <td>@Html.DisplayFor(modelItem => sale.location)</td>
+                <td>@Html.DisplayFor(modelItem => sale.notes)</td>
+            </tr>
+        }
     </tbody>
 </table>

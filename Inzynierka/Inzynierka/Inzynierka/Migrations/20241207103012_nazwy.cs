@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Inzynierka.Migrations
 {
     /// <inheritdoc />
-    public partial class delete : Migration
+    public partial class nazwy : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -181,7 +181,7 @@ namespace Inzynierka.Migrations
                     location = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     currency = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
-                    status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    status = table.Column<int>(type: "int", maxLength: 50, nullable: false),
                     YachtId = table.Column<int>(type: "int", nullable: false),
                     OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -264,7 +264,7 @@ namespace Inzynierka.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    status = table.Column<int>(type: "int", maxLength: 50, nullable: false),
                     date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CruiseId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -298,7 +298,7 @@ namespace Inzynierka.Migrations
                     end_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     currency = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
-                    status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    status = table.Column<int>(type: "int", maxLength: 50, nullable: false),
                     maxParticipants = table.Column<int>(type: "int", nullable: false),
                     YachtId = table.Column<int>(type: "int", nullable: true),
                     CapitanId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -437,7 +437,7 @@ namespace Inzynierka.Migrations
                     price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     currency = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
                     location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    status = table.Column<int>(type: "int", nullable: false),
                     notes = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     YachtId = table.Column<int>(type: "int", nullable: false),
                     BuyerUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),

@@ -34,7 +34,7 @@ namespace Inzynierka.Controllers
          }*/
 
         // GET: Yachts
-        /* public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index()
          {
              var userIdGuid = GetLoggedInUserId();
 
@@ -71,46 +71,7 @@ namespace Inzynierka.Controllers
              ViewData["isLogged"] = isLogged;
 
              return View(model);
-         }*/
-
-        public async Task<IActionResult> Index()
-        {
-            var userIdGuid = GetLoggedInUserId();
-
-            List<YachtSale> userSales = new List<YachtSale>();
-            List<YachtSale> otherSales;
-
-            bool isLogged = false;
-
-            if (userIdGuid != null)
-            {
-                // Pobranie ofert sprzedaży użytkownika
-                userSales = await _context.YachtSale
-                    .Where(s => s.OwnerId == userIdGuid)
-                    .Include(s => s.Yacht)
-                    .Include(s => s.Owner)
-                    .ToListAsync();
-                isLogged = true;
-            }
-
-            // Pobranie ofert sprzedaży innych użytkowników
-            otherSales = await _context.YachtSale
-                .Where(s => s.OwnerId != userIdGuid)
-                .Include(s => s.Yacht)
-                .Include(s => s.Owner)
-                .ToListAsync();
-
-            // Przekazanie danych do modelu widoku
-            var model = new YachtSalesIndexViewModel
-            {
-                UserSales = userSales,
-                OtherSales = otherSales
-            };
-
-            ViewData["isLogged"] = isLogged;
-
-            return View(model);
-        }
+         }
 
 
 

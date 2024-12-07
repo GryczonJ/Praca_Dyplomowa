@@ -1,11 +1,17 @@
-﻿namespace Inzynierka.Data.Tables
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Inzynierka.Data.Tables
 {
     public class Image
     {
+        [Display(Name = "Identyfikator")]
         public int Id { get; set; }
+        [Display(Name = "Link do obrazu")]
         public string link { get; set; }
         // foreing key
+        [Display(Name = "Użytkownicy")]
         public List<Users> Users { get; set; } = new List<Users>();// RequestUser
+        [Display(Name = "Jachty")]
         public List<Yachts> Yachts { get; set; } = new List<Yachts>();// RequestYacht
     }
 }

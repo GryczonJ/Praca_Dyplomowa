@@ -120,7 +120,7 @@ namespace Inzynierka.Controllers
                 CruiseId = cruise.Id,
                 UserId = userId,
                 CapitanId = cruise.Capitan.Id,
-                status = "Pending",
+                status = (RequestStatus)(int)TransactionStatus.Pending,
                 date = DateTime.UtcNow
             };
             _context.CruiseJoinRequest.Add(joinRequest);

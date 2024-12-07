@@ -1,35 +1,68 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
+using System.ComponentModel.DataAnnotations;
+using System.Transactions;
 
 namespace Inzynierka.Data.Tables
 {
     public class YachtSale
     {
         public int Id { get; set; }
+
+        [Display(Name = "Data sprzedaży")]
         public DateTime saleDate { get; set; } // Zmieniono nazwę na bardziej opisową
 
         [Column(TypeName = "decimal(18, 2)")]
-        public decimal price { get; set; }// SalePrice
-        public string currency { get; set; } // Waluta
-        public string location { get; set; }
-        //public string availabilityStatus { get; set; } // status dostępności
-        public string status { get; set; } = "Pending"; // Dodano status transakcji (Pending, Accepted, Rejected) transactionStatus
-        public string notes { get; set; } // Dodatkowe uwagi do transakcji
+        [Display(Name = "Cena sprzedaży")]
+        public decimal price { get; set; } // Cena sprzedaży
 
-        // foreing key
+        [Display(Name = "Waluta")]
+        public string currency { get; set; } // Waluta
+
+        [Display(Name = "Lokalizacja")]
+        public string location { get; set; }
+
+        [Display(Name = "Status transakcji")]
+        public TransactionStatus status { get; set; } = TransactionStatus.Pending; // Status transakcji jako enum
+
+        [Display(Name = "Uwagi")]
+        public string notes { get; set; } // Uwagi do transakcji
+
+        // Klucz obcy
+        [Display(Name = "Identyfikator jachtu")]
         public int YachtId { get; set; }
+
+        [Display(Name = "Jacht")]
         public Yachts Yacht { get; set; }
 
-        public Guid? BuyerUserId { get; set; }// kupujący
+        [Display(Name = "Identyfikator kupującego")]
+        public Guid? BuyerUserId { get; set; } // Kupujący
+
+        [Display(Name = "Kupujący")]
         public Users? BuyerUser { get; set; }
 
+        [Display(Name = "Identyfikator właściciela")]
         public Guid OwnerId { get; set; }
+
+        [Display(Name = "Właściciel")]
         public Users Owner { get; set; }
 
-        // reference
-        public List<Reports> Reports { get; set; } = new List<Reports>(); // relation with Reports table, one to many
-        public List<Image> Images { get; set; } = new List<Image>(); // relation with Image table, one to many 
-        public List<Comments> Comments { get; set; } = new List<Comments>(); // relation with Comments table, one to many
-        public List<FavoriteYachtsForSale> FavoriteYachtsForSale { get; set; } = new List<FavoriteYachtsForSale>(); // relation with FavoriteYachtsForSale table, one to many
+        // Relacje
+        [Display(Name = "Raporty")]
+        public List<Reports> Reports { get; set; } = new List<Reports>();
+
+        [Display(Name = "Obrazy")]
+        public List<Image> Images { get; set; } = new List<Image>();
+
+        [Display(Name = "Komentarze")]
+        public List<Comments> Comments { get; set; } = new List<Comments>();
+
+        [Display(Name = "Ulubione oferty sprzedaży")]
+        public List<FavoriteYachtsForSale> FavoriteYachtsForSale { get; set; } = new List<FavoriteYachtsForSale>();
+    }
+    public enum TransactionStatus
+    {
+        Pending,   // Oczekujący
+        Accepted,  // Zaakceptowany
+        Rejected   // Odrzucony
     }
 }

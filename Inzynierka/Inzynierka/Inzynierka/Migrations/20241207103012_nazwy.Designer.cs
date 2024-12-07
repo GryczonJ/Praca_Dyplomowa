@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Inzynierka.Migrations
 {
     [DbContext(typeof(AhoyDbContext))]
-    [Migration("20241204104159_delete")]
-    partial class delete
+    [Migration("20241207103012_nazwy")]
+    partial class nazwy
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,10 +62,9 @@ namespace Inzynierka.Migrations
                     b.Property<DateTime>("startDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("status")
-                        .IsRequired()
+                    b.Property<int>("status")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -152,10 +151,9 @@ namespace Inzynierka.Migrations
                     b.Property<DateTime>("date")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("status")
-                        .IsRequired()
+                    b.Property<int>("status")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -214,10 +212,9 @@ namespace Inzynierka.Migrations
                     b.Property<DateTime>("start_date")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("status")
-                        .IsRequired()
+                    b.Property<int>("status")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -608,9 +605,8 @@ namespace Inzynierka.Migrations
                     b.Property<DateTime>("saleDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
