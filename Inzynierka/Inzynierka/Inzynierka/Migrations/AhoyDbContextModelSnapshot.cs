@@ -33,7 +33,7 @@ namespace Inzynierka.Migrations
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("YachtId")
+                    b.Property<int?>("YachtId")
                         .HasColumnType("int");
 
                     b.Property<string>("currency")
@@ -811,8 +811,7 @@ namespace Inzynierka.Migrations
                     b.HasOne("Inzynierka.Data.Tables.Yachts", "Yacht")
                         .WithMany("Charters")
                         .HasForeignKey("YachtId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Owner");
 

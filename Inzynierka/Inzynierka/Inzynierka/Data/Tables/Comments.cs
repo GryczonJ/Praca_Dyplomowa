@@ -19,22 +19,22 @@ namespace Inzynierka.Data.Tables
         public Guid CreatorId { get; set; }
 
         [Display(Name = "Profil")]
-        public Users Profile { get; set; }
+        public Users? Profile { get; set; }
         [Display(Name = "Identyfikator profilu")]
         public Guid? ProfileId { get; set; }
 
         [Display(Name = "Czarter")]
-        public Charters Charter { get; set; }
+        public Charters? Charter { get; set; }
         [Display(Name = "Identyfikator czarteru")]
         public int? CharterId { get; set; }
 
         [Display(Name = "Rejs")]
-        public Cruises Cruises { get; set; }
+        public Cruises? Cruises { get; set; }
         [Display(Name = "Identyfikator rejsu")]
         public int? CruisesId { get; set; }
 
         [Display(Name = "Jacht")]
-        public Yachts Yachts { get; set; }
+        public Yachts? Yachts { get; set; }
         [Display(Name = "Identyfikator jachtu")]
         public int? YachtsId { get; set; }
 

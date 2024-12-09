@@ -31,10 +31,10 @@ namespace Inzynierka.Data.Tables
 
         //foreing key
         [Display(Name = "Jacht")]
-        public Yachts Yacht { get; set; }
+        public Yachts? Yacht { get; set; }
         [ForeignKey(nameof(Yacht))]
         [Display(Name = "Identyfikator jachtu")]
-        public int YachtId { get; set; }
+        public int? YachtId { get; set; }
 
         [Display(Name = "Właściciel")]
         public Users Owner { get; set; }
