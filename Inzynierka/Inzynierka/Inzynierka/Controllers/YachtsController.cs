@@ -92,8 +92,10 @@ namespace Inzynierka.Controllers
             {
                 return NotFound();
             }
+
             bool isOwner = userId != null && yachts.Owner.Id == userId;
             ViewData["Owner"] = isOwner;
+
             return View(yachts);
         }
 

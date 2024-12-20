@@ -174,18 +174,29 @@ namespace Inzynierka.Controllers
                 return NotFound();
             }
 
-            bool isMember = userId != null && await _context.CruisesParticipants
-            .AnyAsync(cp => cp.UsersId == userId && cp.CruisesId == id);
 
+
+            // Sprawdzenie, czy użytkownik jest członkiem rejsu
+            bool isMember = userId != null && await _context.CruisesParticipants
+                .AnyAsync(cp => cp.UsersId == userId && cp.CruisesId == id);
+
+            // Sprawdzenie, czy użytkownik złożył prośbę o dołączenie do rejsu
             bool isPending = userId != null && await _context.CruiseJoinRequest
                 .AnyAsync(cjr => cjr.UserId == userId && cjr.CruiseId == id);
 
-            // Sprawdzenie, czy użytkownik jest właścicielem rejsu
+            // Sprawdzenie, czy użytkownik jest właścicielem (kapitanem) rejsu
             bool isOwner = userId != null && cruises.CapitanId == userId;
+           
+            /*bool isFavorite = userId != null && await _context.FavoriteCruises
+            .AnyAsync(fc => fc.CruiseId == id && fc.UserId == userId);*/
 
+            
+
+            // Przekazanie danych do ViewData
             ViewData["IsMember"] = isMember;
             ViewData["IsPending"] = isPending;
-            ViewData["Owner"] = isOwner;
+            ViewData["isOwner"] = isOwner;
+            //ViewData["ulubiony"] = isFavorite;
 
             return View(cruises);
         }

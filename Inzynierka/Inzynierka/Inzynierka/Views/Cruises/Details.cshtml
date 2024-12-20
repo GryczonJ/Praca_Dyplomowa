@@ -5,6 +5,7 @@
     bool isMember = ViewData["IsMember"] != null && (bool)ViewData["IsMember"];
     bool isPending = ViewData["IsPending"] != null && (bool)ViewData["IsPending"];
     bool isOwner = ViewData["isOwner"] != null && (bool)ViewData["isOwner"];
+    bool ulubiony = ViewData["ulubiony"] != null && (bool)ViewData["ulubiony"];
 }
 
 <h1>Details</h1>
@@ -91,41 +92,106 @@
         </dd>
     </dl>
 </div>
-
+@* 
 <div>
     @if (User.Identity.IsAuthenticated)
     {
-        @if (isMember)
+        @if (isMember && !isOwner)
         {
             <form asp-action="LeaveCruise" method="post">
                 <input type="hidden" name="cruiseId" value="@Model.Id" />
                 <button type="submit" class="btn btn-danger">Rezygnuj</button>
             </form>
+            @if (ulubiony)
+            {
+                <form asp-action="RemoveFromFavorites" asp-controller="FavoriteCruises" method="post" style="display:inline;">
+                    <input type="hidden" name="YachtSaleId" value="@Model?.Id" />
+                    <button type="submit" class="btn btn-outline-danger">
+                        💔 Usuń z ulubionych
+                    </button>
+                </form>
+            }
+            else
+            {
+                <form asp-action="AddToFavorites" asp-controller="FavoriteCruises" method="post" style="display:inline;">
+                    <input type="hidden" name="YachtSaleId" value="@Model?.Id" />
+                    <button type="submit" class="btn btn-outline-danger">
+                        ❤️ Dodaj do ulubionych
+                    </button>
+                </form>
+            }
         }
-        else if (isPending)
+        else if (isPending && !isOwner)
         {
             <p class="text-info">Twoje zgłoszenie jest w trakcie rozpatrywania.</p>
+            @if (ulubiony)
+            {
+                <form asp-action="RemoveFromFavorites" asp-controller="FavoriteCruises" method="post" style="display:inline;">
+                    <input type="hidden" name="YachtSaleId" value="@Model?.Id" />
+                    <button type="submit" class="btn btn-outline-danger">
+                        💔 Usuń z ulubionych
+                    </button>
+                </form>
+            }
+            else
+            {
+                <form asp-action="AddToFavorites" asp-controller="FavoriteCruises" method="post" style="display:inline;">
+                    <input type="hidden" name="YachtSaleId" value="@Model?.Id" />
+                    <button type="submit" class="btn btn-outline-danger">
+                        ❤️ Dodaj do ulubionych
+                    </button>
+                </form>
+            }
+
         }
-        else
+        else if (!isOwner)
         {
             <form asp-action="JoinCruise" method="post">
                 <input type="hidden" name="cruiseId" value="@Model.Id" />
                 <button type="submit" class="btn btn-primary">Dołącz</button>
             </form>
+            @if (ulubiony)
+            {
+                <form asp-action="RemoveFromFavorites" asp-controller="FavoriteCruises" method="post" style="display:inline;">
+                    <input type="hidden" name="YachtSaleId" value="@Model?.Id" />
+                    <button type="submit" class="btn btn-outline-danger">
+                        💔 Usuń z ulubionych
+                    </button>
+                </form>
+            }
+            else
+            {
+                <form asp-action="AddToFavorites" asp-controller="FavoriteCruises" method="post" style="display:inline;">
+                    <input type="hidden" name="YachtSaleId" value="@Model?.Id" />
+                    <button type="submit" class="btn btn-outline-danger">
+                        ❤️ Dodaj do ulubionych
+                    </button>
+                </form>
+            }
         }
         <div>
-            @if (isOwner == true)
+            @if (isOwner)
 			{
 				<a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> <br/>
 				<a asp-action="Delete" asp-route-id="@Model?.Id">Delete</a>
 			}
-            @* <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> | *@
+           
             <a asp-action="Index">Back to List</a>
         </div>
+
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["Message"]
+            </div>
+        }
+
     }
     else
     {
         <span class="text-muted">Zaloguj się, aby dołączyć</span>
+        <a asp-action="Index">Back to List</a>
     }
 </div>
 
+ *@

@@ -16,6 +16,8 @@ builder.Services.AddDbContext<AhoyDbContext>(options =>
 //builder.Services.AddDefaultIdentity<Users>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AhoyDbContext>();
 
 //builder.Services.AddDefaultIdentity<Users>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AhoyDbContext>();
+
+//builder.Services.AddDefaultIdentity<Users>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AhoyDbContext>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 /*builder.Services.AddDefaultIdentity<Users>(options => options.SignIn.RequireConfirmedAccount = true)// IdentityUser
@@ -96,16 +98,11 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
-/*using (var scope = app.Services.CreateScope())
+
+using (var scope = app.Services.CreateScope())
 {
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Roles>>();
-    var roles = new[] { "Kapitan", "User", "Moderacja" };
-    foreach (var role in roles)
-    {
-        if(!await roleManager.RoleExistsAsync(role))
-        {
-            await roleManager.CreateAsync(new Roles(role));
-        }
-    }
-}  */ 
+    var serviceProvider = scope.ServiceProvider;
+    await RoleInitializer.CreateRoles(serviceProvider);
+}
+
 app.Run();

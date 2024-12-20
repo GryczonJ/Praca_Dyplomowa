@@ -95,6 +95,18 @@ namespace Inzynierka.Controllers
                 return NotFound();
             }
 
+            // Sprawdź, czy jacht jest w ulubionych
+            var loggedInUserId = GetLoggedInUserId();
+            bool isFavorite = await _context.FavoriteYachtsForSale
+                .AnyAsync(f => f.YachtSaleId == id && f.UserId == loggedInUserId);
+
+            ViewData["ulubiony"] = isFavorite;
+            bool isOwner = loggedInUserId != null && yachtSale.Owner.Id == loggedInUserId;
+            
+            ViewData["Owner"] = isOwner;
+            
+            ViewData["isLogged"] = loggedInUserId != null ? true : false;
+
             return View(yachtSale);
         }
 

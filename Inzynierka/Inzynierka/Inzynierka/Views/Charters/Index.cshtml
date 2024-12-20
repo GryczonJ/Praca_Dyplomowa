@@ -9,6 +9,10 @@
 
 @if (isLogged)
 {
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+
     <h2>Your Charters</h2>
     @if (Model.MyCharters.Any())
     {

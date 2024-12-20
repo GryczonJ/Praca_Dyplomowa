@@ -1,13 +1,14 @@
 ﻿@model Inzynierka.Data.Tables.YachtSale
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Szczegóły";
+    bool ulubiony = ViewData["ulubiony"] != null && (bool)ViewData["ulubiony"];
+    bool isOwner = ViewData["isOwner"] != null && (bool)ViewData["isOwner"];
+    bool isLogged = ViewData["isLogged"] != null && (bool)ViewData["isLogged"];
 }
 
-<h1>Details</h1>
-
+<h1>Szczegóły</h1>
 <div>
-    <h4>YachtSale</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -73,6 +74,41 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    @if (isLogged) { 
+        @if(isOwner)
+	    {
+            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+            <a asp-action="Details" asp-route-id="@Model.Id">Details</a>
+	    }
+        <a asp-action="Index">Powrót</a>
+        @if (ulubiony)
+        {
+            <form asp-action="RemoveFromFavorites" asp-controller="FavoriteYachtsForSales" method="post" style="display:inline;">
+                <input type="hidden" name="YachtSaleId" value="@Model?.Id" />
+                <button type="submit" class="btn btn-outline-danger">
+                    💔 Usuń z ulubionych
+                </button>
+            </form>
+        }
+        else
+        {
+            <form asp-action="AddToFavorites" asp-controller="FavoriteYachtsForSales" method="post" style="display:inline;">
+                <input type="hidden" name="YachtSaleId" value="@Model?.Id" />
+                <button type="submit" class="btn btn-outline-danger">
+                    ❤️ Dodaj do ulubionych
+                </button>
+            </form>
+        }
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["Message"]
+            </div>
+        }
+    }
+    else
+    {
+        <a asp-action="Index">Powrót</a>
+    }
 </div>
+

@@ -40,29 +40,60 @@
             }
         </tbody>
     </table>
+
+    <h2>Dostępne oferty sprzedaży</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.OtherSales.First().Yacht.name)</th>
+                <th>@Html.DisplayNameFor(model => model.OtherSales.First().price)</th>
+                <th>@Html.DisplayNameFor(model => model.OtherSales.First().currency)</th>
+                <th>@Html.DisplayNameFor(model => model.OtherSales.First().location)</th>
+                <th>@Html.DisplayNameFor(model => model.OtherSales.First().notes)</th>
+                <th>Akcje</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sale in Model.OtherSales)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => sale.Yacht.name)</td>
+                    <td>@Html.DisplayFor(modelItem => sale.price)</td>
+                    <td>@Html.DisplayFor(modelItem => sale.currency)</td>
+                    <td>@Html.DisplayFor(modelItem => sale.location)</td>
+                    <td>@Html.DisplayFor(modelItem => sale.notes)</td>
+                    <td> <a asp-action="Details" asp-route-id="@sale.Id">Szczegóły</a> </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h2>Dostępne oferty sprzedaży</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.OtherSales.First().Yacht.name)</th>
+                <th>@Html.DisplayNameFor(model => model.OtherSales.First().price)</th>
+                <th>@Html.DisplayNameFor(model => model.OtherSales.First().currency)</th>
+                <th>@Html.DisplayNameFor(model => model.OtherSales.First().location)</th>
+                <th>@Html.DisplayNameFor(model => model.OtherSales.First().notes)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sale in Model.OtherSales)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => sale.Yacht.name)</td>
+                    <td>@Html.DisplayFor(modelItem => sale.price)</td>
+                    <td>@Html.DisplayFor(modelItem => sale.currency)</td>
+                    <td>@Html.DisplayFor(modelItem => sale.location)</td>
+                    <td>@Html.DisplayFor(modelItem => sale.notes)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 
-<h2>Dostępne oferty sprzedaży</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.OtherSales.First().Yacht.name)</th>
-            <th>@Html.DisplayNameFor(model => model.OtherSales.First().price)</th>
-            <th>@Html.DisplayNameFor(model => model.OtherSales.First().currency)</th>
-            <th>@Html.DisplayNameFor(model => model.OtherSales.First().location)</th>
-            <th>@Html.DisplayNameFor(model => model.OtherSales.First().notes)</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var sale in Model.OtherSales)
-        {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => sale.Yacht.name)</td>
-                <td>@Html.DisplayFor(modelItem => sale.price)</td>
-                <td>@Html.DisplayFor(modelItem => sale.currency)</td>
-                <td>@Html.DisplayFor(modelItem => sale.location)</td>
-                <td>@Html.DisplayFor(modelItem => sale.notes)</td>
-            </tr>
-        }
-    </tbody>
-</table>
+
