@@ -77,8 +77,8 @@
     @if (isLogged) { 
         @if(isOwner)
 	    {
-            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-            <a asp-action="Details" asp-route-id="@Model.Id">Details</a>
+            <a asp-action="Edit" asp-route-id="@Model.Id">Edytuj</a>
+            @* //<a asp-action="Details" asp-route-id="@Model.Id">Szceguły</a> *@
 	    }
         <a asp-action="Index">Powrót</a>
         @if (ulubiony && !isOwner)
@@ -90,7 +90,7 @@
                 </button>
             </form>
         }
-        else if(ulubiony && !isOwner)
+        else if(!ulubiony && !isOwner)
         {
             <form asp-action="AddToFavorites" asp-controller="FavoriteYachtsForSales" method="post" style="display:inline;">
                 <input type="hidden" name="YachtSaleId" value="@Model?.Id" />

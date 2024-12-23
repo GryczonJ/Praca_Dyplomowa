@@ -28,8 +28,14 @@ namespace Inzynierka.Controllers
         // GET: FavoriteCruises
         public async Task<IActionResult> Index()
         {
-            var ahoyDbContext = _context.FavoriteCruises.Include(f => f.Cruise).Include(f => f.User);
-            return View(await ahoyDbContext.ToListAsync());
+            Guid? loggedInUserId = GetLoggedInUserId();
+            // Pobranie ulubionych rejsów zalogowanego użytkownika
+            var favoriteCruises = await _context.FavoriteCruises
+                .Include(f => f.Cruise) // Załaduj dane powiązane z rejsami
+                .Where(f => f.UserId == loggedInUserId) // Filtrowanie po użytkowniku
+                .ToListAsync();
+
+            return View(favoriteCruises);
         }
 
         // GET: FavoriteCruises/Details/5
@@ -194,7 +200,7 @@ namespace Inzynierka.Controllers
         }
 
         // GET: FavoriteCruises/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -204,7 +210,7 @@ namespace Inzynierka.Controllers
             var favoriteCruises = await _context.FavoriteCruises
                 .Include(f => f.Cruise)
                 .Include(f => f.User)
-                .FirstOrDefaultAsync(m => m.UserId == id);
+                .FirstOrDefaultAsync(m => m.CruiseId == id);
             if (favoriteCruises == null)
             {
                 return NotFound();

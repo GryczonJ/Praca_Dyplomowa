@@ -4,15 +4,24 @@
     ViewData["Title"] = "Index";
     bool isLogged = (bool)ViewData["isLogged"];
 }
-
+@* 
 <h1>Charters</h1>
-
+ *@
+<div class="d-flex align-items-center">
+    <h1 class="me-3">Charters</h1>
+    @if (isLogged)
+    {
+        <a asp-action="Create" class="btn btn-outline-success">
+            ➕ Dodaj
+        </a>
+    }
+</div>
 @if (isLogged)
 {
-    <p>
+   @*  <p>
         <a asp-action="Create">Create New</a>
     </p>
-
+ *@
     <h2>Your Charters</h2>
     @if (Model.MyCharters.Any())
     {
@@ -43,9 +52,9 @@
                         <td>@charter.status</td>
                         <td>@charter.Yacht?.name</td>
                         <td>
-                            <a asp-action="Edit" asp-route-id="@charter.Id">Edit</a> |
-                            <a asp-action="Details" asp-route-id="@charter.Id">Details</a> |
-                            <a asp-action="Delete" asp-route-id="@charter.Id">Delete</a>
+                            <a asp-action="Edit" asp-route-id="@charter.Id">Edytuj</a> |
+                            <a asp-action="Details" asp-route-id="@charter.Id">Szczegóły</a> |
+                            <a asp-action="Delete" asp-route-id="@charter.Id">Usuń</a>
                         </td>
                     </tr>
                 }
@@ -90,7 +99,7 @@ else
                 <td>@charter.status</td>
                 <td>@charter.Yacht?.name</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@charter.Id">Details</a>
+                    <a asp-action="Details" asp-route-id="@charter.Id">Szczegóły</a>
                 </td>
             </tr>
         }

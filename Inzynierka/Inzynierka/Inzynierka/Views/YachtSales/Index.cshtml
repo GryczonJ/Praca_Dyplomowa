@@ -5,12 +5,21 @@
     bool isLogged = (bool)ViewData["isLogged"];
 }
 
-<h1>Oferty sprzedaży jachtów</h1>
-
+@* <h1>Oferty sprzedaży jachtów</h1>
+ *@
+<div class="d-flex align-items-center">
+    <h1 class="me-3">Oferty sprzedaży jachtów</h1>
+    @if (isLogged)
+    {
+        <a asp-action="Create" class="btn btn-outline-success">
+            ➕ Dodaj
+        </a>
+    }
+</div>
 @if (isLogged)
 {
     <h2>Moje oferty sprzedaży</h2>
-    <p><a asp-action="Create">Dodaj nową ofertę</a></p>
+   @*  <p><a asp-action="Create">Dodaj nową ofertę</a></p> *@
     <table class="table">
         <thead>
             <tr>
@@ -79,6 +88,7 @@ else
                 <th>@Html.DisplayNameFor(model => model.OtherSales.First().currency)</th>
                 <th>@Html.DisplayNameFor(model => model.OtherSales.First().location)</th>
                 <th>@Html.DisplayNameFor(model => model.OtherSales.First().notes)</th>
+                <th>Akcje</th>
             </tr>
         </thead>
         <tbody>
@@ -90,6 +100,7 @@ else
                     <td>@Html.DisplayFor(modelItem => sale.currency)</td>
                     <td>@Html.DisplayFor(modelItem => sale.location)</td>
                     <td>@Html.DisplayFor(modelItem => sale.notes)</td>
+                    <td> <a asp-action="Details" asp-route-id="@sale.Id">Szczegóły</a> </td>
                 </tr>
             }
         </tbody>
