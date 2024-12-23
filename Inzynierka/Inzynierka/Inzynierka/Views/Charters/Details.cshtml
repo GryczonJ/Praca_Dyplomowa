@@ -77,7 +77,17 @@
             <a asp-action="Details" asp-route-id="@Model.Id">Details</a>
         }
         <a asp-action="Index">Powrót</a>
-       @*  @if (ulubiony)
+      
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["Message"]
+            </div>
+        }
+    }
+    else
+    {
+     @*    @if (ulubiony)
         {
             <form asp-action="RemoveFromFavorites" asp-controller="" method="post" style="display:inline;">
                 <input type="hidden" name="YachtSaleId" value="@Model?.Id" />
@@ -95,15 +105,6 @@
                 </button>
             </form>
         } *@
-        @if (TempData["Message"] != null)
-        {
-            <div class="alert alert-success">
-                @TempData["Message"]
-            </div>
-        }
-    }
-    else
-    {
         <a asp-action="Index">Powrót</a>
     }
 </div>

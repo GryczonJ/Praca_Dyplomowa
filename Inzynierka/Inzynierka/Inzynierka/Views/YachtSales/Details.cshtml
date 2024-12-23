@@ -81,7 +81,7 @@
             <a asp-action="Details" asp-route-id="@Model.Id">Details</a>
 	    }
         <a asp-action="Index">Powrót</a>
-        @if (ulubiony)
+        @if (ulubiony && !isOwner)
         {
             <form asp-action="RemoveFromFavorites" asp-controller="FavoriteYachtsForSales" method="post" style="display:inline;">
                 <input type="hidden" name="YachtSaleId" value="@Model?.Id" />
@@ -90,7 +90,7 @@
                 </button>
             </form>
         }
-        else
+        else if(ulubiony && !isOwner)
         {
             <form asp-action="AddToFavorites" asp-controller="FavoriteYachtsForSales" method="post" style="display:inline;">
                 <input type="hidden" name="YachtSaleId" value="@Model?.Id" />
@@ -99,6 +99,7 @@
                 </button>
             </form>
         }
+
         @if (TempData["Message"] != null)
         {
             <div class="alert alert-success">

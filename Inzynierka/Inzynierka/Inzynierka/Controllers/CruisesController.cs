@@ -174,8 +174,6 @@ namespace Inzynierka.Controllers
                 return NotFound();
             }
 
-
-
             // Sprawdzenie, czy użytkownik jest członkiem rejsu
             bool isMember = userId != null && await _context.CruisesParticipants
                 .AnyAsync(cp => cp.UsersId == userId && cp.CruisesId == id);
@@ -187,16 +185,15 @@ namespace Inzynierka.Controllers
             // Sprawdzenie, czy użytkownik jest właścicielem (kapitanem) rejsu
             bool isOwner = userId != null && cruises.CapitanId == userId;
            
-            /*bool isFavorite = userId != null && await _context.FavoriteCruises
-            .AnyAsync(fc => fc.CruiseId == id && fc.UserId == userId);*/
+            bool isFavorite = userId != null && await _context.FavoriteCruises
+            .AnyAsync(fc => fc.CruiseId == id && fc.UserId == userId);
 
-            
 
             // Przekazanie danych do ViewData
             ViewData["IsMember"] = isMember;
             ViewData["IsPending"] = isPending;
             ViewData["isOwner"] = isOwner;
-            //ViewData["ulubiony"] = isFavorite;
+            ViewData["ulubiony"] = isFavorite;
 
             return View(cruises);
         }
@@ -235,7 +232,7 @@ namespace Inzynierka.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,name,description,destination,start_date,end_date,price,currency,status,maxParticipants,YachtId,CapitanId")] Cruises cruises)
+        public async Task<IActionResult> Create([Bind("Id,name,description,destination,start_date,end_date,price,currency,maxParticipants,YachtId")] Cruises cruises)
         {
             // Pobranie zalogowanego użytkownika jako string
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -255,12 +252,14 @@ namespace Inzynierka.Controllers
             }
 
             ModelState.Clear();
+            cruises.status = CruiseStatus.Planned;
             if (ModelState.IsValid)
             {
                 _context.Add(cruises);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["CapitanId"] = new SelectList(_context.Users, "Id", "Id", cruises.CapitanId);
             ViewData["YachtId"] = new SelectList(_context.Yachts, "Id", "name", cruises.YachtId);
             return View(cruises);

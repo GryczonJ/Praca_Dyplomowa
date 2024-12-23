@@ -47,24 +47,24 @@
                 <input asp-for="currency" class="form-control" />
                 <span asp-validation-for="currency" class="text-danger"></span>
             </div>
-            <div class="form-group">
+        @*     <div class="form-group">
                 <label asp-for="status" class="control-label"></label>
                 <select asp-for="status" class="form-control"></select>
                 <span asp-validation-for="status" class="text-danger"></span>
-            </div>
+            </div> *@
             <div class="form-group">
                 <label asp-for="maxParticipants" class="control-label"></label>
                 <input asp-for="maxParticipants" class="form-control" />
                 <span asp-validation-for="maxParticipants" class="text-danger"></span>
             </div>
-            <div class="form-group">
+          @*   <div class="form-group">
                 <label asp-for="YachtId" class="control-label"></label>
                 <select asp-for="YachtId" class ="form-control" asp-items="ViewBag.YachtId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="CapitanId" class="control-label"></label>
                 <select asp-for="CapitanId" class ="form-control" asp-items="ViewBag.CapitanId"></select>
-            </div>
+            </div> *@
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

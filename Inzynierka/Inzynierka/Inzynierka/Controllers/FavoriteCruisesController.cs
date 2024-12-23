@@ -80,7 +80,7 @@ namespace Inzynierka.Controllers
             return View(favoriteCruises);
         }
 
-       /* [HttpPost]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddToFavorites(int Id)
         {
@@ -89,29 +89,29 @@ namespace Inzynierka.Controllers
             if (loggedInUserId == null)
             {
                 TempData["Message"] = "Musisz być zalogowany, aby dodać jacht do ulubionych!";
-                return RedirectToAction("Details", "YachtSales", new { id = Id });
+                return RedirectToAction("Details", "Cruises", new { id = Id });
             }
 
-            var existingFavorite = await _context.FavoriteYachtsForSale
-                .FirstOrDefaultAsync(f => f.YachtSaleId == Id && f.UserId == loggedInUserId);
+            var existingFavorite = await _context.FavoriteCruises
+                .FirstOrDefaultAsync(f => f.CruiseId == Id && f.UserId == loggedInUserId);
 
             if (existingFavorite != null)
             {
                 TempData["Message"] = "Ten jacht już znajduje się w Twoich ulubionych!";
-                return RedirectToAction("Details", "YachtSales", new { id = Id });
+                return RedirectToAction("Details", "Cruises", new { id = Id });
             }
 
-            var favorite = new FavoriteYachtsForSale
+            var favorite = new FavoriteCruises
             {
-                UserId = loggedInUserId.Value,
-                YachtSaleId = Id
+                UserId = (Guid)loggedInUserId,
+                CruiseId = Id
             };
-
-            _context.FavoriteYachtsForSale.Add(favorite);
+            
+            _context.FavoriteCruises.Add(favorite);
             await _context.SaveChangesAsync();
 
             TempData["Message"] = "Jacht został dodany do ulubionych!";
-            return RedirectToAction("Details", "YachtSales", new { id = Id });
+            return RedirectToAction("Details", "Cruises", new { id = Id });
         }
 
         [HttpPost]
@@ -120,12 +120,12 @@ namespace Inzynierka.Controllers
         {
             var loggedInUserId = GetLoggedInUserId();
 
-            var favorite = await _context.FavoriteYachtsForSale
-                .FirstOrDefaultAsync(f => f.YachtSaleId == Id && f.UserId == loggedInUserId);
+            var favorite = await _context.FavoriteCruises
+                .FirstOrDefaultAsync(f => f.CruiseId == Id && f.UserId == loggedInUserId);
 
             if (favorite != null)
             {
-                _context.FavoriteYachtsForSale.Remove(favorite);
+                _context.FavoriteCruises.Remove(favorite);
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Jacht został usunięty z ulubionych.";
             }
@@ -134,8 +134,8 @@ namespace Inzynierka.Controllers
                 TempData["Message"] = "Nie znaleziono jachtu w ulubionych.";
             }
 
-            return RedirectToAction("Details", "YachtSales", new { id = Id });
-        }*/
+            return RedirectToAction("Details", "Cruises", new { id = Id });
+        }
 
 
         // GET: FavoriteCruises/Edit/5

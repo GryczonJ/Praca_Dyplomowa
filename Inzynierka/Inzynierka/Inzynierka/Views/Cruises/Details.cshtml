@@ -92,7 +92,7 @@
         </dd>
     </dl>
 </div>
-@* 
+ 
 <div>
     @if (User.Identity.IsAuthenticated)
     {
@@ -105,7 +105,7 @@
             @if (ulubiony)
             {
                 <form asp-action="RemoveFromFavorites" asp-controller="FavoriteCruises" method="post" style="display:inline;">
-                    <input type="hidden" name="YachtSaleId" value="@Model?.Id" />
+                    <input type="hidden" name="Id" value="@Model.Id" />
                     <button type="submit" class="btn btn-outline-danger">
                         💔 Usuń z ulubionych
                     </button>
@@ -114,7 +114,7 @@
             else
             {
                 <form asp-action="AddToFavorites" asp-controller="FavoriteCruises" method="post" style="display:inline;">
-                    <input type="hidden" name="YachtSaleId" value="@Model?.Id" />
+                    <input type="hidden" name="Id" value="@Model.Id" />
                     <button type="submit" class="btn btn-outline-danger">
                         ❤️ Dodaj do ulubionych
                     </button>
@@ -127,7 +127,7 @@
             @if (ulubiony)
             {
                 <form asp-action="RemoveFromFavorites" asp-controller="FavoriteCruises" method="post" style="display:inline;">
-                    <input type="hidden" name="YachtSaleId" value="@Model?.Id" />
+                    <input type="hidden" name="Id" value="@Model.Id" />
                     <button type="submit" class="btn btn-outline-danger">
                         💔 Usuń z ulubionych
                     </button>
@@ -136,7 +136,7 @@
             else
             {
                 <form asp-action="AddToFavorites" asp-controller="FavoriteCruises" method="post" style="display:inline;">
-                    <input type="hidden" name="YachtSaleId" value="@Model?.Id" />
+                    <input type="hidden" name="Id" value="@Model.Id" />
                     <button type="submit" class="btn btn-outline-danger">
                         ❤️ Dodaj do ulubionych
                     </button>
@@ -153,7 +153,7 @@
             @if (ulubiony)
             {
                 <form asp-action="RemoveFromFavorites" asp-controller="FavoriteCruises" method="post" style="display:inline;">
-                    <input type="hidden" name="YachtSaleId" value="@Model?.Id" />
+                    <input type="hidden" name="Id" value="@Model.Id" />
                     <button type="submit" class="btn btn-outline-danger">
                         💔 Usuń z ulubionych
                     </button>
@@ -162,7 +162,7 @@
             else
             {
                 <form asp-action="AddToFavorites" asp-controller="FavoriteCruises" method="post" style="display:inline;">
-                    <input type="hidden" name="YachtSaleId" value="@Model?.Id" />
+                    <input type="hidden" name="Id" value="@Model.Id" />
                     <button type="submit" class="btn btn-outline-danger">
                         ❤️ Dodaj do ulubionych
                     </button>
@@ -172,8 +172,8 @@
         <div>
             @if (isOwner)
 			{
-				<a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> <br/>
-				<a asp-action="Delete" asp-route-id="@Model?.Id">Delete</a>
+				<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> <br/>
+				<a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
 			}
            
             <a asp-action="Index">Back to List</a>
@@ -193,5 +193,3 @@
         <a asp-action="Index">Back to List</a>
     }
 </div>
-
- *@

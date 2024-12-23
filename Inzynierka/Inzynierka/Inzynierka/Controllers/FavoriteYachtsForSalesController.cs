@@ -80,7 +80,7 @@ namespace Inzynierka.Controllers
             return View(favoriteYachtsForSale);
         }
 
-        /*[HttpPost]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddToFavorites(int YachtSaleId)
         {
@@ -94,7 +94,7 @@ namespace Inzynierka.Controllers
 
             // Sprawdź, czy jacht nie został już dodany do ulubionych
             var existingFavorite = await _context.FavoriteYachtsForSale
-                .FirstOrDefaultAsync(f => f.YachtForSale.Id == YachtSaleId && f.UserId == loggedInUserId);
+                .FirstOrDefaultAsync(f => f.YachtSaleId == YachtSaleId && f.UserId == loggedInUserId);
 
             if (existingFavorite != null)
             {
@@ -126,7 +126,7 @@ namespace Inzynierka.Controllers
 
             // Znajdź ulubiony jacht
             var favorite = await _context.FavoriteYachtsForSale
-                .FirstOrDefaultAsync(f => f.YachtForSale.Id == YachtSaleId && f.UserId == loggedInUserId);
+                .FirstOrDefaultAsync(f => f.YachtSaleId == YachtSaleId && f.UserId == loggedInUserId);
 
             if (favorite != null)
             {
@@ -140,7 +140,7 @@ namespace Inzynierka.Controllers
             }
 
             return RedirectToAction("Details", "YachtSales", new { id = YachtSaleId });
-        }*/
+        }
 
         // GET: FavoriteYachtsForSales/Edit/5
         public async Task<IActionResult> Edit(Guid? id)

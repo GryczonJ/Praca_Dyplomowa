@@ -33,7 +33,7 @@ namespace Inzynierka.Data.Tables
         public string currency { get; set; }// waluta
 
         [Display(Name = "Status")]
-        public CruiseStatus status { get; set; }
+        public CruiseStatus? status { get; set; }
 
         [Display(Name = "Maksymalna liczba uczestników")]
         public int maxParticipants { get; set; }
