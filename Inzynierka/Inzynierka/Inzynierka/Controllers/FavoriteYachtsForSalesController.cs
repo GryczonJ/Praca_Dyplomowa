@@ -19,6 +19,7 @@ namespace Inzynierka.Controllers
         {
             _context = context;
         }
+
         private Guid? GetLoggedInUserId()
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -26,12 +27,25 @@ namespace Inzynierka.Controllers
         }
 
         // GET: FavoriteYachtsForSales
+        /* public async Task<IActionResult> Index()
+         {
+             var ahoyDbContext = _context.FavoriteYachtsForSale.Include(f => f.User).Include(f => f.YachtForSale);
+             return View(await ahoyDbContext.ToListAsync());
+         }
+ */
         public async Task<IActionResult> Index()
         {
-            var ahoyDbContext = _context.FavoriteYachtsForSale.Include(f => f.User).Include(f => f.YachtForSale);
-            return View(await ahoyDbContext.ToListAsync());
-        }
+            Guid? loggedInUserId = GetLoggedInUserId();
+            // Pobranie ulubionych rejsów zalogowanego użytkownika
+            var favoriteYachtsForSale = await _context.FavoriteYachtsForSale
+                .Include(f => f.User) // Załaduj dane użytkownika
+                .Include(f => f.YachtForSale) // Załaduj dane powiązane z rejsami
+                    .ThenInclude(y => y.Yacht) // Załaduj dane szczegółowe jachtu
+                .Where(f => f.UserId == loggedInUserId) // Filtrowanie po użytkowniku
+                .ToListAsync();
 
+            return View(favoriteYachtsForSale);
+        }
         // GET: FavoriteYachtsForSales/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
@@ -82,32 +96,32 @@ namespace Inzynierka.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddToFavorites(int YachtSaleId)
+        public async Task<IActionResult> AddToFavorites(int Id)
         {
             // Pobierz ID zalogowanego użytkownika
             Guid? loggedInUserId = GetLoggedInUserId();
            if(loggedInUserId == null)
             {
                 TempData["Message"] = "Musisz być zalogowany, aby dodać jacht do ulubionych!";
-                return RedirectToAction("Details", "YachtSales", new { id = YachtSaleId });
+                return RedirectToAction("Details", "YachtSales", new { id = Id });
             }
 
             // Sprawdź, czy jacht nie został już dodany do ulubionych
             var existingFavorite = await _context.FavoriteYachtsForSale
-                .FirstOrDefaultAsync(f => f.YachtSaleId == YachtSaleId && f.UserId == loggedInUserId);
+                .FirstOrDefaultAsync(f => f.YachtSaleId == Id && f.UserId == loggedInUserId);
 
             if (existingFavorite != null)
             {
                 // Jeśli już istnieje, możesz zwrócić komunikat lub odświeżyć stronę
                 TempData["Message"] = "Ten jacht już znajduje się w Twoich ulubionych!";
-                return RedirectToAction("Details", "YachtSales", new { id = YachtSaleId });
+                return RedirectToAction("Details", "YachtSales", new { id = Id });
             }
 
             // Dodaj jacht do ulubionych
             var favorite = new FavoriteYachtsForSale
             {
                 UserId = (Guid)loggedInUserId,
-                YachtSaleId = YachtSaleId
+                YachtSaleId = Id
             };
 
             _context.FavoriteYachtsForSale.Add(favorite);
@@ -115,18 +129,18 @@ namespace Inzynierka.Controllers
 
             // Powrót do strony szczegółów jachtu z komunikatem
             TempData["Message"] = "Jacht został dodany do ulubionych!";
-            return RedirectToAction("Details", "YachtSales", new { id = YachtSaleId });
+            return RedirectToAction("Details", "YachtSales", new { id = Id });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RemoveFromFavorites(int YachtSaleId)
+        public async Task<IActionResult> RemoveFromFavorites(int Id)
         {
             var loggedInUserId = GetLoggedInUserId();
 
             // Znajdź ulubiony jacht
             var favorite = await _context.FavoriteYachtsForSale
-                .FirstOrDefaultAsync(f => f.YachtSaleId == YachtSaleId && f.UserId == loggedInUserId);
+                .FirstOrDefaultAsync(f => f.YachtSaleId == Id && f.UserId == loggedInUserId);
 
             if (favorite != null)
             {
@@ -139,7 +153,7 @@ namespace Inzynierka.Controllers
                 TempData["Message"] = "Nie znaleziono jachtu w ulubionych.";
             }
 
-            return RedirectToAction("Details", "YachtSales", new { id = YachtSaleId });
+            return RedirectToAction("Details", "YachtSales", new { id = Id });
         }
 
         // GET: FavoriteYachtsForSales/Edit/5

@@ -14,59 +14,60 @@
     </p>
 } 
  *@
-<div class="d-flex align-items-center">
-    <h1 class="me-3">Rejsy</h1>
-    @if (isLogged)
+  @if (isLogged)
+ {
+        <div class="d-flex align-items-center">
+            <h1 class="me-3">Rejsy</h1>
+                <a asp-action="Create" class="btn btn-outline-success">
+                    ➕ Dodaj
+                </a>
+        </div>
+
+    @if (Model.MyCruises.Any())
     {
-        <a asp-action="Create" class="btn btn-outline-success">
-            ➕ Dodaj
-        </a>
-    }
-</div>
-@if (Model.MyCruises.Any())
-{
-    <h2>Moje Rejsy</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nazwa</th>
-                <th>Opis</th>
-                <th>Data rozpoczęcia</th>
-                <th>Data zakończenia</th>
-                <th>Cena</th>
-                <th>Waluta</th>
-                <th>Status</th>
-                <th>Maks. uczestników</th>
-                <th>Email kapitana</th>
-                <th>Akcje</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.MyCruises)
-            { 
+        <h2>Moje Rejsy</h2>
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@item.name</td>
-                    <td>@item.description</td>
-                    <td>@item.start_date</td>
-                    <td>@item.end_date</td>
-                    <td>@item.price</td>
-                    <td>@item.currency</td>
-                    <td>@item.status</td>
-                    <td>@item.maxParticipants</td>
-                    <td>@item.Capitan?.Email</td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edytuj</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Szczegóły</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
-                    </td>
+                    <th>Nazwa</th>
+                    <th>Opis</th>
+                    <th>Data rozpoczęcia</th>
+                    <th>Data zakończenia</th>
+                    <th>Cena</th>
+                    <th>Waluta</th>
+                    <th>Status</th>
+                    <th>Maks. uczestników</th>
+                    <th>Email kapitana</th>
+                    <th>Akcje</th>
                 </tr>
-             } 
-        </tbody>
-    </table>
-}
-else
-{
-    <p>Nie prowadzisz żadnych rejsów.</p>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.MyCruises)
+                { 
+                    <tr>
+                        <td>@item.name</td>
+                        <td>@item.description</td>
+                        <td>@item.start_date</td>
+                        <td>@item.end_date</td>
+                        <td>@item.price</td>
+                        <td>@item.currency</td>
+                        <td>@item.status</td>
+                        <td>@item.maxParticipants</td>
+                        <td>@item.Capitan?.Email</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edytuj</a> |
+                            <a asp-action="Details" asp-route-id="@item.Id">Szczegóły</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
+                        </td>
+                    </tr>
+                 } 
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Nie prowadzisz żadnych rejsów.</p>
+    }
 }
 
 <h2>Rejsy</h2>

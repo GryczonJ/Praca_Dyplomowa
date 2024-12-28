@@ -84,7 +84,7 @@
         @if (ulubiony && !isOwner)
         {
             <form asp-action="RemoveFromFavorites" asp-controller="FavoriteYachtsForSales" method="post" style="display:inline;">
-                <input type="hidden" name="YachtSaleId" value="@Model?.Id" />
+                <input type="hidden" name="Id" value="@Model?.Id" />
                 <button type="submit" class="btn btn-outline-danger">
                     💔 Usuń z ulubionych
                 </button>
@@ -93,7 +93,7 @@
         else if(!ulubiony && !isOwner)
         {
             <form asp-action="AddToFavorites" asp-controller="FavoriteYachtsForSales" method="post" style="display:inline;">
-                <input type="hidden" name="YachtSaleId" value="@Model?.Id" />
+                <input type="hidden" name="Id" value="@Model?.Id" />
                 <button type="submit" class="btn btn-outline-danger">
                     ❤️ Dodaj do ulubionych
                 </button>

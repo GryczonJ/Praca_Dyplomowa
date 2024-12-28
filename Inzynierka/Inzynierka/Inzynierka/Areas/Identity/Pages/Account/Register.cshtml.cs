@@ -122,6 +122,11 @@ namespace Inzynierka.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+                    var defaultRole = "User"; // Możesz zmienić nazwę roli
+                    if (!await _userManager.IsInRoleAsync(user, defaultRole))
+                    {
+                        await _userManager.AddToRoleAsync(user, defaultRole);
+                    }
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

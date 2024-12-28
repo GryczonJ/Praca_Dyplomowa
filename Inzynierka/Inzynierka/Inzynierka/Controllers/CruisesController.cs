@@ -68,7 +68,7 @@ namespace Inzynierka.Controllers
             return View(((IEnumerable<Cruises>)myCruises, (IEnumerable<Cruises>)otherCruises));
         }
 
-
+        
         [HttpPost]
         public async Task<IActionResult> JoinCruise(int cruiseId)
         {

@@ -1,22 +1,22 @@
 ﻿@model IEnumerable<Inzynierka.Data.Tables.FavoriteYachtsForSale>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Ulubione Jachty na Sprzedaż";
 }
 
-<h1>Index</h1>
-
+<h1>Ulubione Jachty na Sprzedaż</h1>
+@*
 <p>
     <a asp-action="Create">Create New</a>
-</p>
+</p >*@
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.User)
+                @Html.DisplayNameFor(model => model.User.firstName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.YachtForSale)
+                @Html.DisplayNameFor(model => model.YachtForSale.Yacht.name)
             </th>
             <th></th>
         </tr>
@@ -25,15 +25,23 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.User.Id)
+                @Html.DisplayFor(modelItem => item.User.firstName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.YachtForSale.currency)
+                @Html.DisplayFor(modelItem => item.YachtForSale.Yacht.name)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    <div class="d-inline">
+                        <a href="@Url.Action("Details", "YachtSales", new { id = item.YachtSaleId })" class="btn btn-outline-primary">
+                            📄 Zobacz szczegóły
+                        </a>
+                    </div>
+                    <form asp-action="RemoveFromFavorites" asp-controller="FavoriteYachtsForSales" method="post" style="display:inline;">
+                        <input type="hidden" name="Id" value="@item.YachtSaleId" />
+                        <button type="submit" class="btn btn-outline-danger">
+                            💔 Usuń z ulubionych
+                        </button>
+                    </form>
             </td>
         </tr>
 }

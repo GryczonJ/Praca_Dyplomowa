@@ -103,7 +103,7 @@ namespace Inzynierka.Controllers
             ViewData["ulubiony"] = isFavorite;
             bool isOwner = loggedInUserId != null && yachtSale.Owner.Id == loggedInUserId;
             
-            ViewData["Owner"] = isOwner;
+            ViewData["isOwner"] = isOwner;
             
             ViewData["isLogged"] = loggedInUserId != null ? true : false;
 

@@ -10,7 +10,7 @@ namespace Inzynierka.Data.Tables
         [Display(Name = "Data utworzenia")]
         public DateTime CreateDate { get; set; }
         [Display(Name = "Ocena")]
-        public int Rating { get; set; }
+        public int? Rating { get; set; }
 
         // foreing key
         [Display(Name = "Twórca")]

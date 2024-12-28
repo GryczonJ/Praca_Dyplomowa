@@ -15,9 +15,6 @@ builder.Services.AddDbContext<AhoyDbContext>(options =>
 
 //builder.Services.AddDefaultIdentity<Users>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AhoyDbContext>();
 
-//builder.Services.AddDefaultIdentity<Users>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AhoyDbContext>();
-
-//builder.Services.AddDefaultIdentity<Users>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AhoyDbContext>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 /*builder.Services.AddDefaultIdentity<Users>(options => options.SignIn.RequireConfirmedAccount = true)// IdentityUser

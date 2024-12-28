@@ -100,7 +100,8 @@ namespace Inzynierka.Migrations
                     b.Property<Guid?>("ProfileId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Rating")
+                    b.Property<int?>("Rating")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(0);
@@ -209,7 +210,7 @@ namespace Inzynierka.Migrations
                     b.Property<DateTime>("start_date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("status")
+                    b.Property<int?>("status")
                         .HasMaxLength(50)
                         .HasColumnType("int");
 
@@ -748,12 +749,10 @@ namespace Inzynierka.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -789,12 +788,10 @@ namespace Inzynierka.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
