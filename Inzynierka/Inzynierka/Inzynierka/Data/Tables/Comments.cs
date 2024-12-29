@@ -13,11 +13,12 @@ namespace Inzynierka.Data.Tables
         public int? Rating { get; set; }
 
         // foreing key
-        [Display(Name = "Twórca")]
-        public Users Creator { get; set; }
         [Display(Name = "Identyfikator twórcy")]
         public Guid CreatorId { get; set; }
 
+        [Display(Name = "Twórca")]
+        public Users? Creator { get; set; }
+        
         [Display(Name = "Profil")]
         public Users? Profile { get; set; }
         [Display(Name = "Identyfikator profilu")]

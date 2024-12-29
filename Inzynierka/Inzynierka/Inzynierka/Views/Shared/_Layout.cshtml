@@ -42,7 +42,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Charters" asp-action="Index">Czarter Jachtów</a>
                         </li>
-                        @if (isInRole)
+                        @if (User.Identity.IsAuthenticated)//isInRole)
                         {
                             <li class="nav-item">
                                 <div class="dropdown">
@@ -58,6 +58,9 @@
                                         </li>
                                     </ul>
                                 </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Comments" asp-action="Index">Komętarze</a>
                             </li>
                         }
                     </ul>

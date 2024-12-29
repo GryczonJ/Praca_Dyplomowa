@@ -40,9 +40,9 @@ namespace Inzynierka.Controllers
             bool isLogged = loggedInUserId != null;
 
             var charters = await _context.Charters
-         .Include(c => c.Owner)
-         .Include(c => c.Yacht)
-         .ToListAsync();
+             .Include(c => c.Owner)
+             .Include(c => c.Yacht)
+             .ToListAsync();
 
             var myCharters = isLogged
                 ? charters.Where(c => c.Owner.Id == loggedInUserId).ToList()
@@ -74,11 +74,20 @@ namespace Inzynierka.Controllers
             var charters = await _context.Charters
                 .Include(c => c.Owner)
                 .Include(c => c.Yacht)
+                .Include(c=>c.Comments)
+                /*.ThenInclude(c=>c.Creator)*/
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (charters == null)
             {
                 return NotFound();
             }
+
+            Guid? loggedUserId = GetLoggedInUserId();
+            bool isOwner = charters.OwnerId == loggedUserId;
+            bool isLogged = loggedUserId.HasValue;
+
+            ViewData["isOwner"] = isOwner;
+            ViewData["isLogged"] = isLogged;
 
             return View(charters);
         }
@@ -187,6 +196,7 @@ namespace Inzynierka.Controllers
             }
 
             var charters = await _context.Charters
+                .Include(c => c.Comments)
                 .Include(c => c.Owner)
                 .Include(c => c.Yacht)
                 .FirstOrDefaultAsync(m => m.Id == id);

@@ -3,12 +3,12 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+@* 
 <h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
-</p>
+</p> *@
 <table class="table">
     <thead>
         <tr>
@@ -21,9 +21,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Rating)
             </th>
-            <th>
+           @*  <th>
                 @Html.DisplayNameFor(model => model.Creator)
-            </th>
+            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.Profile)
             </th>
@@ -45,31 +45,36 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Message)
             </td>
-            <td>
+             <td>
                 @Html.DisplayFor(modelItem => item.CreateDate)
-            </td>
+            </td> 
             <td>
                 @Html.DisplayFor(modelItem => item.Rating)
             </td>
-            <td>
+          @*   <td>
                 @Html.DisplayFor(modelItem => item.Creator.Id)
+            </td> *@
+            <td>
+                @Html.DisplayFor(modelItem => item.Profile.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Profile.Id)
+                @Html.DisplayFor(modelItem => item.Charter.description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Charter.currency)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cruises.currency)
+                @Html.DisplayFor(modelItem => item.Cruises.description)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Yachts.name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @* <a asp-action="Details" asp-route-id="@item.Id">Details</a> | *@
+                @* <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> *@
+                    <form asp-action="Delete">
+                        <input type="hidden" name="id" asp-for="@item.Id" />
+                        <input type="submit" value="Delete" class="btn btn-danger" />
+                        @* <a asp-action="Index">Back to List</a> *@
+                    </form>
             </td>
         </tr>
 }

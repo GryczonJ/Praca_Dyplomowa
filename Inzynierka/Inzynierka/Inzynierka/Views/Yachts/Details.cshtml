@@ -146,24 +146,7 @@
             </div>
         </div>
     </form>
-   @*  <h4>Komentarze:</h4>
-    @if (Model.Comments != null && Model.Comments.Any())
-    {
-        <ul class="list-group">
-            @foreach (var comment in Model.Comments)
-            {
-                <li class="list-group-item">
-                    <strong>@comment.Rating gwiazdek</strong>: @comment.Message
-                </li>
-            }
-        </ul>
-    }
-    else
-    {
-        <p class="text-muted">Brak komentarzy.</p>
-    }  *@
     <h4>Komentarze:</h4>
-
     @if (Model.Comments != null && Model.Comments.Any())
     {
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;

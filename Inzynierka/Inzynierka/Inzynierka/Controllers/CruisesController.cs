@@ -167,6 +167,9 @@ namespace Inzynierka.Controllers
             var cruises = await _context.Cruises
                 .Include(c => c.Capitan)
                 .Include(c => c.Yacht)
+                .Include(c => c.CruisesParticipants)
+                .Include(c => c.CruiseJoinRequests)
+                .Include(c => c.Comments)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (cruises == null)

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Inzynierka.Data;
 using Inzynierka.Data.Tables;
+using System.Security.Claims;
 
 namespace Inzynierka.Controllers
 {
@@ -19,10 +20,24 @@ namespace Inzynierka.Controllers
             _context = context;
         }
 
+        private Guid? GetLoggedInUserId()
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return Guid.TryParse(userIdString, out Guid userId) ? userId : null;
+        }
         // GET: Comments
         public async Task<IActionResult> Index()
         {
-            var ahoyDbContext = _context.Comments.Include(c => c.Charter).Include(c => c.Creator).Include(c => c.Cruises).Include(c => c.Profile).Include(c => c.Yachts);
+            var loggedInUserId = GetLoggedInUserId();
+            bool isLogged = loggedInUserId != null;
+
+            var ahoyDbContext = _context.Comments
+                .Include(c => c.Charter)
+                .Include(c => c.Creator)
+                .Include(c => c.Cruises)
+                .Include(c => c.Profile)
+                .Include(c => c.Yachts)
+                .Where(c => c.CreatorId == loggedInUserId);
             return View(await ahoyDbContext.ToListAsync());
         }
 
@@ -68,14 +83,38 @@ namespace Inzynierka.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Message,CreateDate,Rating,CreatorId,ProfileId,CharterId,CruisesId,YachtsId")] Comments comments)
         {
-            //ModelState.Clear();
-            if (ModelState.IsValid)
+            /* //ModelState.Clear();
+             if (ModelState.IsValid)
+             {
+                 _context.Add(comments);
+                 await _context.SaveChangesAsync();
+                 //return RedirectToAction(nameof(Index));
+                 return Redirect(Request.Headers["Referer"].ToString()); // Powrót do strony poprzedniej
+             }*/
+            try
             {
-                _context.Add(comments);
-                await _context.SaveChangesAsync();
-                //return RedirectToAction(nameof(Index));
-                return Redirect(Request.Headers["Referer"].ToString()); // Powrót do strony poprzedniej
+                if (ModelState.IsValid)
+                {
+                    _context.Add(comments);
+                    await _context.SaveChangesAsync();
+                    return Redirect(Request.Headers["Referer"].ToString()); // Powrót do strony poprzedniej
+                }
+                if(!ModelState.IsValid)
+                {
+                    foreach (var state in ModelState)
+                    {
+                        foreach (var error in state.Value.Errors)
+                        {
+                            Console.WriteLine($"Pole: {state.Key}, Błąd: {error.ErrorMessage}");
+                        }
+                    }
+                }
             }
+            catch (Exception ex)
+            {
+                // Dodaj komunikat o błędzie do ModelState
+                ModelState.AddModelError(string.Empty, $"Wystąpił błąd podczas dodawania komentarza: {ex.Message}");
+           }
             ViewData["CharterId"] = new SelectList(_context.Charters, "Id", "currency", comments.CharterId);
             ViewData["CreatorId"] = new SelectList(_context.Users, "Id", "Id", comments.CreatorId);
             ViewData["CruisesId"] = new SelectList(_context.Cruises, "Id", "currency", comments.CruisesId);
@@ -113,16 +152,26 @@ namespace Inzynierka.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Message,CreateDate,Rating,CreatorId,ProfileId,CharterId,CruisesId,YachtsId")] Comments comments)
         {
+            var komentarz = await _context.Comments
+                             .Include(c => c.Creator) // Jeżeli potrzebujesz szczegółowych danych o twórcy
+                             .FirstOrDefaultAsync(c => c.Id == id);
             if (id != comments.Id)
+            {
+                return NotFound();
+            }
+            else if (komentarz == null)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+
                 try
                 {
-                    _context.Update(comments);
+                    komentarz.Message = comments.Message;
+                    komentarz.Rating = comments.Rating;
+                    _context.Update(komentarz);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
