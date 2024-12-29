@@ -63,22 +63,26 @@ namespace Inzynierka.Controllers
         // POST: Comments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //ModelState.Clear();
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Message,CreateDate,Rating,CreatorId,ProfileId,CharterId,CruisesId,YachtsId")] Comments comments)
         {
+            //ModelState.Clear();
             if (ModelState.IsValid)
             {
                 _context.Add(comments);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
+                return Redirect(Request.Headers["Referer"].ToString()); // Powrót do strony poprzedniej
             }
             ViewData["CharterId"] = new SelectList(_context.Charters, "Id", "currency", comments.CharterId);
             ViewData["CreatorId"] = new SelectList(_context.Users, "Id", "Id", comments.CreatorId);
             ViewData["CruisesId"] = new SelectList(_context.Cruises, "Id", "currency", comments.CruisesId);
             ViewData["ProfileId"] = new SelectList(_context.Users, "Id", "Id", comments.ProfileId);
             ViewData["YachtsId"] = new SelectList(_context.Yachts, "Id", "name", comments.YachtsId);
-            return View(comments);
+            //return View(comments);
+            return Redirect(Request.Headers["Referer"].ToString());
         }
 
         // GET: Comments/Edit/5
