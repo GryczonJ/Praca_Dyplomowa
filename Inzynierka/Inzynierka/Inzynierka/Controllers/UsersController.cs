@@ -7,12 +7,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Inzynierka.Data;
 using Inzynierka.Data.Tables;
+using System.Security.Claims;
 
 namespace Inzynierka.Controllers
 {
     public class UsersController : Controller
     {
         private readonly AhoyDbContext _context;
+
+        private Guid? GetLoggedInUserId()
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return Guid.TryParse(userIdString, out Guid userId) ? userId : null;
+        }
+
 
         public UsersController(AhoyDbContext context)
         {
@@ -73,11 +81,16 @@ namespace Inzynierka.Controllers
         // GET: Users/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null)
+            Guid? getLoggedInUserId = GetLoggedInUserId();
+            //ViewData["ActivePage"] = "Edit";
+            if (id == null && getLoggedInUserId == null)
             {
                 return NotFound();
             }
-
+            if (id == null)
+            {
+                id = getLoggedInUserId;
+            }
             var users = await _context.Users.FindAsync(id);
             if (users == null)
             {
@@ -86,6 +99,21 @@ namespace Inzynierka.Controllers
             ViewData["PhotosId"] = new SelectList(_context.Image, "Id", "link", users.PhotosId);
             return View(users);
         }
+        /*public async Task<IActionResult> Edit()
+        {
+            var id = GetLoggedInUserId;
+
+            ViewData["ActivePage"] = "Edit";
+
+
+            var users = await _context.Users.FindAsync(id);
+            if (users == null)
+            {
+                return NotFound();
+            }
+            ViewData["PhotosId"] = new SelectList(_context.Image, "Id", "link", users.PhotosId);
+            return View(users);
+        }*/
 
         // POST: Users/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -94,16 +122,30 @@ namespace Inzynierka.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, [Bind("age,surName,aboutMe,firstName,lastName,banned,Public,PhotosId,Id,UserName,NormalizedUserName,Email,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] Users users)
         {
+            ViewData["ActivePage"] = "Edit"; 
             if (id != users.Id)
             {
                 return NotFound();
             }
-
+            //ModelState.Clear();
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(users);
+                    var existingUser = await _context.Users.FindAsync(id);
+                    if (existingUser == null)
+                    {
+                        return NotFound();
+                    }
+                    // Ustawienie wartości, jeśli różnią się od istniejących wartości
+                    existingUser.age = users.age;
+                    existingUser.firstName = users.firstName ?? existingUser.firstName;
+                    //existingUser.lastName = users.lastName ?? existingUser.lastName;
+                    existingUser.Email = users.Email ?? existingUser.Email;
+                    existingUser.PhoneNumber = users.PhoneNumber ?? existingUser.PhoneNumber;
+                    existingUser.aboutMe = users.aboutMe ?? existingUser.aboutMe;
+                    existingUser.PhotosId = users.PhotosId ?? existingUser.PhotosId;
+                    _context.Update(existingUser);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -119,9 +161,24 @@ namespace Inzynierka.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PhotosId"] = new SelectList(_context.Image, "Id", "link", users.PhotosId);
+            else
+            {
+                // Przechwytywanie błędów walidacji
+                var validationErrors = new List<string>();
+
+                foreach (var state in ModelState)
+                {
+                    foreach (var error in state.Value.Errors)
+                    {
+                        validationErrors.Add(error.ErrorMessage);
+                    }
+                }
+            }
+
+                ViewData["PhotosId"] = new SelectList(_context.Image, "Id", "link", users.PhotosId);
             return View(users);
         }
+
 
         // GET: Users/Delete/5
         public async Task<IActionResult> Delete(Guid? id)

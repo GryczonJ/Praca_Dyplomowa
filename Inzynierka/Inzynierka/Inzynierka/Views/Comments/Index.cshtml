@@ -55,20 +55,36 @@
                 @Html.DisplayFor(modelItem => item.Creator.Id)
             </td> *@
             <td>
-                @Html.DisplayFor(modelItem => item.Profile.Email)
+                @* @Html.DisplayFor(modelItem => item.Profile.Email) *@
+                    @if (item.Profile != null)
+                    {
+                        @Html.ActionLink(item.Profile.Email, "Details", "Profile", new { id = item.Profile.Id }, null)
+                    }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Charter.description)
+               @*  @Html.DisplayFor(modelItem => item.Charter.description) *@
+                    @if (item.Charter != null)
+                    {
+                        @Html.ActionLink(item.Charter.description, "Details", "Charters", new { id = item.Charter.Id }, null)
+                    }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Cruises.description)
+                @* @Html.DisplayFor(modelItem => item.Cruises.description) *@
+                    @if (item.Cruises != null)
+                    {
+                        @Html.ActionLink(item.Cruises.description, "Details", "Cruises", new { id = item.Cruises.Id }, null)
+                    }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Yachts.name)
+                @* @Html.DisplayFor(modelItem => item.Yachts.name) *@
+                    @if (item.Yachts != null)
+                    {
+                        @Html.ActionLink(item.Yachts.name, "Details", "Yachts", new { id = item.Yachts.Id }, null)
+                    }
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                @* <a asp-action="Details" asp-route-id="@item.Id">Details</a> | *@
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 @* <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> *@
                     <form asp-action="Delete">
                         <input type="hidden" name="id" asp-for="@item.Id" />

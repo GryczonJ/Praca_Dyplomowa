@@ -6,16 +6,19 @@ namespace Inzynierka.Data.Tables
 {
     public class Users : IdentityUser<Guid>
     {
+        
         [Display(Name = "Wiek")]
-        public int   age { get; set; } = 0;
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime? age { get; set; }
+        [Display(Name = "Imię")]
+        public string firstName { get; set; } = "Jan";
+        [Display(Name = "Nazwisko")]
+        public string? lastName { get; set;}
         [Display(Name = "Nazwisko")]
         public string surName { get; set; } = "Kowalski";
         [Display(Name = "Opis o mnie")]
         public string aboutMe { get; set; } = "Nazywam sie Jan Kowalski";
-        [Display(Name = "Imię")]
-        public string firstName { get; set; } = "Jan";
-        [Display(Name = "Nazwisko")]
-        public string lastName { get; set; } = "Janina";
+        
         [Display(Name = "Zbanowany")]
         public bool banned { get; set; } = false;
         [Display(Name = "Profil publiczny")]
@@ -25,7 +28,7 @@ namespace Inzynierka.Data.Tables
         //public Roles Role { get; set; }
         //public Guid? RoleId { get; set; }
         [Display(Name = "Zdjęcie")]
-        public Image Photos { get; set; }
+        public Image? Photos { get; set; }
         [Display(Name = "Identyfikator zdjęcia")]
         public int? PhotosId { get; set; }
 

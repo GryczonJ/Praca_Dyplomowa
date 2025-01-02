@@ -9,41 +9,48 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p >*@
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.User.firstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.YachtForSale.Yacht.name)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.firstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.YachtForSale.Yacht.name)
-            </td>
-            <td>
-                    <div class="d-inline">
-                        <a href="@Url.Action("Details", "YachtSales", new { id = item.YachtSaleId })" class="btn btn-outline-primary">
-                            📄 Zobacz szczegóły
-                        </a>
-                    </div>
-                    <form asp-action="RemoveFromFavorites" asp-controller="FavoriteYachtsForSales" method="post" style="display:inline;">
-                        <input type="hidden" name="Id" value="@item.YachtSaleId" />
-                        <button type="submit" class="btn btn-outline-danger">
-                            💔 Usuń z ulubionych
-                        </button>
-                    </form>
-            </td>
-        </tr>
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.User.firstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.YachtForSale.Yacht.name)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.firstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.YachtForSale.Yacht.name)
+                </td>
+                <td>
+                        <div class="d-inline">
+                            <a href="@Url.Action("Details", "YachtSales", new { id = item.YachtSaleId })" class="btn btn-outline-primary">
+                                📄 Zobacz szczegóły
+                            </a>
+                        </div>
+                        <form asp-action="RemoveFromFavorites" asp-controller="FavoriteYachtsForSales" method="post" style="display:inline;">
+                            <input type="hidden" name="Id" value="@item.YachtSaleId" />
+                            <button type="submit" class="btn btn-outline-danger">
+                                💔 Usuń z ulubionych
+                            </button>
+                        </form>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
 }
-    </tbody>
-</table>
+else
+{
+	<p>Brak ulubionych jachtów na sprzedaż.</p>
+}

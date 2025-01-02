@@ -530,8 +530,8 @@ namespace Inzynierka.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("age")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("age")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("banned")
                         .HasColumnType("bit");
@@ -542,7 +542,6 @@ namespace Inzynierka.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("lastName")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 

@@ -8,9 +8,11 @@ namespace Inzynierka.Data.Tables
         public int Id { get; set; }
         //start_date
         [Display(Name = "Data rozpoczęcia")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime startDate { get; set; }
         //end_date
         [Display(Name = "Data zakończenia")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime endDate { get; set; }
   
         [Display(Name = "Cena")]

@@ -9,50 +9,60 @@
 @* <p>
     <a asp-action="Create">Create New</a>
 </p> *@
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Cruise.name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cruise.description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cruise.destination)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cruise.name)
-            </td>
-            <td>
-                    @Html.DisplayFor(modelItem => item.Cruise.description)
-            </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Cruise.destination)
-                </td>
-            <td>
-               @*  @Html.ActionLink("Details", "Details", new {  id=item.CruiseId  }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.CruiseId }) *@
-                    @* @Html.ActionLink("Details", "Details", "Cruises", new { id = item.CruiseId }, null)  *@
-                    <div class="d-inline">
-                        <a href="@Url.Action("Details", "Cruises", new { id = item.CruiseId })" class="btn btn-outline-primary">
-                            📄 Zobacz szczegóły
-                        </a>
-                    </div>
-                    <form asp-action="RemoveFromFavorites" asp-controller="FavoriteCruises" method="post" style="display:inline;">
-                        <input type="hidden" name="Id" value="@item.CruiseId" />
-                        <button type="submit" class="btn btn-outline-danger">
-                            💔 Usuń z ulubionych
-                        </button>
-                    </form>
-            </td>
-        </tr>
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+    
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Cruise.name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Cruise.description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Cruise.destination)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        
+                @foreach (var item in Model) {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Cruise.name)
+                            </td>
+                            <td>
+                                    @Html.DisplayFor(modelItem => item.Cruise.description)
+                            </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Cruise.destination)
+                                </td>
+                            <td>
+                               @*  @Html.ActionLink("Details", "Details", new {  id=item.CruiseId  }) |
+                                @Html.ActionLink("Delete", "Delete", new { id=item.CruiseId }) *@
+                                    @* @Html.ActionLink("Details", "Details", "Cruises", new { id = item.CruiseId }, null)  *@
+                                    <div class="d-inline">
+                                        <a href="@Url.Action("Details", "Cruises", new { id = item.CruiseId })" class="btn btn-outline-primary">
+                                            📄 Zobacz szczegóły
+                                        </a>
+                                    </div>
+                                    <form asp-action="RemoveFromFavorites" asp-controller="FavoriteCruises" method="post" style="display:inline;">
+                                        <input type="hidden" name="Id" value="@item.CruiseId" />
+                                        <button type="submit" class="btn btn-outline-danger">
+                                            💔 Usuń z ulubionych
+                                        </button>
+                                    </form>
+                            </td>
+                        </tr>
+           
+            }
+        </tbody>
+    </table>
+ }
+ else
+{
+	<p>Brak ulubionych rejsów</p>
 }
-    </tbody>
-</table>

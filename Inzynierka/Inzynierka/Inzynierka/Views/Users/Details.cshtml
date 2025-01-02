@@ -1,7 +1,7 @@
 ﻿@model Inzynierka.Data.Tables.Users
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Profil Użtkownika";
 }
 
 <h1>Details</h1>
@@ -40,55 +40,55 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.lastName)
         </dd>
-        <dt class = "col-sm-2">
+       @*  <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.banned)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.banned)
-        </dd>
-        <dt class = "col-sm-2">
+        </dd> *@
+       @*  <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Public)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Public)
-        </dd>
+        </dd> *@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Photos)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Photos.link)
         </dd>
-        <dt class = "col-sm-2">
+        @* <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.UserName)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.UserName)
-        </dd>
-        <dt class = "col-sm-2">
+        </dd> *@
+       @*  <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.NormalizedUserName)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.NormalizedUserName)
-        </dd>
+        </dd> *@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Email)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Email)
         </dd>
-        <dt class = "col-sm-2">
+       @*  <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.NormalizedEmail)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.NormalizedEmail)
-        </dd>
-        <dt class = "col-sm-2">
+        </dd> *@
+       @*  <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.EmailConfirmed)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.EmailConfirmed)
-        </dd>
-        <dt class = "col-sm-2">
+        </dd> *@
+       @*  <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.PasswordHash)
         </dt>
         <dd class = "col-sm-10">
@@ -105,20 +105,20 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.ConcurrencyStamp)
-        </dd>
+        </dd> *@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.PhoneNumber)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.PhoneNumber)
         </dd>
-        <dt class = "col-sm-2">
+      @*   <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.PhoneNumberConfirmed)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.PhoneNumberConfirmed)
-        </dd>
-        <dt class = "col-sm-2">
+        </dd> *@
+     @*    <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.TwoFactorEnabled)
         </dt>
         <dd class = "col-sm-10">
@@ -141,7 +141,7 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.AccessFailedCount)
-        </dd>
+        </dd> *@
     </dl>
 </div>
 <div>
