@@ -70,5 +70,4 @@ namespace Inzynierka.Data.Tables
         [Display(Name = "Jachty użytkownika")]
         public List<Yachts> Yachts { get; set; } = new List<Yachts>(); // One user can have many yachts
     }
-
 }

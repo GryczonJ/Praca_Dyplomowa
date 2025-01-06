@@ -1,0 +1,94 @@
+﻿@model Inzynierka.Data.Tables.Reports
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Reports</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="status" class="control-label"></label>
+                <input asp-for="status" class="form-control" />
+                <span asp-validation-for="status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="date" class="control-label"></label>
+                <input asp-for="date" class="form-control" />
+                <span asp-validation-for="date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="message" class="control-label"></label>
+                <input asp-for="message" class="form-control" />
+                <span asp-validation-for="message" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="note" class="control-label"></label>
+                <input asp-for="note" class="form-control" />
+                <span asp-validation-for="note" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModeratorId" class="control-label"></label>
+                <select asp-for="ModeratorId" class="form-control" asp-items="ViewBag.ModeratorId"></select>
+                <span asp-validation-for="ModeratorId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SuspectUserId" class="control-label"></label>
+                <select asp-for="SuspectUserId" class="form-control" asp-items="ViewBag.SuspectUserId"></select>
+                <span asp-validation-for="SuspectUserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SuspectCruiseId" class="control-label"></label>
+                <select asp-for="SuspectCruiseId" class="form-control" asp-items="ViewBag.SuspectCruiseId"></select>
+                <span asp-validation-for="SuspectCruiseId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SuspectYachtId" class="control-label"></label>
+                <select asp-for="SuspectYachtId" class="form-control" asp-items="ViewBag.SuspectYachtId"></select>
+                <span asp-validation-for="SuspectYachtId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DocumentVerificationId" class="control-label"></label>
+                <select asp-for="DocumentVerificationId" class="form-control" asp-items="ViewBag.DocumentVerificationId"></select>
+                <span asp-validation-for="DocumentVerificationId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SuspectYachtSaleId" class="control-label"></label>
+                <select asp-for="SuspectYachtSaleId" class="form-control" asp-items="ViewBag.SuspectYachtSaleId"></select>
+                <span asp-validation-for="SuspectYachtSaleId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SuspectCharterId" class="control-label"></label>
+                <select asp-for="SuspectCharterId" class="form-control" asp-items="ViewBag.SuspectCharterId"></select>
+                <span asp-validation-for="SuspectCharterId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SuspectCommentId" class="control-label"></label>
+                <select asp-for="SuspectCommentId" class="form-control" asp-items="ViewBag.SuspectCommentId"></select>
+                <span asp-validation-for="SuspectCommentId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SuspectRoleId" class="control-label"></label>
+                <select asp-for="SuspectRoleId" class="form-control" asp-items="ViewBag.SuspectRoleId"></select>
+                <span asp-validation-for="SuspectRoleId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

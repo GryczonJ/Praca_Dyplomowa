@@ -1,0 +1,132 @@
+﻿@model IEnumerable<Inzynierka.Data.Tables.CruiseJoinRequest>
+
+@{
+    ViewData["Title"] = "Index";
+    var groupedRequests = Model.GroupBy(r => r.Cruise);
+}
+
+<h1>Zgłoszenia</h1>
+
+@* <p>
+    <a asp-action="Create">Create New</a>
+</p> *@
+@* <table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cruise)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Capitan)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cruise.currency)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Capitan.Id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table> *@
+@if (groupedRequests != null && groupedRequests.Count() > 0)
+{
+@foreach (var cruiseGroup in groupedRequests)
+{
+    var cruise = cruiseGroup.Key;
+    var requests = cruiseGroup.ToList();
+
+    <div class="card my-3">
+        <div class="card-header">
+            <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#cruise-@cruise.Id" aria-expanded="false" aria-controls="cruise-@cruise.Id">
+                Rejs: @cruise.name (Data: @cruise.start_date) do (Data: @cruise.end_date) @cruise.status
+            </button>
+        </div>
+        <div id="cruise-@cruise.Id" class="collapse">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.status)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.date)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.User.Email)
+                           
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Capitan)
+                        </th>
+                        @* <th>Status</th>
+                        <th>Data zgłoszenia</th>
+                        <th>Użytkownik</th>
+                        <th>Akcje</th> *@
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var request in requests)
+                    {
+                        <tr>
+                            <td>@request.status</td>
+                            <td>@request.date</td>
+                            <td>
+                            @if (request.User != null)
+                            {
+                                @Html.ActionLink(request.User.Email, "Details", "Users", new { id = request.UserId }, null)
+                            }
+                            </td>
+                            <td>
+                                @* <a asp-action="Edit" asp-route-id="@request.Id">Edytuj</a> |
+                                <a asp-action="Details" asp-route-id="@request.Id">Szczegóły</a> |
+                                <a asp-action="Delete" asp-route-id="@request.Id">Usuń</a> *@
+                                <form asp-controller="CruiseJoinRequests" asp-action="AcceptUserToCruise" method="post">
+                                    <input type="hidden" name="userId" id="userId" value="@request.UserId" />
+                                    <input type="hidden" name="cruiseId" id="cruiseId" value="@request.CruiseId" />
+                                    <button type="submit" class="btn btn-success">
+                                            Wyrzuć
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    }
+}
+else
+{
+    <p>Brak zgłoszeń</p>
+}

@@ -1,0 +1,107 @@
+﻿@model IEnumerable<Inzynierka.Data.Tables.Reports>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.message)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.note)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Moderator)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SuspectUser)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SuspectCruise)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SuspectYacht)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DocumentVerification)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SuspectYachtSale)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SuspectCharter)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SuspectComment)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SuspectRole)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.message)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.note)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Moderator.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SuspectUser.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SuspectCruise.currency)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SuspectYacht.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DocumentVerification.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SuspectYachtSale.currency)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SuspectCharter.currency)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SuspectComment.Message)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SuspectRole.Id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

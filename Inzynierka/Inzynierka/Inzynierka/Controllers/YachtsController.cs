@@ -271,17 +271,35 @@ namespace Inzynierka.Controllers
             // Pobierz jacht wraz z powiązanymi rejsami
             var yacht = await _context.Yachts
                 .Include(y => y.Cruises) // Załaduj powiązane rejsy
+                .Include(y => y.Charters) // Załaduj powiązane uczestnictwa w rejsach
                 .FirstOrDefaultAsync(y => y.Id == id);
 
-            if (yacht != null)
+            if (yacht == null)
             {
-                _context.Yachts.Remove(yacht);
+                return NotFound("Żaglówka nie została znaleziona.");
             }
-            if (yacht.Cruises != null) 
+            var hasActiveCruises = yacht.Cruises.Any(c => c.status == CruiseStatus.Ongoing || c.status == CruiseStatus.Planned);
+            var hasActiveCharters = yacht.Charters.Any(ch => ch.status == CharterStatus.WTrakcie || ch.status == CharterStatus.Planowane);
+            if (hasActiveCruises || hasActiveCharters)
+            {
+                TempData["Message"] = "Nie można usunąć jachtu, ponieważ są aktywne rejsy lub czartery.";
+                return RedirectToAction("Delete", new { id });
+                //return RedirectToAction(nameof(Index)); // Powrót na stronę główną lub odpowiednią podstronę
+                /* return BadRequest("Nie można usunąć jachtu, ponieważ są aktywne rejsy lub czartery.");*/
+            }
+            // Usuń wszystkie powiązane rejsy i czartery
+            if (yacht.Cruises != null)
             {
                 _context.Cruises.RemoveRange(yacht.Cruises);
-            }   
+            }
+
+            if (yacht.Charters != null)
+            {
+                _context.Charters.RemoveRange(yacht.Charters);
+            }
+            _context.Yachts.Remove(yacht);
             await _context.SaveChangesAsync();
+            TempData["Message"] = "Jacht został pomyślnie usunięty.";
             return RedirectToAction(nameof(Index));
         }
 

@@ -1,14 +1,14 @@
 ﻿@model Inzynierka.Data.Tables.Yachts
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Szczegóły Jachtu";
     bool isOwner = ViewData["isOwner"] != null && (bool)ViewData["isOwner"];
 }
 
-<h1>Details</h1>
+<h1>Szczegóły Jachtu</h1>
 
 <div>
-    <h4>Yachts</h4>
+    @* <h4>Yachts</h4> *@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -120,7 +120,7 @@
     {
         <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a><br/>
     }
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Powrót</a>
 </div>
 
 @if (User.Identity.IsAuthenticated) { 

@@ -65,6 +65,20 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Profil</a>
                             </li>
+                            
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Panel Kapitana
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="CruiseJoinRequests" asp-action="Index">Zgłoszenia</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="CruisesParticipants" asp-action="Index">Rejsy i członkowie</a>
+                                    </li>
+                                </ul>
+                            </div>
                         }
                     </ul>
                     <partial name="_LoginPartial" />

@@ -1,0 +1,129 @@
+﻿@model IEnumerable<Inzynierka.Data.Tables.CruisesParticipants>
+
+@{
+    ViewData["Title"] = "Index";
+    var groupedCruise = Model.GroupBy(r => r.Cruises);
+}
+
+<h1>Rejsy i Człąkowie Rejsu</h1>
+
+@* <p>
+    <a asp-action="Create">Create New</a>
+</p> *@
+@* <table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Users)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cruises)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody> *@
+@* @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Users.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cruises.currency)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Użytkownik</th>
+            <th>Rejs</th>
+            <th>Akcje</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var participant in Model)
+        {
+            <tr>
+                <td>@participant.Users.Email</td>
+                <td>@participant.Cruises.name</td>
+                <td>
+                     <a asp-action="Edit" asp-route-id="@participant.Id">Edytuj</a> |
+                    <a asp-action="Details" asp-route-id="@participant.Id">Szczegóły</a> |
+                    <a asp-action="Delete" asp-route-id="@participant.Id">Usuń</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table> *@
+@if (groupedCruise != null && groupedCruise.Count()>0)
+{
+@foreach (var cruiseGroup in groupedCruise)
+{
+   var cruise = cruiseGroup.Key;
+   var participants = cruiseGroup.ToList();
+
+    <div class="card my-3">
+    <div class="card-header">
+        <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#cruise-participants-@cruise.Id" aria-expanded="false" aria-controls="cruise-participants-@cruise.Id">
+              Rejs: @cruise.name (Data: @cruise.start_date - @cruise.end_date) @cruise.status
+        </button>
+    </div>
+    <div id="cruise-participants-@cruise.Id" class="collapse">
+    <table class="table">
+       <thead>
+          <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Users.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cruises.name)
+            </th>
+            <th></th>
+            </tr>
+       </thead>
+           <tbody>
+                @foreach (var participant in participants)
+                {
+                    <tr>
+                    <td>@* @participant.Users.Email *@
+                    @if (participant.Users != null)
+                    {
+                        @Html.ActionLink(participant.Users.Email, "Details", "Users", new { id = participant.UsersId }, null)
+                    }
+                    </td>
+                    <td>
+                    @if (participant.Users != null)
+                    {
+                        @Html.ActionLink(participant.Cruises.name, "Details", "Cruises", new { id = participant.CruisesId }, null)
+                    }
+                        @* @participant.Cruises.name *@
+                    </td>
+                    <td>
+                      @*   @Html.ActionLink("Edit", "Edit", new { id = participant.Id }) |
+                        @Html.ActionLink("Details", "Details", new { id = participant.Id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = participant.Id }) *@
+                                <form asp-controller="CruisesParticipants" asp-action="RemoveCrewmate" method="post">
+                                    <input type="hidden" name="userId" value="@participant.UsersId"/>
+                                    <input type="hidden" name="cruiseId" value="@participant.CruisesId" />
+                                    <button type="submit" class="btn btn-danger">Rezygnuj</button>
+                                </form>
+                    </td>
+                    </tr>
+                }
+           </tbody>
+        </table>
+    </div>
+    </div>
+}
+}
+else{
+	<p>Nie Prowadzisz rejsu</p>
+}

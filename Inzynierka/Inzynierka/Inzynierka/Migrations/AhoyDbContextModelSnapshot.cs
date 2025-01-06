@@ -811,7 +811,7 @@ namespace Inzynierka.Migrations
                     b.HasOne("Inzynierka.Data.Tables.Yachts", "Yacht")
                         .WithMany("Charters")
                         .HasForeignKey("YachtId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Owner");
 
@@ -848,7 +848,7 @@ namespace Inzynierka.Migrations
                     b.HasOne("Inzynierka.Data.Tables.Yachts", "Yachts")
                         .WithMany("Comments")
                         .HasForeignKey("YachtsId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Charter");
 
@@ -998,7 +998,7 @@ namespace Inzynierka.Migrations
                     b.HasOne("Inzynierka.Data.Tables.Charters", "SuspectCharter")
                         .WithMany("Reports")
                         .HasForeignKey("SuspectCharterId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Inzynierka.Data.Tables.Comments", "SuspectComment")
@@ -1010,7 +1010,7 @@ namespace Inzynierka.Migrations
                     b.HasOne("Inzynierka.Data.Tables.Cruises", "SuspectCruise")
                         .WithMany("Reports")
                         .HasForeignKey("SuspectCruiseId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Inzynierka.Data.Tables.Roles", "SuspectRole")

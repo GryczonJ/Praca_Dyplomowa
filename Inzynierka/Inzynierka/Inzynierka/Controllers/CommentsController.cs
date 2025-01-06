@@ -20,6 +20,7 @@ namespace Inzynierka.Controllers
             _context = context;
         }
 
+
         private Guid? GetLoggedInUserId()
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);

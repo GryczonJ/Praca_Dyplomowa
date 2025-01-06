@@ -47,7 +47,7 @@ namespace Inzynierka.Data
                 eb.HasOne(c => c.Yacht)
                     .WithMany(y => y.Charters)
                     .HasForeignKey(c => c.YachtId)
-                    .OnDelete(DeleteBehavior.NoAction);
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 // Relacja wiele-do-jednego z tabelą Users (z OwnerId)
                 eb.HasOne(c => c.Owner)
@@ -64,7 +64,7 @@ namespace Inzynierka.Data
                 eb.HasMany(c => c.Reports)
                     .WithOne(r => r.SuspectCharter)
                     .HasForeignKey(r => r.SuspectCharterId)
-                    .OnDelete(DeleteBehavior.NoAction);
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             builder.Entity<Comments>(eb =>
@@ -168,7 +168,7 @@ namespace Inzynierka.Data
                 eb.HasMany(c => c.Reports)
                     .WithOne(r => r.SuspectCruise)
                     .HasForeignKey(r => r.SuspectCruiseId)
-                    .OnDelete(DeleteBehavior.NoAction); // Jeśli chcesz, aby usunięcie rejsu powodowało usunięcie raportów
+                    .OnDelete(DeleteBehavior.Cascade); // Jeśli chcesz, aby usunięcie rejsu powodowało usunięcie raportów
 
                 eb.HasMany(c => c.Comments)
                   .WithOne(cm => cm.Cruises)
@@ -467,7 +467,7 @@ namespace Inzynierka.Data
                 eb.HasMany(y => y.Comments)
                   .WithOne(c => c.Yachts)
                   .HasForeignKey(c => c.YachtsId)
-                  .OnDelete(DeleteBehavior.NoAction); // Usunięcie Yachts nie usuwa powiązanych Comments
+                  .OnDelete(DeleteBehavior.Cascade); // Usunięcie Yachts nie usuwa powiązanych Comments
 
                 // Relacja jeden do wielu z tabelą Reports
                 eb.HasMany(y => y.Reports)
@@ -480,6 +480,7 @@ namespace Inzynierka.Data
                   .WithMany(u => u.Yachts)
                   .HasForeignKey(y => y.OwnerId)
                   .OnDelete(DeleteBehavior.NoAction); // Usunięcie użytkownika nie usuwa powiązanych jachtów
+
             });
 
             builder.Entity<YachtSale>(eb =>

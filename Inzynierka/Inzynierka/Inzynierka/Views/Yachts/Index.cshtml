@@ -11,6 +11,12 @@
         <a asp-action="Create">Create New</a>
     </p>
 } *@
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Message"]
+    </div>
+}
 <div class="d-flex align-items-center">
     <h1 class="me-3">Jachty</h1>
     @if (isLogged)
@@ -40,9 +46,9 @@
                         <td>@yacht.description</td>
                         <td>@yacht.Owner.Email</td>
                         <td>
-                            <a asp-action="Edit" asp-route-id="@yacht.Id">Edit</a> |
-                            <a asp-action="Details" asp-route-id="@yacht.Id">Details</a>|
-                            <a asp-action="Delete" asp-route-id="@yacht.Id">Delete</a>
+                            <a asp-action="Edit" asp-route-id="@yacht.Id">Edytuj</a> |
+                            <a asp-action="Details" asp-route-id="@yacht.Id">Szczegóły</a>|
+                            <a asp-action="Delete" asp-route-id="@yacht.Id">Usuń</a>
                         </td>
                     </tr>
                 }

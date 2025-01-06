@@ -1,14 +1,14 @@
 ﻿@model Inzynierka.Data.Tables.Cruises
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Szczegóły";
     bool isMember = ViewData["IsMember"] != null && (bool)ViewData["IsMember"];
     bool isPending = ViewData["IsPending"] != null && (bool)ViewData["IsPending"];
     bool isOwner = ViewData["isOwner"] != null && (bool)ViewData["isOwner"];
     bool ulubiony = ViewData["ulubiony"] != null && (bool)ViewData["ulubiony"];
 }
 
-<h1>Details</h1>
+<h1>Szczegóły</h1>
 
 @if (TempData["Success"] != null)
 {
@@ -21,7 +21,7 @@
 }
 
 <div>
-    <h4>Cruises</h4>
+  @*   <h4>Cruises</h4> *@
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -172,11 +172,11 @@
         <div>
             @if (isOwner)
 			{
-				<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> <br/>
-				<a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+				<a asp-action="Edit" asp-route-id="@Model.Id">Edytuj</a> <br/>
+				<a asp-action="Delete" asp-route-id="@Model.Id">Usuń</a>
 			}
            
-            <a asp-action="Index">Back to List</a>
+            <a asp-action="Index">Powrót</a>
         </div>
 
         @if (TempData["Message"] != null)
@@ -190,7 +190,7 @@
     else
     {
         <span class="text-muted">Zaloguj się, aby dołączyć</span>
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Index">Pwrót</a>
     }
 </div>
 @if (User.Identity.IsAuthenticated)
