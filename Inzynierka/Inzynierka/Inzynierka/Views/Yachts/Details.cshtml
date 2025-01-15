@@ -6,6 +6,12 @@
 }
 
 <h1>Szczegóły Jachtu</h1>
+@if (User.Identity.IsAuthenticated && !isOwner)
+{
+    <a asp-action="Create" asp-controller="Reports" class="btn btn-outline-success">
+        ❗ Dodaj Raport
+    </a>
+}
 
 <div>
     @* <h4>Yachts</h4> *@
