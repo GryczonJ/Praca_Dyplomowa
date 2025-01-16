@@ -88,6 +88,7 @@ namespace Inzynierka.Controllers
                 .Include(y => y.Image)
                 .Include(y => y.Owner)
                 .Include(y => y.Comments)
+                .Include(y => y.Reports)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (yachts == null)
             {

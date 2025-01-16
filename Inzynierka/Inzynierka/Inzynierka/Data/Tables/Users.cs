@@ -56,6 +56,9 @@ namespace Inzynierka.Data.Tables
         [Display(Name = "Raporty o podejrzanym użytkowniku")]
         public List<Reports> SuspectUserReports { get; set; } = new List<Reports>(); // One user can have many reports
 
+        [Display(Name = "Moje zgłoszenia")]
+        public List<Reports> CreatorReports { get; set; } = new List<Reports>(); // One user can have many reports
+
         [Display(Name = "Ulubione rejsy")]
         public List<FavoriteCruises> FavoriteCruises { get; set; } = new List<FavoriteCruises>(); // One user can have many favorite cruises
         [Display(Name = "Ulubione jachty na oferty")]

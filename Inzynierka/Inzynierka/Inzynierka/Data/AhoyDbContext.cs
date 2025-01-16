@@ -322,6 +322,12 @@ namespace Inzynierka.Data
                   .WithMany(u => u.SuspectUserReports)
                   .HasForeignKey(r => r.SuspectUserId)
                   .OnDelete(DeleteBehavior.NoAction); // Usunięcie użytkownika nie usuwa raportów
+                
+                // Relacja wiele-do-jednego z tabelą Users (SuspectUser)
+                eb.HasOne(r => r.Creator)
+                  .WithMany(u => u.CreatorReports)
+                  .HasForeignKey(r => r.CreatorId)
+                  .OnDelete(DeleteBehavior.NoAction); // Usunięcie użytkownika nie usuwa raportów
             });
 
             builder.Entity<Reservation>(eb =>

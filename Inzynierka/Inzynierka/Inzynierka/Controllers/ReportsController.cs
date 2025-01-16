@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Inzynierka.Data;
 using Inzynierka.Data.Tables;
+using System.Security.Claims;
 
 namespace Inzynierka.Controllers
 {
@@ -17,6 +18,11 @@ namespace Inzynierka.Controllers
         public ReportsController(AhoyDbContext context)
         {
             _context = context;
+        }
+        private Guid? GetLoggedInUserId()
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return Guid.TryParse(userIdString, out Guid userId) ? userId : null;
         }
 
         // GET: Reports
@@ -75,6 +81,8 @@ namespace Inzynierka.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,status,date,message,note,ModeratorId,SuspectUserId,SuspectCruiseId,SuspectYachtId,DocumentVerificationId,SuspectYachtSaleId,SuspectCharterId,SuspectCommentId,SuspectRoleId")] Reports reports)
         {
+            reports.date = DateTime.Now;
+            reports.CreatorId = GetLoggedInUserId();
             if (ModelState.IsValid)
             {
                 _context.Add(reports);
