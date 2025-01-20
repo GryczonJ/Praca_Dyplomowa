@@ -38,6 +38,11 @@ namespace Inzynierka.Data.Tables
         [Display(Name = "Maksymalna liczba uczestników")]
         public int maxParticipants { get; set; }
 
+        [Display(Name = "Zbanowany")]
+        public bool banned { get; set; } = false;
+
+
+
         //Foreign key
 
         // Foreign key to Yacht

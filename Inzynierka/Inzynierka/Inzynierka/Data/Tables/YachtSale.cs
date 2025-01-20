@@ -27,6 +27,9 @@ namespace Inzynierka.Data.Tables
         [Display(Name = "Uwagi")]
         public string notes { get; set; } // Uwagi do transakcji
 
+        [Display(Name = "Zbanowany")]
+        public bool banned { get; set; } = false;
+
 
 
         // Klucz obcy

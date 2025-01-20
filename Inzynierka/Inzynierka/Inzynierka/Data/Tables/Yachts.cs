@@ -66,6 +66,13 @@ namespace Inzynierka.Data.Tables
         [Display(Name = "Wyporność (kg)")]
         public int capacity { get; set; }// wyporność
 
+        [Display(Name = "Zbanowany")]
+        public bool banned { get; set; } = false;
+
+
+
+
+
         // foreing key
         [Display(Name = "Właściciel jachtu")]
         public Users Owner { get; set; }

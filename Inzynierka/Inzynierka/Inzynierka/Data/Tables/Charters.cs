@@ -31,6 +31,12 @@ namespace Inzynierka.Data.Tables
         [Display(Name = "Status")]
         public CharterStatus status { get; set; }
 
+        [Display(Name = "Zbanowany")]
+        public bool banned { get; set; } = false;
+
+
+
+
         //foreing key
         [Display(Name = "Jacht")]
         public Yachts? Yacht { get; set; }

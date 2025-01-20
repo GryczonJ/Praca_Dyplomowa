@@ -11,6 +11,11 @@ namespace Inzynierka.Data.Tables
         [Display(Name = "Data zgłoszenia")]
         public DateTime date { get; set; }// RequestDate
 
+        /*[Display(Name = "Zbanowany")]
+        public bool banned { get; set; } = false;*/
+
+
+
         // foreing key
         [Display(Name = "Rejs")]
         public Cruises Cruise { get; set; }

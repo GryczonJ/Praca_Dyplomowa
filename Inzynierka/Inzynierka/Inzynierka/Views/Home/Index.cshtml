@@ -1,8 +1,75 @@
 ﻿@{
-    ViewData["Title"] = "Start";
+    ViewData["Title"] = "Ahoy";
+    var roles = new[] { "Kapitan", "User", "Moderacja" };
+    var isInRole = roles.Any(role => User.IsInRole(role));
+
 }
 
-<div class="text-center">
-    <h1 class="display-4">Ahoy Żeglarzu</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+ <div class="text-center">
+    <h1 class="display-4">Ahoy Żeglarzu</h1>@*
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
+
+</div> 
+<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+    <ul class="navbar-nav flex-grow-1">
+        @*   <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </li> *@
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Yachts" asp-action="Index">Jachty</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Cruises" asp-action="Index">Rejsy</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="YachtSales" asp-action="Index">Sprzedarz Jachtów</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Charters" asp-action="Index">Czarter Jachtów</a>
+        </li>
+        @if (User.Identity.IsAuthenticated)//isInRole)
+        {
+            <li class="nav-item">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        Ulubione
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li>
+                            <a class="dropdown-item" asp-area="" asp-controller="FavoriteCruises" asp-action="Index">Ulubione Rejsy</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" asp-area="" asp-controller="FavoriteYachtsForSales" asp-action="Index">Ulubione Jachty na Sprzedaż</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Comments" asp-action="Index">Komętarze</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Profil</a>
+            </li>
+
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    Panel Kapitana
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="CruiseJoinRequests" asp-action="Index">Zgłoszenia</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-area="" asp-controller="CruisesParticipants" asp-action="Index">Rejsy i członkowie</a>
+                    </li>
+                </ul>
+            </div>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="Index">Admin Panel</a>
+            </li>
+        }
+    </ul>
 </div>

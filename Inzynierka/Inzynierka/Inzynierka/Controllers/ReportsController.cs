@@ -101,6 +101,44 @@ namespace Inzynierka.Controllers
             return View(reports);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Banned(Guid userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return NotFound("Użytkownik nie został znaleziony.");
+            }
+
+            user.banned = true;
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+
+            TempData["Message"] = $"Użytkownik {user.firstName} {user.lastName} został zbanowany.";
+            //return RedirectToAction("Index");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UnBanned(Guid userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return NotFound("Użytkownik nie został znaleziony.");
+            }
+
+            user.banned = false;
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+
+            TempData["Message"] = $"Użytkownik {user.firstName} {user.lastName} został odbanowany.";
+            return RedirectToAction("Index");
+        }
+
+
         // GET: Reports/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

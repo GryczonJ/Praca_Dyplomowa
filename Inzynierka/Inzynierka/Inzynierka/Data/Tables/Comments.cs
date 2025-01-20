@@ -12,6 +12,11 @@ namespace Inzynierka.Data.Tables
         [Display(Name = "Ocena")]
         public int? Rating { get; set; }
 
+        [Display(Name = "Zbanowany")]
+        public bool banned { get; set; } = false;
+
+
+
         // foreing key
         [Display(Name = "Identyfikator twórcy")]
         public Guid CreatorId { get; set; }

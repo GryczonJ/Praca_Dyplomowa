@@ -14,6 +14,9 @@ namespace Inzynierka.Data.Tables
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Status rezerwacji")]
         public string status { get; set; }
+        [Display(Name = "Zbanowany")]
+        public bool banned { get; set; } = false;
+
 
         // foreing key
         [Display(Name = "Czarter")]
