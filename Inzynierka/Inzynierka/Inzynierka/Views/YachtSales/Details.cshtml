@@ -106,6 +106,27 @@
                 @TempData["Message"]
             </div>
         }
+        <div class="container mt-3">
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#message-form" aria-expanded="false" aria-controls="message-form">
+                Zgłoś
+            </button>
+
+            <div class="collapse mt-2" id="message-form">
+                <form asp-action="Create" asp-controller="Reports" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-group">
+                        <label for="message" class="control-label">Wiadomość</label>
+                        <input id="message" name="message" class="form-control" />
+                        <span class="text-danger"></span>
+                    </div>
+
+                    <input type="hidden" name="SuspectYachtSaleId" value="@Model.Id" />
+                    <input type="hidden" name="SuspectUserId" value="@Model.OwnerId" />
+                    <button type="submit" class="btn btn-success mt-2">Wyślij</button>
+                </form>
+            </div>
+        </div>
     }
     else
     {

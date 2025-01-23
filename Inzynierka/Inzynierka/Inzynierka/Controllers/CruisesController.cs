@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Inzynierka.Data;
 using Inzynierka.Data.Tables;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Inzynierka.Controllers
 {
+    [Authorize(Roles = "User,Moderacja,Kapitan")]
     public class CruisesController : Controller
     {
         private readonly AhoyDbContext _context;
@@ -202,6 +204,7 @@ namespace Inzynierka.Controllers
         }
 
         // GET: Cruises/Create
+        [Authorize(Roles = "Moderacja,Kapitan")]
         public IActionResult Create()
         {
             /*ViewData["CapitanId"] = new SelectList(_context.Users, "Id", "Id");
@@ -233,6 +236,7 @@ namespace Inzynierka.Controllers
         // POST: Cruises/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Moderacja,Kapitan")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,name,description,destination,start_date,end_date,price,currency,maxParticipants,YachtId")] Cruises cruises)

@@ -1,0 +1,51 @@
+﻿@model Inzynierka.Models.UserRolesViewModel
+
+@{
+    ViewData["Title"] = "Role";
+}
+
+<h1>Role</h1>
+
+@* <p>
+    <a asp-action="Create">Create New</a>
+</p> *@
+<table class="table">
+    <thead>
+        <tr>
+            <th>Użytkownik</th>
+            <th>Rola</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var userRole in Model.UserRoles)
+        {
+            <tr>
+                <td>@userRole.UserName</td>
+                <td>@userRole.RoleName</td>
+                <td>
+                    <form method="post" action="@Url.Action("ChangeRole", "Roles")">
+                        <input type="hidden" name="userId" value="@userRole.UserId" />
+
+                        <div class="form-group">
+                            <label for="RoleId_@userRole.UserId">Rola dla @userRole.UserName:</label>
+                            <select id="RoleId_@userRole.UserId" name="roleId" class="form-control" required>
+                                @foreach (var role in Model.Roles)
+                                {
+                                   <option value="@role.Id" selected="@(role.Id == userRole.RoleId ? "selected" : null)">@role.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Zmień rolę</button>
+                    </form>
+                </td>
+            </tr> 
+            
+        }
+    </tbody>
+</table>
+            @* <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td> *@

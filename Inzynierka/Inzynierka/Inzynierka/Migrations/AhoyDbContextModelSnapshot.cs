@@ -36,6 +36,9 @@ namespace Inzynierka.Migrations
                     b.Property<int?>("YachtId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("banned")
+                        .HasColumnType("bit");
+
                     b.Property<string>("currency")
                         .IsRequired()
                         .HasMaxLength(3)
@@ -112,6 +115,9 @@ namespace Inzynierka.Migrations
                     b.Property<int?>("YachtsId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("banned")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CharterId");
@@ -177,6 +183,9 @@ namespace Inzynierka.Migrations
 
                     b.Property<int?>("YachtId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("banned")
+                        .HasColumnType("bit");
 
                     b.Property<string>("currency")
                         .IsRequired()
@@ -278,6 +287,9 @@ namespace Inzynierka.Migrations
 
                     b.Property<int?>("YachtSaleId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("banned")
+                        .HasColumnType("bit");
 
                     b.Property<string>("link")
                         .IsRequired()
@@ -419,6 +431,9 @@ namespace Inzynierka.Migrations
                         .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("banned")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("endDate")
                         .HasColumnType("datetime2");
 
@@ -548,6 +563,10 @@ namespace Inzynierka.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("reasonBan")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("surName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -583,6 +602,9 @@ namespace Inzynierka.Migrations
 
                     b.Property<int>("YachtId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("banned")
+                        .HasColumnType("bit");
 
                     b.Property<string>("currency")
                         .IsRequired()
@@ -632,6 +654,9 @@ namespace Inzynierka.Migrations
 
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("banned")
+                        .HasColumnType("bit");
 
                     b.Property<int>("beds")
                         .HasColumnType("int");

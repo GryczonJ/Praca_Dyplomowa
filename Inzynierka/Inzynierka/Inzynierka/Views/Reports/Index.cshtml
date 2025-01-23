@@ -74,19 +74,41 @@
                 @Html.DisplayFor(modelItem => item.Moderator.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SuspectUser.Id)
+                @* @Html.DisplayFor(modelItem => item.SuspectUser.Email)
                 @Html.DisplayFor(modelItem => item.SuspectCruise.currency)
                 @Html.DisplayFor(modelItem => item.SuspectYacht.name)
                 @Html.DisplayFor(modelItem => item.DocumentVerification.Id)
                 @Html.DisplayFor(modelItem => item.SuspectYachtSale.currency)
                 @Html.DisplayFor(modelItem => item.SuspectCharter.currency)
                 @Html.DisplayFor(modelItem => item.SuspectComment.Message)
-                @Html.DisplayFor(modelItem => item.SuspectRole.Id)
-                </td>
+                @Html.DisplayFor(modelItem => item.SuspectRole.Name) *@
+                    <div>@Html.DisplayFor(modelItem => item.SuspectUser.Email)</div>
+                    <div>@Html.DisplayFor(modelItem => item.SuspectCruise.currency)</div>
+                    <div>@Html.DisplayFor(modelItem => item.SuspectYacht.name)</div>
+                    <div>@Html.DisplayFor(modelItem => item.DocumentVerification.Id)</div>
+                    <div>@Html.DisplayFor(modelItem => item.SuspectYachtSale.currency)</div>
+                    <div>@Html.DisplayFor(modelItem => item.SuspectCharter.currency)</div>
+                    <div>@Html.DisplayFor(modelItem => item.SuspectComment.Message)</div>
+                    <div>@Html.DisplayFor(modelItem => item.SuspectRole.Name)</div>
+                   @*  <div>@Html.DisplayFor(modelItem => item.SuspectUser.banned)</div> *@
+            </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Co Robimy?</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Szeguły</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
+
+                    <form asp-action="Banned" asp-controller="Reports" method="post" style="display:inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="userId" value="@item.SuspectUserId" />
+                            <button type="submit" class="btn btn-danger btn-sm">Zbanuj</button>
+                    </form>
+
+                    <form asp-action="UnBanned" asp-controller="Reports" method="post" style="display:inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="userId" value="@item.SuspectUserId" />
+                            <button type="submit" class="btn btn-success btn-sm">Odbanuj</button>
+                    </form>
+                    
             </td>
         </tr>
 }

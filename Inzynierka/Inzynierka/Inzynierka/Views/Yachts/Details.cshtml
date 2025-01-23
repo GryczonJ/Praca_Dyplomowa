@@ -214,7 +214,7 @@
     </form> *@
     <div class="container mt-3">
         <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#message-form" aria-expanded="false" aria-controls="message-form">
-            Dodaj wiadomość
+            Zgłoś
         </button>
 
         <div class="collapse mt-2" id="message-form">
@@ -228,6 +228,7 @@
                 </div>
 
                 <input type="hidden" name="SuspectYachtId" value="@Model.Id" />
+                <input type="hidden" name="SuspectUserId" value="@Model.OwnerId" />
                 <button type="submit" class="btn btn-success mt-2">Wyślij</button>
             </form>
         </div>

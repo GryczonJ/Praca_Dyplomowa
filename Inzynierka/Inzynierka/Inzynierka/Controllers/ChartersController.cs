@@ -10,9 +10,11 @@ using Inzynierka.Data.Tables;
 using System.Security.Claims;
 using Inzynierka.Models;
 using System.Runtime.InteropServices;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Inzynierka.Controllers
 {
+    [Authorize(Roles = "User,Moderacja,Kapitan")]
     public class ChartersController : Controller
     {
         private readonly AhoyDbContext _context;

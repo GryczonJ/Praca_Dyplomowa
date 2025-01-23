@@ -21,6 +21,10 @@ namespace Inzynierka.Data.Tables
         
         [Display(Name = "Zbanowany")]
         public bool banned { get; set; } = false;
+
+        [Display(Name = "Powód Bana")]
+        public string reasonBan { get; set; } = "";
+
         [Display(Name = "Profil publiczny")]
         public bool Public { get; set; } = true;
 

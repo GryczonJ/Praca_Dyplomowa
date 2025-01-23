@@ -1,0 +1,69 @@
+﻿@model IEnumerable<Inzynierka.Data.Tables.Users>
+
+@{
+    ViewData["Title"] = "Zbanowani Użytkownicy";
+}
+
+<h1>Zbanowani Użytkownicy</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            @* <th>@Html.DisplayNameFor(model => model.Id)</th> *@
+            <th>@Html.DisplayNameFor(model => model.Email)</th>
+            <th>
+                @Html.DisplayNameFor(model => model.reasonBan)
+            </th>
+            <th>Zgłoszenia</th>
+            <th>Akcje</th>
+        </tr>
+    </thead>
+   @*  <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                 <td>@Html.DisplayFor(modelItem => user.Id)</td> 
+                <td>@Html.DisplayFor(modelItem => user.Email)</td>
+                <td>@Html.DisplayFor(modelItem => user.reasonBan)</td>
+                <td>
+                    <form asp-action="UnBanned" asp-controller="Reports" method="post" style="display:inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <button type="submit" class="btn btn-success btn-sm">Odbanuj</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody> *@
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => user.Email)</td>
+                <td>@Html.DisplayFor(modelItem => user.reasonBan)</td>
+                <td>
+                    @if (user.SuspectUserReports != null && user.SuspectUserReports.Any())
+                    {
+                        <ul>
+                            @foreach (var report in user.SuspectUserReports)
+                            {
+                                <li>@report.message</li> <!-- Wyświetlanie wiadomości z zgłoszenia -->
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <span>Brak zgłoszeń</span>
+                    }
+                </td>
+                <td>
+                    <form asp-action="UnBanned" asp-controller="Reports" method="post" style="display:inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <button type="submit" class="btn btn-success btn-sm">Odbanuj</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

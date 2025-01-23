@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Inzynierka.Data;
 using Inzynierka.Data.Tables;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Inzynierka.Controllers
 {
+    [Authorize(Roles = "User,Moderacja,Kapitan")]
     public class FavoriteYachtsForSalesController : Controller
     {
         private readonly AhoyDbContext _context;

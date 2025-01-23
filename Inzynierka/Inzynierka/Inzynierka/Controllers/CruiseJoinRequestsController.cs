@@ -9,9 +9,11 @@ using Inzynierka.Data;
 using Inzynierka.Data.Tables;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Inzynierka.Controllers
 {
+    [Authorize(Roles = "User,Moderacja,Kapitan")]
     public class CruiseJoinRequestsController : Controller
     {
         private readonly AhoyDbContext _context;
