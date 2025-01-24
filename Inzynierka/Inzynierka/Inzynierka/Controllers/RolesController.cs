@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
 using Inzynierka.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace Inzynierka.Controllers
 {
@@ -22,6 +23,11 @@ namespace Inzynierka.Controllers
         public RolesController(AhoyDbContext context)
         {
             _context = context;
+        }
+        private Guid? GetLoggedInUserId()
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return Guid.TryParse(userIdString, out Guid userId) ? userId : null;
         }
 
         // GET: Roles
@@ -48,9 +54,10 @@ namespace Inzynierka.Controllers
             return View(userRolesViewModel);
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public async Task<IActionResult> ChangeRole(Guid userId, Guid roleId)
         {
+
             if (userId == Guid.Empty || roleId == Guid.Empty)
             {
                 return BadRequest("Nieprawidłowe dane wejściowe.");
@@ -80,7 +87,75 @@ namespace Inzynierka.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Index");
+        }*/
+        [HttpPost]
+        public async Task<IActionResult> ChangeRole(Guid userId, Guid roleId)
+        {
+            // Sprawdzenie poprawności danych wejściowych
+            if (userId == Guid.Empty || roleId == Guid.Empty)
+            {
+                return BadRequest("Nieprawidłowe dane wejściowe.");
+            }
+
+            // Pobranie ID zalogowanego użytkownika
+            var loggedInUserId = GetLoggedInUserId();
+
+            if (loggedInUserId == null)
+            {
+                return Unauthorized("Brak dostępu.");
+            }
+
+            // Pobranie ról zalogowanego użytkownika
+            var loggedInUserRoles = await _context.UserRoles
+                .Where(ur => ur.UserId == loggedInUserId)
+                .Select(ur => ur.RoleId)
+                .ToListAsync();
+
+            // Pobranie ID roli "Moderator"
+            var moderatorRoleId = await _context.Roles
+                .Where(r => r.Name == "Moderacja")
+                .Select(r => r.Id)
+                .FirstOrDefaultAsync();
+
+            if (moderatorRoleId == Guid.Empty)
+            {
+                return NotFound("Rola 'Moderator' nie została znaleziona.");
+            }
+
+            // Sprawdzenie, czy zalogowany użytkownik ma rolę "Moderator" i próbuje zmieniać inną rolę "Moderator"
+            if (loggedInUserRoles.Contains(moderatorRoleId) && roleId != moderatorRoleId)
+            {
+                return Forbid("Moderatorzy nie mogą usuwać rangi moderatora.");
+            }
+
+            // Pobranie istniejącej roli użytkownika
+            var userRole = await _context.UserRoles.FirstOrDefaultAsync(ur => ur.UserId == userId);
+
+            if (userRole == null)
+            {
+                return NotFound("Użytkownik lub przypisana rola nie istnieje.");
+            }
+
+            // Usuń istniejącą relację, jeśli istnieje
+            if (userRole != null)
+            {
+                _context.UserRoles.Remove(userRole);
+                await _context.SaveChangesAsync();
+            }
+
+            // Dodanie nowej roli użytkownikowi
+            var newUserRole = new IdentityUserRole<Guid>
+            {
+                UserId = userId,
+                RoleId = roleId
+            };
+
+            _context.UserRoles.Add(newUserRole);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
+
 
         // GET: Roles/Details/5
         public async Task<IActionResult> Details(Guid? id)

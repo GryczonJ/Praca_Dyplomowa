@@ -1,6 +1,10 @@
 ﻿@{
     var roles = new[] { "Kapitan", "User", "Moderacja" };
     var isInRole = roles.Any(role => User.IsInRole(role));
+    var isCaptain = User.IsInRole("Kapitan");
+    var isModerator = User.IsInRole("Moderacja");
+    var isUser = User.IsInRole("User");
+    // var isBanned = (User.Identity.IsAuthenticated && ((ApplicationUser)User).Banned);
 }
 
 <!DOCTYPE html>
@@ -65,42 +69,44 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Profil</a>
                             </li>
-                            
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Panel Kapitana
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="CruiseJoinRequests" asp-action="Index">Zgłoszenia</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-area="" asp-controller="CruisesParticipants" asp-action="Index">Rejsy i członkowie</a>
-                                    </li>
-                                </ul>
-                            </div>
-                           @*   <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="Index">Admin Panel</a>
-                            </li> *@
-                            <li class="nav-item">
-                                @*  <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="Index">Admin Panel</a> *@
+                            @if (isModerator || isCaptain)
+                            {
                                 <div class="dropdown">
                                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Admin Panel
+                                        Panel Kapitana
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <li>
-                                            <a class="dropdown-item" asp-action="Reports" asp-controller="Reports">Zgłoszenia</a>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="CruiseJoinRequests" asp-action="Index">Zgłoszenia</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" asp-action="BannedUsers" asp-controller="Reports">Zbanowani Użytkownicy</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" asp-action="Index" asp-controller="Roles">Role</a>
+                                            <a class="dropdown-item" asp-area="" asp-controller="CruisesParticipants" asp-action="Index">Rejsy i członkowie</a>
                                         </li>
                                     </ul>
                                 </div>
-                            </li>
+                            }
+                            @if (isModerator)
+                            {
+                                <li class="nav-item">
+                                    @*  <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="Index">Admin Panel</a> *@
+                                    <div class="dropdown">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Admin Panel
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <li>
+                                                <a class="dropdown-item" asp-action="Reports" asp-controller="Reports">Zgłoszenia</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" asp-action="BannedUsers" asp-controller="Reports">Zbanowani Użytkownicy</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" asp-action="Index" asp-controller="Roles">Role</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            }
                         }
                     </ul>
                     <partial name="_LoginPartial" />

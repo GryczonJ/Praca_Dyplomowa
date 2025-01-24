@@ -9,6 +9,7 @@ using Inzynierka.Data;
 using Inzynierka.Data.Tables;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Inzynierka.Controllers
 {
@@ -164,18 +165,110 @@ namespace Inzynierka.Controllers
             {
                 return NotFound("Użytkownik nie został znaleziony.");
             }
+            if (userId == GetLoggedInUserId())
+            {
+                return RedirectToAction("BannedUsers", "Reports");
+            }
 
             user.reasonBan = reason;
             user.banned = true;
             _context.Update(user);
             await _context.SaveChangesAsync();
 
+                    // Pobranie ID roli "Banned"
+                    var bannedRoleId = await _context.Roles
+                        .Where(r => r.Name == "Banned")
+                        .Select(r => r.Id)
+                        .FirstOrDefaultAsync();
+
+                    if (bannedRoleId == Guid.Empty)
+                    {
+                        return NotFound("Rola 'Banned' nie została znaleziona.");
+                    }
+
+                    // Sprawdzenie, czy użytkownik już ma rolę "Banned"
+                    var isAlreadyBanned = await _context.UserRoles
+                        .AnyAsync(ur => ur.UserId == userId && ur.RoleId == bannedRoleId);
+
+                    if (isAlreadyBanned)
+                    {
+                        return BadRequest("Użytkownik już posiada rolę 'Banned'.");
+                    }
+
+                    // Dodanie roli "Banned" użytkownikowi
+                    var bannedUserRole = new IdentityUserRole<Guid>
+                    {
+                        UserId = userId,
+                        RoleId = bannedRoleId
+                    };
+
+                    _context.UserRoles.Add(bannedUserRole);
+                    await _context.SaveChangesAsync();
+
+
             TempData["Message"] = $"Użytkownik {user.firstName} {user.lastName} został zbanowany.";
             //return RedirectToAction("Index");
-            /* return View(BannedUsers);*/
+            //* return View(BannedUsers);*//
             return RedirectToAction("BannedUsers", "Reports");
         }
 
+        /*
+         public async Task<IActionResult> BanUser(Guid userId)
+        {
+            // Sprawdzenie poprawności danych wejściowych
+            if (userId == Guid.Empty)
+            {
+                return BadRequest("Nieprawidłowe dane wejściowe.");
+            }
+
+            // Pobranie ID zalogowanego użytkownika
+            var loggedInUserId = GetLoggedInUserId();
+
+            if (loggedInUserId == null)
+            {
+                return Unauthorized("Brak dostępu.");
+            }
+
+            // Sprawdzenie, czy użytkownik istnieje
+            var userExists = await _context.Users.AnyAsync(u => u.Id == userId);
+            if (!userExists)
+            {
+                return NotFound("Użytkownik nie istnieje.");
+            }
+
+            // Pobranie ID roli "Banned"
+            var UnBannedRoleId = await _context.Roles
+                .Where(r => r.Name == "Banned")
+                .Select(r => r.Id)
+                .FirstOrDefaultAsync();
+
+            if (UnBannedRoleId == Guid.Empty)
+            {
+                return NotFound("Rola 'Banned' nie została znaleziona.");
+            }
+
+            // Sprawdzenie, czy użytkownik już ma rolę "Banned"
+            var isAlreadyBanned = await _context.UserRoles
+                .AnyAsync(ur => ur.UserId == userId && ur.RoleId == UnBannedRoleId);
+
+            if (isAlreadyBanned)
+            {
+                return BadRequest("Użytkownik już posiada rolę 'Banned'.");
+            }
+
+            // Dodanie roli "Banned" użytkownikowi
+            var bannedUserRole = new IdentityUserRole<Guid>
+            {
+                UserId = userId,
+                RoleId = UnBannedRoleId
+            };
+
+            _context.UserRoles.Add(bannedUserRole);
+            await _context.SaveChangesAsync();
+
+            return Ok("Użytkownik został zbanowany.");
+        }
+        */
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UnBanned(Guid userId)
@@ -190,6 +283,36 @@ namespace Inzynierka.Controllers
             user.reasonBan = "";
             _context.Update(user);
             await _context.SaveChangesAsync();
+
+                // Pobranie ID roli "Banned"
+                    var UnBannedRoleId = await _context.Roles
+                        .Where(r => r.Name == "User")
+                        .Select(r => r.Id)
+                        .FirstOrDefaultAsync();
+
+                    if (UnBannedRoleId == Guid.Empty)
+                    {
+                        return NotFound("Rola 'Banned' nie została znaleziona.");
+                    }
+
+                    // Sprawdzenie, czy użytkownik już ma rolę "Banned"
+                    var isAlreadyBanned = await _context.UserRoles
+                        .AnyAsync(ur => ur.UserId == userId && ur.RoleId == UnBannedRoleId);
+
+                    if (isAlreadyBanned)
+                    {
+                        return BadRequest("Użytkownik już posiada rolę 'Banned'.");
+                    }
+
+                    // Dodanie roli "Banned" użytkownikowi
+                    var bannedUserRole = new IdentityUserRole<Guid>
+                    {
+                        UserId = userId,
+                        RoleId = UnBannedRoleId
+                    };
+
+                    _context.UserRoles.Add(bannedUserRole);
+                    await _context.SaveChangesAsync();
 
             TempData["Message"] = $"Użytkownik {user.firstName} {user.lastName} został odbanowany.";
             //return RedirectToAction("Index");

@@ -8,7 +8,7 @@ namespace Inzynierka.Data
         public static async Task CreateRoles(IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<Roles>>();
-            var roles = new[] { "Kapitan", "User", "Moderacja" };
+            var roles = new[] { "Kapitan", "User", "Moderacja", "Ban" };
 
             foreach (var role in roles)
             {
