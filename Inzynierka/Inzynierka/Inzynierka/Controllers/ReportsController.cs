@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Inzynierka.Controllers
 {
-    [Authorize(Roles = "Moderacja")]
+/*    [Authorize(Roles = "Moderacja")]*/
     public class ReportsController : Controller
     {
         private readonly AhoyDbContext _context;
@@ -111,6 +111,7 @@ namespace Inzynierka.Controllers
         }
 
         // GET: Reports/Create
+        [Authorize(Roles = "User,Moderacja,Kapitan")]
         public IActionResult Create()
         {
             ViewData["DocumentVerificationId"] = new SelectList(_context.Roles, "Id", "Id");
@@ -155,7 +156,7 @@ namespace Inzynierka.Controllers
             ViewData["SuspectYachtSaleId"] = new SelectList(_context.YachtSale, "Id", "currency", reports.SuspectYachtSaleId);
             return View(reports);
         }
-
+        [Authorize(Roles = "Moderacja")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Banned(Guid userId, string reason)
@@ -290,6 +291,7 @@ namespace Inzynierka.Controllers
             return Ok("Użytkownik został zbanowany.");
         }
         */
+        [Authorize(Roles = "Moderacja")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UnBanned(Guid userId)

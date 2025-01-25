@@ -100,6 +100,7 @@ namespace Inzynierka.Controllers
             }
             ViewData["PhotosId"] = new SelectList(_context.Image, "Id", "link", users.PhotosId);
             return View(users);
+            /*  return RedirectToAction("Index", "Home");*/
         }
         /*public async Task<IActionResult> Edit()
         {
@@ -161,7 +162,8 @@ namespace Inzynierka.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
+                /*return RedirectToAction(nameof(Index));*/
             }
             else
             {
@@ -178,7 +180,8 @@ namespace Inzynierka.Controllers
             }
 
                 ViewData["PhotosId"] = new SelectList(_context.Image, "Id", "link", users.PhotosId);
-            return View(users);
+            /*return View(users);*/
+            return RedirectToAction("Index", "Home");
         }
 
 

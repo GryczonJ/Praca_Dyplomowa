@@ -29,12 +29,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="start_date" class="control-label"></label>
-                <input asp-for="start_date" class="form-control" />
+                <input asp-for="start_date" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
                 <span asp-validation-for="start_date" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="end_date" class="control-label"></label>
-                <input asp-for="end_date" class="form-control" />
+                <input asp-for="end_date" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
                 <span asp-validation-for="end_date" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -79,3 +79,48 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+ @* <script>
+    document.getElementById("submitBtn").addEventListener("click", function (e) {
+        const startDateInput = document.getElementById("start_date");
+        const endDateInput = document.getElementById("end_date");
+
+        const startDate = new Date(startDateInput.value);
+        const endDate = new Date(endDateInput.value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Ustaw godziny na 00:00:00
+
+        // Resetowanie poprzednich komunikatów o błędach
+        startDateInput.classList.remove("is-invalid");
+        endDateInput.classList.remove("is-invalid");
+
+        let isValid = true;
+
+        // Sprawdzenie, czy data rozpoczęcia jest w przyszłości lub dzisiaj
+        if (startDate < today) {
+            startDateInput.classList.add("is-invalid");
+            alert("Data rozpoczęcia nie może być wcześniejsza niż dzisiaj!");
+            isValid = false;
+        }
+
+        // Sprawdzenie, czy data zakończenia jest w przyszłości lub dzisiaj
+        if (endDate < today) {
+            endDateInput.classList.add("is-invalid");
+            alert("Data zakończenia nie może być wcześniejsza niż dzisiaj!");
+            isValid = false;
+        }
+
+        // Sprawdzenie, czy data rozpoczęcia jest wcześniejsza lub równa dacie zakończenia
+        if (startDate > endDate) {
+            startDateInput.classList.add("is-invalid");
+            endDateInput.classList.add("is-invalid");
+            alert("Data rozpoczęcia nie może być późniejsza niż data zakończenia!");
+            isValid = false;
+        }
+
+        // Jeśli walidacja nie przeszła, zapobiegaj wysłaniu formularza
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+</script> *@

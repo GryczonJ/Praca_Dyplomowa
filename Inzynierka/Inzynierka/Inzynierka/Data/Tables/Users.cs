@@ -17,7 +17,7 @@ namespace Inzynierka.Data.Tables
         [Display(Name = "Nazwisko")]
         public string surName { get; set; } = "Kowalski";
         [Display(Name = "Opis o mnie")]
-        public string aboutMe { get; set; } = "Nazywam sie Jan Kowalski";
+        public string? aboutMe { get; set; } = "Nazywam sie Jan Kowalski";
         
         [Display(Name = "Zbanowany")]
         public bool banned { get; set; } = false;

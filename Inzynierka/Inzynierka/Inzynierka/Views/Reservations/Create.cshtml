@@ -1,0 +1,69 @@
+﻿@model Inzynierka.Data.Tables.Reservation
+
+@{
+    ViewData["Title"] = "Rezerwacja";
+}
+
+<h1>Utwurz</h1>
+
+<h4>Rezerwacja</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @* <div class="form-group">
+                <label asp-for="startDate" class="control-label"></label>
+                <input asp-for="startDate" class="form-control" />
+                <span asp-validation-for="startDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="endDate" class="control-label"></label>
+                <input asp-for="endDate" class="form-control" />
+                <span asp-validation-for="endDate" class="text-danger"></span>
+            </div> *@
+            <div class="form-group">
+                <label asp-for="startDate" class="control-label"></label>
+                <input asp-for="startDate" class="form-control"
+                       min="@ViewData["CharterStartDate"]"
+                       max="@ViewData["CharterEndDate"]" />
+                <span asp-validation-for="startDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="endDate" class="control-label"></label>
+                <input asp-for="endDate" class="form-control"
+                       min="@ViewData["CharterStartDate"]"
+                       max="@ViewData["CharterEndDate"]" />
+                <span asp-validation-for="endDate" class="text-danger"></span>
+            </div>
+           @*  <div class="form-group">
+                <label asp-for="status" class="control-label"></label>
+                <input asp-for="status" class="form-control" />
+                <span asp-validation-for="status" class="text-danger"></span>
+            </div> *@
+            @* <div class="form-group">
+                <label asp-for="CharterId" class="control-label"></label>
+                <select asp-for="CharterId" class ="form-control" asp-items="ViewBag.CharterId"></select>
+            </div> *@
+            <!-- Ukryte pole dla CharterId -->
+            <input type="hidden" asp-for="CharterId" value="@ViewData["CharterId"]" />
+
+    @*         <div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
+            </div> *@
+
+            <div class="form-group">
+                <input type="submit" value="Utwurz" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Powrót</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

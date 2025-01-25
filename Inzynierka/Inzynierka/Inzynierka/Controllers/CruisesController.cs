@@ -297,15 +297,15 @@ namespace Inzynierka.Controllers
                 // Przekazanie tylko jachtów zalogowanego użytkownika do widoku
                 ViewData["YachtId"] = new SelectList(userYachts, "Id", "name");
             }
-            else
+           /* else
             {
                 // Jeśli użytkownik nie jest zalogowany, lista jachtów będzie pusta
                 ViewData["YachtId"] = new SelectList(Enumerable.Empty<object>(), "Id", "name");
                 ModelState.AddModelError(string.Empty, "Nie jesteś zalogowany. Proszę zalogować się.");
-            }
+            }*/
 
             //ViewData["CapitanId"] = new SelectList(_context.Users, "Id", "Id", cruises.CapitanId);
-            ViewData["YachtId"] = new SelectList(_context.Yachts, "Id", "name", cruises.YachtId);
+            //ViewData["YachtId"] = new SelectList(_context.Yachts, "Id", "name", cruises.YachtId);
             return View(cruises);
         }
 

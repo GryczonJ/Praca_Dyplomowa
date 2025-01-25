@@ -10,6 +10,10 @@
 <h1>Szczegóły Czarterowania</h1>
 @if (User.Identity.IsAuthenticated)
 {
+    @if (!isOwner)
+    {
+        <a asp-controller="Reservations" asp-action="Create" asp-route-charterId="@Model.Id" class="btn btn-primary">Rezerwuj</a>
+    }
     <div class="container mt-3">
         <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#message-form" aria-expanded="false" aria-controls="message-form">
             Zgłoś
@@ -29,6 +33,7 @@
                 <input type="hidden" name="SuspectUserId" value="@Model.OwnerId" />
                 <button type="submit" class="btn btn-success mt-2">Wyślij</button>
             </form>
+            
         </div>
     </div>
 }

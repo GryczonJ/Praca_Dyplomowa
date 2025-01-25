@@ -8,14 +8,14 @@ namespace Inzynierka.Data.Tables
         public int Id { get; set; }
         [Display(Name = "Data rozpoczęcia")]
         public DateTime startDate { get; set; }
+
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Data zakończenia")]
         public DateTime endDate { get; set; }
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+
         [Display(Name = "Status rezerwacji")]
-        public string status { get; set; }
-        [Display(Name = "Zbanowany")]
-        public bool banned { get; set; } = false;
+        public RequestStatus status { get; set; } = RequestStatus.Pending;
 
 
         // foreing key

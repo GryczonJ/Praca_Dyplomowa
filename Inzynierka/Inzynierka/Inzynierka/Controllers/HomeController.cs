@@ -1,3 +1,4 @@
+using Inzynierka.Data;
 using Inzynierka.Data.Tables;
 using Inzynierka.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -5,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace Inzynierka.Controllers
 {
@@ -12,13 +14,35 @@ namespace Inzynierka.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger) 
-        {
-            _logger = logger;
-        }
+        private readonly AhoyDbContext _context;
 
+        public HomeController(AhoyDbContext context)
+        {
+            _context = context;
+        }
+        
+        private Guid? GetLoggedInUserId()
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return Guid.TryParse(userIdString, out Guid userId) ? userId : null;
+        }
         public IActionResult Index()
         {
+            var userId = GetLoggedInUserId();
+
+            // Pobierz u¿ytkownika z bazy danych
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+            if (user != null &&
+                user.firstName == "Jan" &&
+                user.surName == "Kowalski" &&
+                user.aboutMe == "Nazywam sie Jan Kowalski" &&
+                user.age == null)
+            {
+                // Jeœli któryœ z warunków jest spe³niony, u¿ytkownik nie uzupe³ni³ danych
+                return RedirectToAction("Edit", "Users");
+            }
+            
             return View();
         }
 

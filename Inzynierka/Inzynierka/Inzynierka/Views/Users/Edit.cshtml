@@ -5,8 +5,10 @@
     ViewData["ActivePage"] = "Edit";
 }
 
-<h1>Edit</h1>
-
+<h1>Edytuj</h1>
+<a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Edit">
+    Dokończ rejestrację jeżeli jeszcze tego nie zrobiłeś
+</a>
 <h4>Users</h4>
 <hr />
 <div class="row">
@@ -139,7 +141,8 @@
 </div>
 
 <div>
-    <a asp-action="Index">Powrót</a>
+    <button onclick="window.history.back();" class="btn btn-secondary">Powrót</button>
+    @* <a asp-action="Index">Powrót</a> *@
 </div>
 
 @section Scripts {

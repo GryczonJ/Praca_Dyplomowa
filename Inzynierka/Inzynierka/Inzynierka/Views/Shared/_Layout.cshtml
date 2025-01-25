@@ -46,6 +46,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Charters" asp-action="Index">Czarter Jachtów</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Reservations" asp-action="Index">Rezerwacje</a>
+                        </li>
                         @if (User.Identity.IsAuthenticated)//isInRole)
                         {
                             <li class="nav-item">
@@ -119,7 +122,12 @@
             @RenderBody()
         </main>
     </div>
-
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Message"]
+        </div>
+    }
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2024 - Inzynierka - <a asp-area="" asp-controller="Home" asp-action="Privacy">Polityka Prywatności</a>

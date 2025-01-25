@@ -7,14 +7,12 @@ namespace Inzynierka.Data.Tables
         public int Id { get; set; }
 
         [Display(Name = "Status")]
-        public RequestStatus status { get; set; }// RequestStatus
+        public RequestStatus status { get; set; } = RequestStatus.Accepted; // RequestStatus
         [Display(Name = "Data zgłoszenia")]
         public DateTime date { get; set; }// RequestDate
 
         /*[Display(Name = "Zbanowany")]
         public bool banned { get; set; } = false;*/
-
-
 
         // foreing key
         [Display(Name = "Rejs")]
@@ -42,6 +40,10 @@ namespace Inzynierka.Data.Tables
         Accepted,
 
         [Display(Name = "Odrzucone")]
-        Rejected
+        Rejected,
+
+        [Display(Name = "Zakończony")]
+        completed
     }
+
 }
