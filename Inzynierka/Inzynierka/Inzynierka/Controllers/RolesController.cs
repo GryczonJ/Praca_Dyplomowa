@@ -107,7 +107,7 @@ namespace Inzynierka.Controllers
 
             // Pobranie ról zalogowanego użytkownika
             var loggedInUserRoles = await _context.UserRoles
-                .Where(ur => ur.UserId == loggedInUserId)
+                .Where(ur => ur.UserId == userId)
                 .Select(ur => ur.RoleId)
                 .ToListAsync();
 
@@ -123,7 +123,7 @@ namespace Inzynierka.Controllers
             }
 
             // Sprawdzenie, czy zalogowany użytkownik ma rolę "Moderator" i próbuje zmieniać inną rolę "Moderator"
-            if (loggedInUserRoles.Contains(moderatorRoleId) && roleId != moderatorRoleId)
+            if (loggedInUserRoles.Contains(moderatorRoleId))//&& roleId == moderatorRoleId
             {
                 return Forbid("Moderatorzy nie mogą usuwać rangi moderatora.");
             }

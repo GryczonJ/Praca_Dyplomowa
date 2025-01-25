@@ -16,7 +16,6 @@ namespace Inzynierka.Data.Tables
         public bool banned { get; set; } = false;
 
 
-
         // foreing key
         [Display(Name = "Identyfikator twórcy")]
         public Guid CreatorId { get; set; }
@@ -34,15 +33,24 @@ namespace Inzynierka.Data.Tables
         [Display(Name = "Identyfikator czarteru")]
         public int? CharterId { get; set; }
 
+
         [Display(Name = "Rejs")]
         public Cruises? Cruises { get; set; }
         [Display(Name = "Identyfikator rejsu")]
         public int? CruisesId { get; set; }
 
+
         [Display(Name = "Jacht")]
         public Yachts? Yachts { get; set; }
         [Display(Name = "Identyfikator jachtu")]
         public int? YachtsId { get; set; }
+
+
+        [Display(Name = "Jacht na sprzedarz")]
+        public YachtSale? YachtSale { get; set; }
+        [Display(Name = "Identyfikator jachtu na sprzedarz")]
+        public int? YachtSaleId{ get; set; }
+
 
         // reference
 

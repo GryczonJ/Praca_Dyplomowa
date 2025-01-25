@@ -10,7 +10,7 @@
     <div class="col-md-4">
         <section>
             <form id="account" method="post">
-                <h2>Use a local account to log in.</h2>
+                <h2>Użyj konta lokalnego, aby się zalogować.</h2>@* Use a local account to log in *@
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                 <div class="form-floating mb-3">
@@ -34,7 +34,7 @@
                 </div>
                 <div>
                     <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Zarejestruj się jako nowy użytkownik</a>@* Forgot your password? *@
+                        <a id="forgot-password" asp-page="./ForgotPassword">Zapomniałeś Hasła?</a>@* Forgot your password? *@
                     </p>
                     <p>
                         <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Zarejestruj się jako nowy użytkownik</a>@* Register as a new user *@

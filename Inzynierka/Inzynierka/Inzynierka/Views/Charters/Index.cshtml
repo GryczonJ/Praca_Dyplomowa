@@ -1,14 +1,14 @@
 ﻿@model Inzynierka.Models.ChartersViewModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Czarter Jachtów";
     bool isLogged = (bool)ViewData["isLogged"];
 }
 @* 
 <h1>Charters</h1>
  *@
 <div class="d-flex align-items-center">
-    <h1 class="me-3">Charters</h1>
+    <h1 class="me-3">Czarter Jachtów</h1>
     @if (isLogged)
     {
         <a asp-action="Create" class="btn btn-outline-success">
@@ -63,7 +63,7 @@
     }
     else
     {
-        <p>You don't have any charters yet.</p>
+        <p>Nie masz jeszcze żadnych czarterów.</p>
     }
 }
 else
@@ -71,37 +71,44 @@ else
     @* <p>Please log in to see your charters.</p> *@
 }
 
-<h2>Other Charters</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(Model => Model.OtherCharters.FirstOrDefault().startDate)</th>
-            <th>@Html.DisplayNameFor(Model => Model.OtherCharters.FirstOrDefault().endDate)</th>
-            <th>@Html.DisplayNameFor(Model => Model.OtherCharters.FirstOrDefault().price)</th>
-            <th>@Html.DisplayNameFor(Model => Model.OtherCharters.FirstOrDefault().location)</th>
-            <th>@Html.DisplayNameFor(Model => Model.OtherCharters.FirstOrDefault().description)</th>
-            <th>@Html.DisplayNameFor(Model => Model.OtherCharters.FirstOrDefault().currency)</th>
-            <th>@Html.DisplayNameFor(Model => Model.OtherCharters.FirstOrDefault().status)</th>
-            <th>@Html.DisplayNameFor(Model => Model.OtherCharters.FirstOrDefault().Yacht)</th>
-            <th>Akcje</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var charter in Model.OtherCharters)
-        {
+<h2>Inne Czartery Jachtów</h2>
+@if (Model.OtherCharters == null || !Model.OtherCharters.Any())
+{
+    <p class="text-center text-muted">Aktualnie nie mamy dostępnych czarterów jachtów. 🌍 Zajrzyj później, być może pojawi się oferta, która pozwoli Ci wyruszyć w wymarzoną podróż! ⛵</p>
+}
+else
+{
+    <table class="table">
+        <thead>
             <tr>
-                <td>@charter.startDate</td>
-                <td>@charter.endDate</td>
-                <td>@charter.price</td>
-                <td>@charter.location</td>
-                <td>@charter.description</td>
-                <td>@charter.currency</td>
-                <td>@charter.status</td>
-                <td>@charter.Yacht?.name</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@charter.Id">Szczegóły</a>
-                </td>
+                <th>@Html.DisplayNameFor(Model => Model.OtherCharters.FirstOrDefault().startDate)</th>
+                <th>@Html.DisplayNameFor(Model => Model.OtherCharters.FirstOrDefault().endDate)</th>
+                <th>@Html.DisplayNameFor(Model => Model.OtherCharters.FirstOrDefault().price)</th>
+                <th>@Html.DisplayNameFor(Model => Model.OtherCharters.FirstOrDefault().location)</th>
+                <th>@Html.DisplayNameFor(Model => Model.OtherCharters.FirstOrDefault().description)</th>
+                <th>@Html.DisplayNameFor(Model => Model.OtherCharters.FirstOrDefault().currency)</th>
+                <th>@Html.DisplayNameFor(Model => Model.OtherCharters.FirstOrDefault().status)</th>
+                <th>@Html.DisplayNameFor(Model => Model.OtherCharters.FirstOrDefault().Yacht)</th>
+                <th>Akcje</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var charter in Model.OtherCharters)
+            {
+                <tr>
+                    <td>@charter.startDate</td>
+                    <td>@charter.endDate</td>
+                    <td>@charter.price</td>
+                    <td>@charter.location</td>
+                    <td>@charter.description</td>
+                    <td>@charter.currency</td>
+                    <td>@charter.status</td>
+                    <td>@charter.Yacht?.name</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@charter.Id">Szczegóły</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

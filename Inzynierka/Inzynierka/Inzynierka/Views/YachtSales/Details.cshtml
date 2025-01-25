@@ -7,7 +7,31 @@
     bool isLogged = ViewData["isLogged"] != null && (bool)ViewData["isLogged"];
 }
 
-<h1>Szczegóły</h1>
+<h1>Szczegóły Sprzedaży</h1>
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="container mt-3">
+        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#message-form" aria-expanded="false" aria-controls="message-form">
+            Zgłoś
+        </button>
+
+        <div class="collapse mt-2" id="message-form">
+            <form asp-action="Create" asp-controller="Reports" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    <label for="message" class="control-label">Wiadomość</label>
+                    <input id="message" name="message" class="form-control" />
+                    <span class="text-danger"></span>
+                </div>
+
+                <input type="hidden" name="SuspectYachtSaleId" value="@Model.Id" />
+                <input type="hidden" name="SuspectUserId" value="@Model.OwnerId" />
+                <button type="submit" class="btn btn-success mt-2">Wyślij</button>
+            </form>
+        </div>
+    </div>
+}
 <div>
     <hr />
     <dl class="row">
@@ -106,31 +130,106 @@
                 @TempData["Message"]
             </div>
         }
-        <div class="container mt-3">
-            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#message-form" aria-expanded="false" aria-controls="message-form">
-                Zgłoś
-            </button>
-
-            <div class="collapse mt-2" id="message-form">
-                <form asp-action="Create" asp-controller="Reports" method="post">
-                    @Html.AntiForgeryToken()
-
-                    <div class="form-group">
-                        <label for="message" class="control-label">Wiadomość</label>
-                        <input id="message" name="message" class="form-control" />
-                        <span class="text-danger"></span>
-                    </div>
-
-                    <input type="hidden" name="SuspectYachtSaleId" value="@Model.Id" />
-                    <input type="hidden" name="SuspectUserId" value="@Model.OwnerId" />
-                    <button type="submit" class="btn btn-success mt-2">Wyślij</button>
-                </form>
-            </div>
-        </div>
+       
     }
     else
     {
         <a asp-action="Index">Powrót</a>
     }
 </div>
+@if (User.Identity.IsAuthenticated) { 
+    <h4>Dodaj komentarz</h4>
+    <form asp-controller="Comments" asp-action="Create" method="post">
+        <div class="card">
+            <div class="card-body">
+                <input type="hidden" name="YachtSaleId" value="@Model.Id" />
+                <input type="hidden" name="CreateDate" value="@DateTime.Now" />
+                <input type="hidden" name="CreatorId" value="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value" />
+
+                <div class="form-group">
+                    <label for="Message" class="control-label">Treść komentarza</label>
+                    <textarea name="Message" id="Message" class="form-control"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="Rating" class="control-label">Ocena (1-5)</label>
+                    <input type="number" name="Rating" id="Rating" class="form-control" min="1" max="5" />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Dodaj komentarz</button>
+            </div>
+        </div>
+    </form>
+
+
+    <h4>Komentarze:</h4>
+    @if (Model.Comments != null && Model.Comments.Any())
+    {
+        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        var userComments = Model.Comments.Where(c => c.CreatorId.ToString() == userId).ToList();
+        var otherComments = Model.Comments.Where(c => c.CreatorId.ToString() != userId).ToList();
+
+        @if (userComments.Any())
+        {
+            <h5>Twoje komentarze:</h5>
+            <ul class="list-group">
+                @foreach (var comment in userComments)
+                {
+                    <li class="list-group-item">
+                        <strong>@comment.Rating gwiazdek</strong>: @comment.Message
+                       
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p class="text-muted">Nie dodałeś jeszcze żadnych komentarzy.</p>
+        }
+
+        @if (otherComments.Any())
+        {
+            <h5>Pozostałe komentarze:</h5>
+            <ul class="list-group">
+                @foreach (var comment in otherComments)
+                {
+                    <li class="list-group-item">
+                        <strong>@comment.Rating gwiazdek</strong>: @comment.Message
+                        <div class="container mt-3">
+                            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#message-form" aria-expanded="false" aria-controls="message-form">
+                                Zgłoś
+                            </button>
+
+                            <div class="collapse mt-2" id="message-form">
+                                <form asp-action="Create" asp-controller="Reports" method="post">
+                                    @Html.AntiForgeryToken()
+
+                                    <div class="form-group">
+                                        <label for="message" class="control-label">Wiadomość</label>
+                                        <input id="message" name="message" class="form-control" />
+                                        <span class="text-danger"></span>
+                                    </div>
+
+                                    <input type="hidden" name="SuspectYachtSaleId" value="@Model.Id" />
+                                    <input type="hidden" name="SuspectCommentId" value="@comment.Id" />
+                                    <input type="hidden" name="SuspectUserId" value="@comment.CreatorId" />
+                                    <button type="submit" class="btn btn-success mt-2">Wyślij</button>
+                                </form>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p class="text-muted">Brak innych komentarzy.</p>
+        }
+
+    }
+    else
+    {
+        <p class="text-muted">Brak komentarzy.</p>
+    }
+   }
 

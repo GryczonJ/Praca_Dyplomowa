@@ -1,12 +1,12 @@
 ﻿@model Inzynierka.Data.Tables.Cruises
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Utwórz Rejs";
 }
 
-<h1>Create</h1>
+<h1>Utwórz Rejs</h1>
 
-<h4>Cruises</h4>
+<h4>Resjy</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -66,14 +66,14 @@
                 <select asp-for="CapitanId" class ="form-control" asp-items="ViewBag.CapitanId"></select>
             </div> *@
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Utwórz Rejs" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Pwrót</a>
 </div>
 
 @section Scripts {

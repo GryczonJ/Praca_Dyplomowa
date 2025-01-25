@@ -524,6 +524,11 @@ namespace Inzynierka.Data
                   .WithOne(r => r.SuspectYachtSale)
                   .HasForeignKey(r => r.SuspectYachtSaleId)
                   .OnDelete(DeleteBehavior.NoAction); // Usunięcie YachtSale nie usuwa powiązanych Reports
+
+                eb.HasMany(ys => ys.Comments)
+                  .WithOne(r => r.YachtSale)
+                  .HasForeignKey(r => r.YachtSaleId)
+                  .OnDelete(DeleteBehavior.NoAction); // Usunięcie YachtSale nie usuwa powiązanych Reports
             });
 
             base.OnModelCreating(builder);

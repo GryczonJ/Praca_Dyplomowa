@@ -1,12 +1,12 @@
 ﻿@model Inzynierka.Data.Tables.Yachts
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "utwórz Jacht";
 }
 
-<h1>Create</h1>
+@* <h1>Create</h1> *@
 
-<h4>Yachts</h4>
+<h4>utwórz Jacht:</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -108,14 +108,14 @@
                 <input asp-for="ImageLink" class="form-control" />
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="utwórz Jacht" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Pwrót</a>
 </div>
 
 @section Scripts {

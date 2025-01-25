@@ -8,8 +8,31 @@
     bool ulubiony = ViewData["ulubiony"] != null && (bool)ViewData["ulubiony"];
 }
 
-<h1>Szczegóły</h1>
+<h1>Szczegóły Rejsu</h1>
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="container mt-3">
+        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#message-form" aria-expanded="false" aria-controls="message-form">
+            Zgłoś
+        </button>
 
+        <div class="collapse mt-2" id="message-form">
+            <form asp-action="Create" asp-controller="Reports" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    <label for="message" class="control-label">Wiadomość</label>
+                    <input id="message" name="message" class="form-control" />
+                    <span class="text-danger"></span>
+                </div>
+
+                <input type="hidden" name="SuspectCruiseId" value="@Model.Id" />
+                <input type="hidden" name="SuspectUserId" value="@Model.CapitanId" />
+                <button type="submit" class="btn btn-success mt-2">Wyślij</button>
+            </form>
+        </div>
+    </div>
+}
 @if (TempData["Success"] != null)
 {
     <div class="alert alert-success">@TempData["Success"]</div>
@@ -262,25 +285,5 @@
         <p class="text-muted">Brak komentarzy.</p>
     }
 
-    <div class="container mt-3">
-        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#message-form" aria-expanded="false" aria-controls="message-form">
-            Zgłoś
-        </button>
-
-        <div class="collapse mt-2" id="message-form">
-            <form asp-action="Create" asp-controller="Reports" method="post">
-                @Html.AntiForgeryToken()
-
-                <div class="form-group">
-                    <label for="message" class="control-label">Wiadomość</label>
-                    <input id="message" name="message" class="form-control" />
-                    <span class="text-danger"></span>
-                </div>
-
-                <input type="hidden" name="SuspectCruiseId" value="@Model.Id" />
-                <input type="hidden" name="SuspectUserId" value="@Model.CapitanId" />
-                <button type="submit" class="btn btn-success mt-2">Wyślij</button>
-            </form>
-        </div>
-    </div>
+    
 }

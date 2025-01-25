@@ -165,7 +165,26 @@ namespace Inzynierka.Controllers
             {
                 return NotFound("Użytkownik nie został znaleziony.");
             }
-            if (userId == GetLoggedInUserId())
+            // Pobranie ID zalogowanego użytkownika
+            var loggedInUserId = GetLoggedInUserId();
+
+            if (loggedInUserId == null)
+            {
+                return Unauthorized("Brak dostępu.");
+            }
+
+            // Pobranie ról zalogowanego użytkownika
+            var loggedInUserRoles = await _context.UserRoles
+                .Where(ur => ur.UserId == userId)
+                .Select(ur => ur.RoleId)
+                .ToListAsync();
+            var moderatorRoleId = await _context.Roles
+                .Where(r => r.Name == "Moderacja")
+                .Select(r => r.Id)
+                .FirstOrDefaultAsync();
+
+            // Pobranie ID zalogowanego użytkownika
+            if (userId == GetLoggedInUserId() || loggedInUserRoles.Contains(moderatorRoleId))
             {
                 return RedirectToAction("BannedUsers", "Reports");
             }
@@ -188,11 +207,13 @@ namespace Inzynierka.Controllers
 
                     // Sprawdzenie, czy użytkownik już ma rolę "Banned"
                     var isAlreadyBanned = await _context.UserRoles
-                        .AnyAsync(ur => ur.UserId == userId && ur.RoleId == bannedRoleId);
+                        .FirstOrDefaultAsync(ur => ur.UserId == userId);
 
-                    if (isAlreadyBanned)
+                    // Usuń istniejącą relację, jeśli istnieje
+                    if (isAlreadyBanned != null)
                     {
-                        return BadRequest("Użytkownik już posiada rolę 'Banned'.");
+                        _context.UserRoles.Remove(isAlreadyBanned);
+                        await _context.SaveChangesAsync();
                     }
 
                     // Dodanie roli "Banned" użytkownikowi
@@ -297,11 +318,13 @@ namespace Inzynierka.Controllers
 
                     // Sprawdzenie, czy użytkownik już ma rolę "Banned"
                     var isAlreadyBanned = await _context.UserRoles
-                        .AnyAsync(ur => ur.UserId == userId && ur.RoleId == UnBannedRoleId);
+                        .FirstOrDefaultAsync(ur => ur.UserId == userId);
 
-                    if (isAlreadyBanned)
+                    // Usuń istniejącą relację, jeśli istnieje
+                    if (isAlreadyBanned != null)
                     {
-                        return BadRequest("Użytkownik już posiada rolę 'Banned'.");
+                        _context.UserRoles.Remove(isAlreadyBanned);
+                        await _context.SaveChangesAsync();
                     }
 
                     // Dodanie roli "Banned" użytkownikowi
