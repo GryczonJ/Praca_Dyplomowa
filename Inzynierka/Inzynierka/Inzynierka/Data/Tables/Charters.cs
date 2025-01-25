@@ -61,12 +61,12 @@ namespace Inzynierka.Data.Tables
     public enum CharterStatus
     {
         [Display(Name = "Planowane")]
-        Planowane,
+        Planowane = 0,
 
         [Display(Name = "W trakcie")]
-        WTrakcie,
+        WTrakcie = 1,
 
         [Display(Name = "Zakończone")]
-        Zakonczone
+        Zakonczone = 2
     }
 }

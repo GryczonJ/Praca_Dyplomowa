@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Inzynierka.Data.Tables
 {
@@ -20,12 +21,12 @@ namespace Inzynierka.Data.Tables
 
         // foreing key
         [Display(Name = "Czarter")]
-        public Charters Charter { get; set; }
+        public Charters? Charter { get; set; }
         [Display(Name = "Identyfikator czarteru")]
         public int CharterId { get; set; }
 
         [Display(Name = "Użytkownik")]
-        public Users User { get; set; }
+        public Users? User { get; set; }
         [Display(Name = "Identyfikator użytkownika")]
         public Guid? UserId { get; set; }
     }

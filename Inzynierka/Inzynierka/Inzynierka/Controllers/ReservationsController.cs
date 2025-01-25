@@ -90,12 +90,13 @@ namespace Inzynierka.Controllers
 
             reservation.UserId = userId;
             var users = _context.Users.FirstOrDefault(c => c.Id == userId);
-
-            if (users == null)
+            var Charters = _context.Charters.FirstOrDefault(c => c.Id == reservation.CharterId);
+            if (users == null && Charters == null)
             {
-                return NotFound("Nie znaleziono użytkownika.");
+                return NotFound("Nie znaleziono użytkownika albo Charters.");
             }
             reservation.User = users;
+            reservation.Charter = Charters;
             reservation.status = RequestStatus.Pending;
 
             if (ModelState.IsValid)
@@ -103,6 +104,14 @@ namespace Inzynierka.Controllers
                 _context.Add(reservation);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                var errors = ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage)
+                .ToArray();
+
             }
             ViewData["CharterId"] = new SelectList(_context.Charters, "Id", "currency", reservation.CharterId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", reservation.UserId);

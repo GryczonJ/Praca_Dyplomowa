@@ -18,9 +18,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.endDate)
             </th>
-            <th>
+          @*   <th>
                 @Html.DisplayNameFor(model => model.status)
-            </th>
+            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.Charter)
             </th>
@@ -39,9 +39,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.endDate)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.status)
-            </td>
+         @*    <td>
+                @Html.DisplayFor(modelItem => item.status.ToString())
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.Charter.currency)
             </td>
