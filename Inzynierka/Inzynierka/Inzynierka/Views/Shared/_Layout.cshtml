@@ -46,11 +46,23 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Charters" asp-action="Index">Czarter Jachtów</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Reservations" asp-action="Index">Rezerwacje</a>
-                        </li>
+                       
+                       
                         @if (User.Identity.IsAuthenticated)//isInRole)
                         {
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Panel Kapitana
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Reservations" asp-action="Index">Rezerwacje</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Reservations" asp-action="Zarzadzanie">Zarzadzanie</a>
+                                    </li>
+                                </ul>
+                            </div>
                             <li class="nav-item">
                                 <div class="dropdown">
                                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -117,17 +129,21 @@
             </div>
         </nav>
     </header>
+    
     <div class="container">
         <main role="main" class="pb-3">
+            @if (TempData["Message"] != null)
+            {
+                var alertType = TempData["AlertType"]?.ToString() ?? "info"; // Domyślnie 'info'
+                <div class="alert alert-@alertType">
+                    @TempData["Message"]
+                </div>
+            }
+
             @RenderBody()
         </main>
     </div>
-    @if (TempData["Message"] != null)
-    {
-        <div class="alert alert-success">
-            @TempData["Message"]
-        </div>
-    }
+    
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2024 - Inzynierka - <a asp-area="" asp-controller="Home" asp-action="Privacy">Polityka Prywatności</a>

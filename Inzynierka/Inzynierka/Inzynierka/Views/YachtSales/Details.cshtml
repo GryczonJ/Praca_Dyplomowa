@@ -143,6 +143,7 @@
         <div class="card">
             <div class="card-body">
                 <input type="hidden" name="YachtSaleId" value="@Model.Id" />
+                <input type="hidden" name="YachtId" value="@Model.Id" />
                 <input type="hidden" name="CreateDate" value="@DateTime.Now" />
                 <input type="hidden" name="CreatorId" value="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value" />
 

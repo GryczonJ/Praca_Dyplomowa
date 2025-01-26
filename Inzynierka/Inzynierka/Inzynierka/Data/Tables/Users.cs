@@ -9,7 +9,7 @@ namespace Inzynierka.Data.Tables
         
         [Display(Name = "Wiek")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime? age { get; set; }
+        public DateOnly? age { get; set; }
         [Display(Name = "Imię")]
         public string firstName { get; set; } = "Jan";
         [Display(Name = "Nazwisko")]

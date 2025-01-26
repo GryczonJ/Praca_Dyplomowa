@@ -91,6 +91,7 @@ namespace Inzynierka.Controllers
                 .Include(y => y.BuyerUser)
                 .Include(y => y.Owner)
                 .Include(y => y.Yacht)
+                .Include(y => y.Comments)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (yachtSale == null)
             {

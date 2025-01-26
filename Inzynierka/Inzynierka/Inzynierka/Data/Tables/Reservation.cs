@@ -8,15 +8,15 @@ namespace Inzynierka.Data.Tables
         [Display(Name = "Identyfikator rezerwacji")]
         public int Id { get; set; }
         [Display(Name = "Data rozpoczęcia")]
-        public DateTime startDate { get; set; }
+        public DateOnly startDate { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Data zakończenia")]
-        public DateTime endDate { get; set; }
+        public DateOnly endDate { get; set; }
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
 
         [Display(Name = "Status rezerwacji")]
-        public RequestStatus status { get; set; } = RequestStatus.Pending;
+        public StatusReservation Status { get; set; } = StatusReservation.Pending;
 
 
         // foreing key
@@ -29,5 +29,14 @@ namespace Inzynierka.Data.Tables
         public Users? User { get; set; }
         [Display(Name = "Identyfikator użytkownika")]
         public Guid? UserId { get; set; }
+    }
+    public enum StatusReservation
+        {
+        [Display(Name = "Oczekujący")]
+        Pending = 0,
+        [Display(Name = "Zaakceptowany")]
+        Accepted = 1 ,
+        [Display(Name = "Odrzucony")]
+        Rejected= 2
     }
 }

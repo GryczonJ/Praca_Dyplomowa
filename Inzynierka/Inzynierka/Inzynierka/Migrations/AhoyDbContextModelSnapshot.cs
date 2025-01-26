@@ -48,8 +48,8 @@ namespace Inzynierka.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("endDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("endDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("location")
                         .IsRequired()
@@ -59,8 +59,8 @@ namespace Inzynierka.Migrations
                     b.Property<decimal>("price")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<DateTime>("startDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("startDate")
+                        .HasColumnType("date");
 
                     b.Property<int>("status")
                         .HasMaxLength(50)
@@ -202,8 +202,8 @@ namespace Inzynierka.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<DateTime>("end_date")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("end_date")
+                        .HasColumnType("date");
 
                     b.Property<int>("maxParticipants")
                         .HasColumnType("int");
@@ -216,8 +216,8 @@ namespace Inzynierka.Migrations
                     b.Property<decimal>("price")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<DateTime>("start_date")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("start_date")
+                        .HasColumnType("date");
 
                     b.Property<int?>("status")
                         .HasMaxLength(50)
@@ -427,19 +427,19 @@ namespace Inzynierka.Migrations
                     b.Property<int>("CharterId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Status")
+                        .HasMaxLength(50)
+                        .HasColumnType("int");
+
                     b.Property<Guid?>("UserId")
                         .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("endDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("endDate")
+                        .HasColumnType("date");
 
-                    b.Property<DateTime>("startDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("status")
-                        .HasMaxLength(50)
-                        .HasColumnType("int");
+                    b.Property<DateOnly>("startDate")
+                        .HasColumnType("date");
 
                     b.HasKey("Id");
 
@@ -543,8 +543,8 @@ namespace Inzynierka.Migrations
                     b.Property<string>("aboutMe")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("age")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly?>("age")
+                        .HasColumnType("date");
 
                     b.Property<bool>("banned")
                         .HasColumnType("bit");
@@ -619,8 +619,8 @@ namespace Inzynierka.Migrations
                     b.Property<decimal>("price")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<DateTime>("saleDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("saleDate")
+                        .HasColumnType("date");
 
                     b.Property<int>("status")
                         .HasColumnType("int");
@@ -708,8 +708,8 @@ namespace Inzynierka.Migrations
                     b.Property<double>("width")
                         .HasColumnType("float");
 
-                    b.Property<DateTime>("year")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("year")
+                        .HasColumnType("date");
 
                     b.HasKey("Id");
 

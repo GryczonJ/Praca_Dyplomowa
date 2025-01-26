@@ -341,7 +341,7 @@ namespace Inzynierka.Data
                     .IsRequired();
 
                 // Ustawienie właściwości status jako wymaganej i maksymalnej długości 50 znaków
-                eb.Property(r => r.status)
+                eb.Property(r => r.Status)
                     .IsRequired()
                     .HasMaxLength(50);
 

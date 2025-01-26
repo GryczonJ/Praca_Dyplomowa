@@ -9,7 +9,7 @@ namespace Inzynierka.Data.Tables
         public int Id { get; set; }
 
         [Display(Name = "Data sprzedaży")]
-        public DateTime saleDate { get; set; } // Zmieniono nazwę na bardziej opisową
+        public DateOnly saleDate { get; set; } // Zmieniono nazwę na bardziej opisową
 
         [Column(TypeName = "decimal(18, 2)")]
         [Display(Name = "Cena sprzedaży")]

@@ -28,7 +28,7 @@ namespace Inzynierka.Data.Tables
 
         [Display(Name = "Rok produkcji")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime year { get; set; }
+        public DateOnly year { get; set; }
 
    
         [Display(Name = "Długość (m)")]

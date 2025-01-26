@@ -131,7 +131,9 @@ namespace Inzynierka.Controllers
                 // Obsługa błędu: brak lub nieprawidłowy identyfikator użytkownika
                 //ModelState.AddModelError(string.Empty, "Nie można przypisać użytkownika jako właściciela.");
                 // Obsługa błędu: brak lub nieprawidłowy identyfikator użytkownika
-                ModelState.AddModelError(string.Empty, "Nie jesteś zalogowany jako właściciel. Proszę zalogować się.");
+                //ModelState.AddModelError(string.Empty, "Nie jesteś zalogowany jako właściciel. Proszę zalogować się.");
+                TempData["Message"] = "Nie jesteś zalogowany jako właściciel. Proszę zalogować się.";
+                TempData["AlertType"] = "danger"; // Czerwony alert
                 return View(yachts);
             }
 
@@ -144,6 +146,8 @@ namespace Inzynierka.Controllers
 
                 // Przypisz ID nowo utworzonego obrazu do jachtu
                 yachts.ImageId = newImage.Id;
+                TempData["Message"] = "Nowy obraz został dodany pomyślnie.";
+                TempData["AlertType"] = "success"; // Zielony alert
             }
 
             ModelState.Clear();
@@ -151,8 +155,12 @@ namespace Inzynierka.Controllers
             {
                 _context.Add(yachts);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Jacht został pomyślnie dodany.";
+                TempData["AlertType"] = "success"; // Zielony alert
                 return RedirectToAction(nameof(Index));
             }
+            TempData["Message"] = "Wystąpił błąd podczas dodawania jachtu. Sprawdź poprawność wprowadzonych danych.";
+            TempData["AlertType"] = "danger"; // Czerwony alert
             ViewData["ImageId"] = new SelectList(_context.Image, "Id", "link", yachts.ImageId);
             ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id", yachts.OwnerId);
             return View(yachts);

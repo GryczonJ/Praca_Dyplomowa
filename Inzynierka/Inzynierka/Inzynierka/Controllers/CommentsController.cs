@@ -84,7 +84,7 @@ namespace Inzynierka.Controllers
         //ModelState.Clear();
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Message,CreateDate,Rating,CreatorId,ProfileId,CharterId,CruisesId,YachtsId")] Comments comments)
+        public async Task<IActionResult> Create([Bind("Id,Message,CreateDate,Rating,CreatorId,ProfileId,CharterId,CruisesId,YachtsId,YachtSaleId")] Comments comments)
         {
             /* //ModelState.Clear();
              if (ModelState.IsValid)
@@ -123,6 +123,7 @@ namespace Inzynierka.Controllers
             ViewData["CruisesId"] = new SelectList(_context.Cruises, "Id", "currency", comments.CruisesId);
             ViewData["ProfileId"] = new SelectList(_context.Users, "Id", "Id", comments.ProfileId);
             ViewData["YachtsId"] = new SelectList(_context.Yachts, "Id", "name", comments.YachtsId);
+            ViewData["YachtSaleId"] = new SelectList(_context.YachtSale, "Id", "saleDate", comments.YachtSaleId);
             //return View(comments);
             return Redirect(Request.Headers["Referer"].ToString());
         }

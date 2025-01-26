@@ -20,10 +20,10 @@ namespace Inzynierka.Data.Tables
         public string destination { get; set; }// cel rejsu
 
         [Display(Name = "Data rozpoczęcia")]
-        public DateTime start_date { get; set; }
+        public DateOnly start_date { get; set; }
 
         [Display(Name = "Data zakończenia")]
-        public DateTime end_date { get; set; }
+        public DateOnly end_date { get; set; }
 
         [Display(Name = "Cena za osobę")]
         [Column(TypeName = "decimal(18, 2)")]

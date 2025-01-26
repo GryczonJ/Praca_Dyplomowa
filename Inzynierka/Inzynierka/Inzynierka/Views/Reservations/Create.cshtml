@@ -10,12 +10,29 @@
 <h1>Utwurz</h1>
 
 <h4>Rezerwacja</h4>
-<hr />
+    <hr />
+    <h3>Dostępne terminy czarteru</h3>
+    <p>Od: @ViewData["CharterStartDate"] do: @ViewData["CharterEndDate"]</p>
+
+    <h4>Zarezerwowane terminy:</h4>
+    @if (ViewData["ReservedDates"] is List<dynamic> reservedDates && reservedDates.Any())
+    {
+        <ul>
+            @foreach (var reservation in reservedDates)
+            {
+                <li>@reservation.StartDate - @reservation.EndDate</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>Brak zatwierdzonych rezerwacji dla tego czarteru.</p>
+    }
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
-            <p>Start: @ViewData["CharterStartDate"]</p>
-            <p>Koniec: @ViewData["CharterEndDate"], @charterId</p>
+            @* <p>Start: @ViewData["CharterStartDate"]</p>
+            <p>Koniec: @ViewData["CharterEndDate"], @charterId</p> *@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @* <div class="form-group">
                 <label asp-for="startDate" class="control-label"></label>
@@ -29,14 +46,14 @@
             </div> *@
             <div class="form-group">
                 <label asp-for="startDate" class="control-label"></label>
-                <input asp-for="startDate" class="form-control"
+                <input type="date" asp-for="startDate" class="form-control"
                        min="@ViewData["CharterStartDate"]"
                        max="@ViewData["CharterEndDate"]" />
                 <span asp-validation-for="startDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="endDate" class="control-label"></label>
-                <input asp-for="endDate" class="form-control"
+                <input type="date" asp-for="endDate" class="form-control"
                        min="@ViewData["CharterStartDate"]"
                        max="@ViewData["CharterEndDate"]" />
                 <span asp-validation-for="endDate" class="text-danger"></span>

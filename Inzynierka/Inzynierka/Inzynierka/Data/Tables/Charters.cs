@@ -9,11 +9,11 @@ namespace Inzynierka.Data.Tables
         //start_date
         [Display(Name = "Data rozpoczęcia")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime startDate { get; set; }
+        public DateOnly startDate { get; set; }
         //end_date
         [Display(Name = "Data zakończenia")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime endDate { get; set; }
+        public DateOnly endDate { get; set; }
   
         [Display(Name = "Cena")]
         [Column(TypeName = "decimal(18, 2)")]
