@@ -75,8 +75,12 @@ namespace Inzynierka.Data.Tables
     }
     public enum TransactionStatus
     {
-        Pending,   // Oczekujący
+
+        [Display(Name = "Oczekujący")]
+       Pending,   // Oczekujący
+        [Display(Name = "Zaakceptowany")]
         Accepted,  // Zaakceptowany
+        [Display(Name = "Odrzucony")]
         Rejected   // Odrzucony
     }
 }

@@ -82,22 +82,22 @@ namespace Inzynierka.Data.Tables
         public enum RequestStatus
         {
             [Display(Name = "Brak statusu")]
-            None = 0,
+            None,
 
             [Display(Name = "Zgłoszono")]
-            Submitted = 1,
+            Submitted,
 
             [Display(Name = "W toku")]
-            InProgress = 2,
+            InProgress,
 
             [Display(Name = "Zakończono")]
-            Completed = 3,
+            Completed,
 
             [Display(Name = "Odrzucono")]
-            Rejected = 4,
+            Rejected,
 
             [Display(Name = "Ponowne Rozpatrzenie")]
-            Reconsidered = 5
+            Reconsidered
         }
     }
 }

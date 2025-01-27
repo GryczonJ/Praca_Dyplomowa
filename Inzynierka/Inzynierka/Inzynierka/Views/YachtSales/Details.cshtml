@@ -10,10 +10,11 @@
 <h1>Szczegóły Sprzedaży</h1>
 @if (User.Identity.IsAuthenticated)
 {
+    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#message-form" aria-expanded="false" aria-controls="message-form">
+        Zgłoś
+    </button>
     <div class="container mt-3">
-        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#message-form" aria-expanded="false" aria-controls="message-form">
-            Zgłoś
-        </button>
+     
 
         <div class="collapse mt-2" id="message-form">
             <form asp-action="Create" asp-controller="Reports" method="post">

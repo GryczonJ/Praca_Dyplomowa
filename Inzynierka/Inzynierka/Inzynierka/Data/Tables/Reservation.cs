@@ -33,10 +33,10 @@ namespace Inzynierka.Data.Tables
     public enum StatusReservation
         {
         [Display(Name = "Oczekujący")]
-        Pending = 0,
+        Pending,
         [Display(Name = "Zaakceptowany")]
-        Accepted = 1 ,
+        Accepted,
         [Display(Name = "Odrzucony")]
-        Rejected= 2
+        Rejected
     }
 }
