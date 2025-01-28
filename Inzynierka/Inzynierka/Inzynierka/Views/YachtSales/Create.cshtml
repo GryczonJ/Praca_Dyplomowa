@@ -1,12 +1,12 @@
 ﻿@model Inzynierka.Data.Tables.YachtSale
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Oferte sprzedarzy";
 }
 
-<h1>Create</h1>
+@* <h1>Create</h1> *@
 
-<h4>YachtSale</h4>
+<h4>Oferte sprzedarzy</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -19,17 +19,17 @@
             </div> *@
             <div class="form-group">
                 <label asp-for="price" class="control-label"></label>
-                <input asp-for="price" class="form-control" />
+                <input asp-for="price" class="form-control" required />
                 <span asp-validation-for="price" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="currency" class="control-label"></label>
-                <input asp-for="currency" class="form-control" />
+                <input asp-for="currency" class="form-control" required />
                 <span asp-validation-for="currency" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="location" class="control-label"></label>
-                <input asp-for="location" class="form-control" />
+                <input asp-for="location" class="form-control" required />
                 <span asp-validation-for="location" class="text-danger"></span>
             </div>
            @*  <div class="form-group">
@@ -44,7 +44,7 @@
             </div> *@
             <div class="form-group">
                 <label asp-for="notes" class="control-label"></label>
-                <input asp-for="notes" class="form-control" />
+                <input asp-for="notes" class="form-control" required />
                 <span asp-validation-for="notes" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -61,14 +61,14 @@
                 <select asp-for="OwnerId" class ="form-control" asp-items="ViewBag.OwnerId"></select>
             </div> *@
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Utwórz" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Powrót</a>
 </div>
 
 @section Scripts {

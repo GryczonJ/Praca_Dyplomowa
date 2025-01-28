@@ -15,52 +15,54 @@
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="name" class="control-label"></label>
-                <input asp-for="name" class="form-control" />
+                <input asp-for="name" class="form-control" required />
                 <span asp-validation-for="name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="description" class="control-label"></label>
-                <input asp-for="description" class="form-control" />
+                <input asp-for="description" class="form-control" required />
                 <span asp-validation-for="description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="destination" class="control-label"></label>
-                <input asp-for="destination" class="form-control" />
+                <input asp-for="destination" class="form-control" required />
                 <span asp-validation-for="destination" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="start_date" class="control-label"></label>
-                <input asp-for="start_date" class="form-control" />
+                <input type="date" asp-for="start_date" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" required required />
                 <span asp-validation-for="start_date" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="end_date" class="control-label"></label>
-                <input asp-for="end_date" class="form-control" />
+                <input type="date" asp-for="end_date" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" required required />
                 <span asp-validation-for="end_date" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="price" class="control-label"></label>
-                <input asp-for="price" class="form-control" />
+                <input type="number" min="0" asp-for="price" class="form-control" required />
                 <span asp-validation-for="price" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="currency" class="control-label"></label>
-                <input asp-for="currency" class="form-control" />
+                <input  asp-for="currency" class="form-control" required />
                 <span asp-validation-for="currency" class="text-danger"></span>
             </div>
-            <div class="form-group">
+          @*   <div class="form-group">
                 <label asp-for="status" class="control-label"></label>
-                <input asp-for="status" class="form-control" />
+                <input asp-for="status" class="form-control" required />
                 <span asp-validation-for="status" class="text-danger"></span>
-            </div>
+            </div> *@
             <div class="form-group">
                 <label asp-for="maxParticipants" class="control-label"></label>
-                <input asp-for="maxParticipants" class="form-control" />
+                <input type="number" min="0" asp-for="maxParticipants" class="form-control" required />
                 <span asp-validation-for="maxParticipants" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="YachtId" class="control-label"></label>
-                <select asp-for="YachtId" class="form-control" asp-items="ViewBag.YachtId"></select>
+                <select asp-for="YachtId" class="form-control" asp-items="ViewBag.YachtId">
+                    <option value="">Brak jachtu</option>
+                </select>
                 <span asp-validation-for="YachtId" class="text-danger"></span>
             </div>
             @* <div class="form-group">

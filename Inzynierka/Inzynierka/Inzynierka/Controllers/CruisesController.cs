@@ -265,6 +265,43 @@ namespace Inzynierka.Controllers
                 TempData["AlertType"] = "danger";
                 return RedirectToAction("Index", "Home"); // Możesz zmienić na odpowiednią stronę
             }
+            if (cruises.YachtId != null) {
+                // 1. Sprawdzenie, czy jacht nie jest wystawiony na sprzedaż
+                var isYachtForSale = _context.YachtSale
+                    .Any(y => y.YachtId == cruises.YachtId && y.status == TransactionStatus.Pending);
+                if (isYachtForSale)
+                {
+                    TempData["Message"] = "Nie można dodać czarteru, ponieważ jacht jest wystawiony na sprzedaż.";
+                    TempData["AlertType"] = "danger";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                // 2. Sprawdzenie, czy daty rejsu pokrywają się z innymi rejsami
+                var hasOverlappingCruise = _context.Cruises
+                    .Any(c => c.YachtId == cruises.YachtId &&
+                              ((cruises.start_date >= c.start_date && cruises.start_date <= c.end_date) ||
+                               (cruises.end_date >= c.start_date && cruises.end_date <= c.end_date) ||
+                               (cruises.start_date <= c.start_date && cruises.end_date >= c.end_date)));
+                if (hasOverlappingCruise)
+                {
+                    TempData["Message"] = "Nie można dodać rejsu, ponieważ daty pokrywają się z innym rejsiem.";
+                    TempData["AlertType"] = "danger";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                // 3. Sprawdzenie, czy daty rejsu pokrywają się z datami czarteru
+                var hasOverlappingCharter = _context.Charters
+                    .Any(c => c.YachtId == cruises.YachtId &&
+                              ((cruises.start_date >= c.startDate && cruises.start_date <= c.endDate) ||
+                               (cruises.end_date >= c.startDate && cruises.end_date <= c.endDate) ||
+                               (cruises.start_date <= c.startDate && cruises.end_date >= c.endDate)));
+                if (hasOverlappingCharter)
+                {
+                    TempData["Message"] = "Nie można dodać rejsu, ponieważ daty pokrywają się z istniejącym czarterem.";
+                    TempData["AlertType"] = "danger";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
 
             ModelState.Clear();
             cruises.status = CruiseStatus.Planned;
@@ -352,7 +389,43 @@ namespace Inzynierka.Controllers
                 ModelState.AddModelError(string.Empty, "Nie jesteś zalogowany jako właściciel. Proszę zalogować się.");
                 return View(cruises);
             }
+            if (cruises.YachtId!=null) { 
+                // 1. Sprawdzenie, czy jacht nie jest wystawiony na sprzedaż
+                var isYachtForSale = _context.YachtSale
+                    .Any(y => y.YachtId == cruises.YachtId && y.status == TransactionStatus.Pending);
+                if (isYachtForSale)
+                {
+                    TempData["Message"] = "Nie można edytować rejsu, ponieważ jacht jest wystawiony na sprzedaż.";
+                    TempData["AlertType"] = "danger";
+                    return RedirectToAction(nameof(Index));
+                }
 
+                // 2. Sprawdzenie, czy daty rejsu pokrywają się z innymi rejsami
+                var hasOverlappingCruise = _context.Cruises
+                    .Any(c => c.YachtId == cruises.YachtId &&
+                              ((cruises.start_date >= c.start_date && cruises.start_date <= c.end_date) ||
+                               (cruises.end_date >= c.start_date && cruises.end_date <= c.end_date) ||
+                               (cruises.start_date <= c.start_date && cruises.end_date >= c.end_date) && c.Id != cruises.Id));
+                if (hasOverlappingCruise)
+                {
+                    TempData["Message"] = "Nie można edytować rejsu, ponieważ daty pokrywają się z innym rejsiem.";
+                    TempData["AlertType"] = "danger";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                // 3. Sprawdzenie, czy daty rejsu pokrywają się z datami czarteru
+                var hasOverlappingCharter = _context.Charters
+                    .Any(c => c.YachtId == cruises.YachtId &&
+                              ((cruises.start_date >= c.startDate && cruises.start_date <= c.endDate) ||
+                               (cruises.end_date >= c.startDate && cruises.end_date <= c.endDate) ||
+                               (cruises.start_date <= c.startDate && cruises.end_date >= c.endDate)));
+                if (hasOverlappingCharter)
+                {
+                    TempData["Message"] = "Nie można edytować rejsu, ponieważ daty pokrywają się z istniejącym czarterem.";
+                    TempData["AlertType"] = "danger";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
             ModelState.Clear();
             if (ModelState.IsValid)
             {

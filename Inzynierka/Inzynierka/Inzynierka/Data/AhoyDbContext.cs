@@ -40,7 +40,6 @@ namespace Inzynierka.Data
             {
                 eb.Property(c => c.price).IsRequired();
                 eb.Property(c => c.currency).HasMaxLength(3).IsRequired();
-                eb.Property(c => c.status).HasMaxLength(50);
                 eb.Property(c => c.location).HasMaxLength(255); // Ustal maksymalną długość dla pola location
 
                 // Relacja wiele-do-jednego z tabelą Yachts
@@ -78,7 +77,7 @@ namespace Inzynierka.Data
 
                 eb.Property(c => c.Rating)
                     .IsRequired()
-                    .HasDefaultValue(0); // Opcjonalnie, ustaw wartość domyślną dla Rating  
+                    .HasDefaultValue(1); // Opcjonalnie, ustaw wartość domyślną dla Rating  
 
                 // Relacja wiele-do-jednego z tabelą Users (Creator)
                 eb.HasOne(c => c.Creator) // Komentarz ma jednego twórcę
@@ -97,8 +96,6 @@ namespace Inzynierka.Data
             {
                 eb.Property(c => c.status).IsRequired().HasMaxLength(50);
                 eb.Property(c => c.date).IsRequired();
-
-
 
                 // Definiowanie relacji wiele-do-jednego z Cruise
                 eb.HasOne(c => c.Cruise)
@@ -145,13 +142,8 @@ namespace Inzynierka.Data
                     .HasMaxLength(3) // Zwykle waluty mają 3 znaki
                     .IsRequired();
 
-                eb.Property(c => c.status)
-                    .HasMaxLength(50); // Możesz dostosować długość statusu
-
                 eb.Property(c => c.maxParticipants)
                     .IsRequired(); // Określenie, że liczba uczestników jest obowiązkowa
-
-
 
                 // Relacja z Yacht (wiele Cruises dla jednego Yacht)
                 eb.HasOne(c => c.Yacht)
@@ -179,8 +171,6 @@ namespace Inzynierka.Data
             builder.Entity<CruisesParticipants>(eb =>
             {
                 eb.HasKey(cp => new { cp.UsersId, cp.CruisesId });
-
-
 
                 // Definicja relacji z tabelą Users
                 eb.HasOne(cp => cp.Users)
@@ -257,8 +247,7 @@ namespace Inzynierka.Data
             {
                 // Ustawienie właściwości status jako wymaganej i maksymalnej długości 50 znaków
                 eb.Property(n => n.status)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                    .IsRequired();
 
                 // Ustawienie właściwości message jako wymaganej i maksymalnej długości 500 znaków
                 eb.Property(n => n.message)
@@ -288,8 +277,7 @@ namespace Inzynierka.Data
             {
                 // Ustawienie właściwości status jako wymaganej i maksymalnej długości 50 znaków
                 eb.Property(r => r.status)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                    .IsRequired();
 
                 // Ustawienie właściwości message jako wymaganej i maksymalnej długości 500 znaków
                 eb.Property(r => r.message)
@@ -342,8 +330,7 @@ namespace Inzynierka.Data
 
                 // Ustawienie właściwości status jako wymaganej i maksymalnej długości 50 znaków
                 eb.Property(r => r.Status)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                    .IsRequired();
 
                 // Ustawienie właściwości CharterId i UserId jako wymaganych
                 eb.Property(r => r.CharterId).IsRequired();

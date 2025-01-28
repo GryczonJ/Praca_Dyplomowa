@@ -96,7 +96,7 @@ namespace Inzynierka.Controllers
              }*/
             try
             {
-                // Sprawdź, czy użytkownik już dodał komentarz dla danej strony (np. dla CharterId)
+              /*  // Sprawdź, czy użytkownik już dodał komentarz dla danej strony (np. dla CharterId)
                 bool commentExists = _context.Comments.Any(c =>
                     c.CreatorId == comments.CreatorId &&
                     (
@@ -111,7 +111,7 @@ namespace Inzynierka.Controllers
                     TempData["Message"] = "Już dodałeś komentarz dla tej strony.";
                     TempData["AlertType"] = "warning"; // Alert typu "ostrzeżenie"
                     return Redirect(Request.Headers["Referer"].ToString());
-                }
+                }*/
                 if (ModelState.IsValid)
                 {
                     _context.Add(comments);

@@ -14,32 +14,32 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="startDate" class="control-label"></label>
-                <input asp-for="startDate" class="form-control" />
+                <input type="date" asp-for="startDate" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" required />
                 <span asp-validation-for="startDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="endDate" class="control-label"></label>
-                <input asp-for="endDate" class="form-control" />
+                <input type="date" asp-for="endDate" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" required />
                 <span asp-validation-for="endDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="price" class="control-label"></label>
-                <input asp-for="price" class="form-control" />
+                <input type="number" min="0" asp-for="price" class="form-control" required />
                 <span asp-validation-for="price" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="location" class="control-label"></label>
-                <input asp-for="location" class="form-control" />
+                <input asp-for="location" class="form-control" required />
                 <span asp-validation-for="location" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="description" class="control-label"></label>
-                <input asp-for="description" class="form-control" />
+                <input asp-for="description" class="form-control" required />
                 <span asp-validation-for="description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="currency" class="control-label"></label>
-                <input asp-for="currency" class="form-control" />
+                <input asp-for="currency" class="form-control" required />
                 <span asp-validation-for="currency" class="text-danger"></span>
             </div>
             @* <div class="form-group">
@@ -63,14 +63,14 @@
                 <select asp-for="OwnerId" class ="form-control" asp-items="ViewBag.OwnerId"></select>
             </div> *@
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Utwórz" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Powrót</a>
 </div>
 
 @section Scripts {

@@ -4,6 +4,7 @@
     ViewData["Title"] = "Index";
     bool isLogged = ViewData["isLogged"] != null && (bool)ViewData["isLogged"];
     bool isCaptain = User.IsInRole("Kapitan");
+    var isModerator = User.IsInRole("Moderacja");
 }
 
 @* <h1>Rejsy</h1>
@@ -15,7 +16,7 @@
     </p>
 } 
  *@
-@if (isLogged && isCaptain)
+@if (isLogged && (isCaptain || isModerator))
  {
         <div class="d-flex align-items-center">
             <h1 class="me-3">Rejsy</h1>

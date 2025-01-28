@@ -96,9 +96,27 @@ namespace Inzynierka.Controllers
 
         // GET: Charters/Create
         public IActionResult Create()
-        {
-            ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["YachtId"] = new SelectList(_context.Yachts, "Id", "name");
+        {// Pobranie zalogowanego użytkownika jako string
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Sprawdzenie, czy wartość istnieje i jest poprawnym Guidem
+            if (userIdString != null && Guid.TryParse(userIdString, out Guid ownerId))
+            {
+                // Filtrowanie jachtów tylko dla zalogowanego użytkownika
+                var userYachts = _context.Yachts.Where(y => y.OwnerId == ownerId).ToList();
+
+                // Przekazanie tylko jachtów zalogowanego użytkownika do widoku
+                ViewData["YachtId"] = new SelectList(userYachts, "Id", "name");
+            }
+            else
+            {
+                // Jeśli użytkownik nie jest zalogowany, lista jachtów będzie pusta
+                ViewData["YachtId"] = new SelectList(Enumerable.Empty<object>(), "Id", "name");
+                ModelState.AddModelError(string.Empty, "Nie jesteś zalogowany. Proszę zalogować się.");
+            }
+
+         /*   ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "name");
+            ViewData["YachtId"] = new SelectList(_context.Yachts, "Id", "name");*/
             return View();
         }
 
@@ -127,7 +145,48 @@ namespace Inzynierka.Controllers
                 TempData["AlertType"] = "danger"; // Typ alertu: ostrzeżenie
                 return RedirectToAction(nameof(Index));
             }
+            if (charters.YachtId != null) { 
+                // Sprawdzenie, czy dla jachtu nie ma zaplanowanego rejsu
+                var currentDate = DateOnly.FromDateTime(DateTime.Now);
+                /*var hasPlannedCruise = _context.Cruises
+                    .Any(c => c.YachtId == charters.YachtId && c.start_date >= currentDate);*/
+                var hasPlannedCruise = _context.Cruises
+                   .Any(c => c.YachtId == charters.YachtId &&
+                 ((charters.startDate >= c.start_date && charters.startDate <= c.end_date) ||
+                  (charters.endDate >= c.start_date && charters.endDate <= c.end_date) ||
+                  (charters.startDate <= c.start_date && charters.endDate >= c.end_date)));
 
+                if (hasPlannedCruise)
+                {
+                    TempData["Message"] = "Nie można dodać czarteru, ponieważ jacht ma zaplanowany rejs.";
+                    TempData["AlertType"] = "danger";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                // Sprawdzenie, czy jacht nie jest wystawiony na sprzedaż
+                var isYachtForSale = _context.YachtSale
+                    .Any(y => y.YachtId == charters.YachtId && y.status == TransactionStatus.Pending);
+                if (isYachtForSale)
+                {
+                    TempData["Message"] = "Nie można dodać czarteru, ponieważ jacht jest wystawiony na sprzedaż.";
+                    TempData["AlertType"] = "danger";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                // Sprawdzenie, czy istnieje już czarter pokrywający się z podanymi datami
+                var overlappingCharter = _context.Charters
+                    .Any(c => c.YachtId == charters.YachtId &&
+                              ((charters.startDate >= c.startDate && charters.startDate <= c.endDate) ||
+                               (charters.endDate >= c.startDate && charters.endDate <= c.endDate) ||
+                               (charters.startDate <= c.startDate && charters.endDate >= c.endDate)));
+
+                if (overlappingCharter)
+                {
+                    TempData["Message"] = "Nie można dodać czarteru, ponieważ pokrywa się z istniejącym czarterem.";
+                    TempData["AlertType"] = "danger";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
             // Ustaw właściciela na zalogowanego użytkownika
             charters.OwnerId = loggedInUserId.Value;
 
@@ -163,8 +222,27 @@ namespace Inzynierka.Controllers
             {
                 return NotFound();
             }
-            ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id", charters.OwnerId);
-            ViewData["YachtId"] = new SelectList(_context.Yachts, "Id", "name", charters.YachtId);
+
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Sprawdzenie, czy wartość istnieje i jest poprawnym Guidem
+            if (userIdString != null && Guid.TryParse(userIdString, out Guid ownerId))
+            {
+                // Filtrowanie jachtów tylko dla zalogowanego użytkownika
+                var userYachts = _context.Yachts.Where(y => y.OwnerId == ownerId).ToList();
+
+                // Przekazanie tylko jachtów zalogowanego użytkownika do widoku
+                ViewData["YachtId"] = new SelectList(userYachts, "Id", "name");
+            }
+            else
+            {
+                // Jeśli użytkownik nie jest zalogowany, lista jachtów będzie pusta
+                ViewData["YachtId"] = new SelectList(Enumerable.Empty<object>(), "Id", "name");
+                ModelState.AddModelError(string.Empty, "Nie jesteś zalogowany. Proszę zalogować się.");
+            }
+            /*  ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "name", charters.OwnerId);
+              ViewData["YachtId"] = new SelectList(_context.Yachts, "Id", "name", charters.YachtId);*/
+
             return View(charters);
         }
 
@@ -179,7 +257,52 @@ namespace Inzynierka.Controllers
             {
                 return NotFound();
             }
+            //
+            // Pobierz aktualną datę
+            var currentDate = DateOnly.FromDateTime(DateTime.Now);
+            if (charters.YachtId != null)
+            {
+                // 1. Sprawdzenie, czy dla jachtu nie ma zaplanowanego rejsu, którego daty pokrywają się z datami czarteru
+                /*var hasPlannedCruise = _context.Cruises
+                    .Any(c => c.YachtId == charters.YachtId &&
+                              ((charters.startDate <= c.end_date && charters.endDate >= c.start_date))); // Sprawdzenie pokrywających się dat*/
+                var hasPlannedCruise = _context.Cruises
+                .Any(c => c.YachtId == charters.YachtId &&
+              ((charters.startDate >= c.start_date && charters.startDate <= c.end_date) ||
+               (charters.endDate >= c.start_date && charters.endDate <= c.end_date) ||
+               (charters.startDate <= c.start_date && charters.endDate >= c.end_date)));
 
+                if (hasPlannedCruise)
+                {
+                    TempData["Message"] = "Nie można edytować czarteru, ponieważ jacht ma zaplanowany rejs, którego daty pokrywają się z datami czarteru.";
+                    TempData["AlertType"] = "danger";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                // 2. Sprawdzenie, czy jacht nie jest wystawiony na sprzedaż
+                var isYachtForSale = _context.YachtSale
+                    .Any(y => y.YachtId == charters.YachtId && y.status == TransactionStatus.Pending);
+                if (isYachtForSale)
+                {
+                    TempData["Message"] = "Nie można edytować czarteru, ponieważ jacht jest wystawiony na sprzedaż.";
+                    TempData["AlertType"] = "danger";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                // 3. Sprawdzenie, czy istnieje już czarter pokrywający się z podanymi datami
+                var overlappingCharter = _context.Charters
+                    .Any(c => c.YachtId == charters.YachtId &&
+                              ((charters.startDate >= c.startDate && charters.startDate <= c.endDate) ||
+                               (charters.endDate >= c.startDate && charters.endDate <= c.endDate) ||
+                               (charters.startDate <= c.startDate && charters.endDate >= c.endDate)) &&
+                              c.Id != charters.Id); // Pomijamy obecny czarter, który jest edytowany
+                if (overlappingCharter)
+                {
+                    TempData["Message"] = "Nie można edytować czarteru, ponieważ pokrywa się z istniejącym czarterem.";
+                    TempData["AlertType"] = "danger";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
             if (ModelState.IsValid)
             {
                 try

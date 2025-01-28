@@ -137,7 +137,7 @@ namespace Inzynierka.Controllers
             reports.date = DateTime.Now;
             reports.CreatorId = GetLoggedInUserId();
             // Sprawdzenie, czy istnieje już zgłoszenie dla tych danych
-            bool alreadyReported = _context.Reports.Any(r =>
+           /* bool alreadyReported = _context.Reports.Any(r =>
                 r.SuspectUserId == reports.SuspectUserId &&
                 r.SuspectCruiseId == reports.SuspectCruiseId &&
                 r.SuspectYachtId == reports.SuspectYachtId &&
@@ -150,7 +150,7 @@ namespace Inzynierka.Controllers
                 TempData["Message"] = "Zgłoszenie dla tych danych już istnieje!";
                 TempData["AlertType"] = "danger";
                 return Redirect(Request.Headers["Referer"].ToString());
-            }
+            }*/
             if (ModelState.IsValid)
             {
                 TempData["Message"] = "Zgłoszenie zostało pomyślnie utworzone!";

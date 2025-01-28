@@ -27,77 +27,77 @@
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="name" class="control-label"></label>
-                <input asp-for="name" class="form-control" />
+                <input asp-for="name" class="form-control" required />
                 <span asp-validation-for="name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="description" class="control-label"></label>
-                <input asp-for="description" class="form-control" />
+                <input asp-for="description" class="form-control" required />
                 <span asp-validation-for="description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="type" class="control-label"></label>
-                <input asp-for="type" class="form-control" />
+                <input asp-for="type" class="form-control" required />
                 <span asp-validation-for="type" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="manufacturer" class="control-label"></label>
-                <input asp-for="manufacturer" class="form-control" />
+                <input asp-for="manufacturer" class="form-control" required />
                 <span asp-validation-for="manufacturer" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="model" class="control-label"></label>
-                <input asp-for="model" class="form-control" />
+                <input asp-for="model" class="form-control" required />
                 <span asp-validation-for="model" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="year" class="control-label"></label>
-                <input asp-for="year" class="form-control" />
-                <span asp-validation-for="year" class="text-danger"></span>
+                <input type="date" asp-for="year" class="form-control" required />
+                <span  asp-validation-for="year" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="length" class="control-label"></label>
-                <input asp-for="length" class="form-control" />
+                <input type="number" min="1" asp-for="length" class="form-control" required />
                 <span asp-validation-for="length" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="width" class="control-label"></label>
-                <input asp-for="width" class="form-control" />
+                <input type="number" asp-for="width" class="form-control"  min="1"/>
                 <span asp-validation-for="width" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="crew" class="control-label"></label>
-                <input asp-for="crew" class="form-control" />
+                <input type="number" min="1" asp-for="crew" class="form-control" required />
                 <span asp-validation-for="crew" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="cabins" class="control-label"></label>
-                <input asp-for="cabins" class="form-control" />
+                <input type="number" min="0" asp-for="cabins" class="form-control" required />
                 <span asp-validation-for="cabins" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="beds" class="control-label"></label>
-                <input asp-for="beds" class="form-control" />
+                <input type="number" min="0" asp-for="beds" class="form-control" required />
                 <span asp-validation-for="beds" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="toilets" class="control-label"></label>
-                <input asp-for="toilets" class="form-control" />
+                <input type="number" min="0" asp-for="toilets" class="form-control" required />
                 <span asp-validation-for="toilets" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="showers" class="control-label"></label>
-                <input asp-for="showers" class="form-control" />
+                <input type="number" min="0" asp-for="showers" class="form-control" required />
                 <span asp-validation-for="showers" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="location" class="control-label"></label>
-                <input asp-for="location" class="form-control" />
+                <input asp-for="location" class="form-control" maxlength="100"/>
                 <span asp-validation-for="location" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="capacity" class="control-label"></label>
-                <input asp-for="capacity" class="form-control" />
+                <input type="number" min="1" asp-for="capacity" class="form-control" required />
                 <span asp-validation-for="capacity" class="text-danger"></span>
             </div>
            @*  <div class="form-group">

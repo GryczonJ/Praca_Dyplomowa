@@ -266,11 +266,55 @@ namespace Inzynierka.Controllers
             {
                 yachtSale.OwnerId = ownerId;
             }
+            // Sprawdzenie, czy jacht jest dostępny do sprzedaży
+            var yacht = await _context.Yachts
+                .Include(y => y.Charters)
+                .Include(y => y.Cruises)
+                .FirstOrDefaultAsync(y => y.Id == yachtSale.YachtId);
+
+            if (yacht == null)
+            {
+                TempData["Message"] = "Wybrany jacht nie istnieje.";
+                TempData["AlertType"] = "danger"; // Typ alertu: błąd
+                return View(yachtSale);
+            }
+            // Sprawdzenie czarterów
+            var currentDate = DateOnly.FromDateTime(DateTime.Now);
+            if (yacht.Charters.Any(c => c.startDate <= currentDate && c.endDate >= currentDate))
+            {
+                TempData["Message"] = "Nie można sprzedać jachtu, ponieważ jest obecnie czarterowany.";
+                TempData["AlertType"] = "danger"; // Typ alertu: błąd
+                return View(yachtSale);
+            }
+
+            // Sprawdzenie rejsów
+            if (yacht.Cruises.Any(c => c.start_date <= currentDate && c.end_date >= currentDate))
+            {
+                TempData["Message"] = "Nie można sprzedać jachtu, ponieważ ma zaplanowane rejsy.";
+                TempData["AlertType"] = "danger"; // Typ alertu: błąd
+                return View(yachtSale);
+            }
+            if (yacht.Charters.Any(c => c.startDate >= currentDate))
+            {
+                TempData["Message"] = "Nie można sprzedać jachtu, ponieważ ma obecne lub zaplanowane czartery.";
+                TempData["AlertType"] = "danger";
+                return View(yachtSale);
+            }
+
+            // Sprawdzenie bieżących i zaplanowanych rejsów
+            if (yacht.Cruises.Any(c => c.start_date >= currentDate))
+            {
+                TempData["Message"] = "Nie można sprzedać jachtu, ponieważ ma obecne lub zaplanowane rejsy.";
+                TempData["AlertType"] = "danger";
+                return View(yachtSale);
+            }
             ModelState.Clear();
             if (ModelState.IsValid)
             {
                 _context.Add(yachtSale);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Jacht został pomyślnie wystawiony na sprzedaż!";
+                TempData["AlertType"] = "success"; // Typ alertu: sukces
                 return RedirectToAction(nameof(Index));
             }
 
@@ -293,9 +337,22 @@ namespace Inzynierka.Controllers
             {
                 return NotFound();
             }
+
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Sprawdzenie, czy wartość istnieje i jest poprawnym Guidem
+            if (userIdString != null && Guid.TryParse(userIdString, out Guid ownerId))
+            {
+                // Filtrowanie jachtów tylko dla zalogowanego użytkownika
+                var userYachts = _context.Yachts.Where(y => y.OwnerId == ownerId).ToList();
+
+                // Przekazanie tylko jachtów zalogowanego użytkownika do widoku
+                ViewData["YachtId"] = new SelectList(userYachts, "Id", "name");
+            }
+
             ViewData["BuyerUserId"] = new SelectList(_context.Users, "Id", "Id", yachtSale.BuyerUserId);
             ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id", yachtSale.OwnerId);
-            ViewData["YachtId"] = new SelectList(_context.Yachts, "Id", "name", yachtSale.YachtId);
+            /*ViewData["YachtId"] = new SelectList(_context.Yachts, "Id", "name", yachtSale.YachtId);*/
             return View(yachtSale);
         }
 
@@ -308,7 +365,54 @@ namespace Inzynierka.Controllers
         {
             if (id != yachtSale.Id)
             {
-                return NotFound();
+                /*return NotFound();*/
+                TempData["Message"] = "Nie znaleziono wskazanej sprzedaży jachtu.";
+                TempData["AlertType"] = "danger";
+                return RedirectToAction(nameof(Index));
+            }
+            // Pobranie jachtu do sprawdzenia jego dostępności
+            var yacht = await _context.Yachts
+                .Include(y => y.Charters)
+                .Include(y => y.Cruises)
+                .FirstOrDefaultAsync(y => y.Id == yachtSale.YachtId);
+
+            if (yacht == null)
+            {
+                TempData["Message"] = "Wybrany jacht nie istnieje.";
+                TempData["AlertType"] = "danger";
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Sprawdzenie czarterów
+            var currentDate = DateOnly.FromDateTime(DateTime.Now);
+            if (yacht.Charters.Any(c => c.startDate <= currentDate && c.endDate >= currentDate))
+            {
+                TempData["Message"] = "Nie można edytować sprzedaży jachtu, ponieważ jest obecnie czarterowany.";
+                TempData["AlertType"] = "danger";
+                return View(yachtSale);
+            }
+
+            // Sprawdzenie rejsów
+            if (yacht.Cruises.Any(c => c.start_date <= currentDate && c.end_date >= currentDate))
+            {
+                TempData["Message"] = "Nie można edytować sprzedaży jachtu, ponieważ ma zaplanowane rejsy.";
+                TempData["AlertType"] = "danger";
+                return View(yachtSale);
+            }
+
+            if (yacht.Charters.Any(c => c.startDate >= currentDate))
+            {
+                TempData["Message"] = "Nie można sprzedać jachtu, ponieważ ma obecne lub zaplanowane czartery.";
+                TempData["AlertType"] = "danger";
+                    
+            }
+
+            // Sprawdzenie bieżących i zaplanowanych rejsów
+            if (yacht.Cruises.Any(c => c.start_date >= currentDate))
+            {
+                TempData["Message"] = "Nie można sprzedać jachtu, ponieważ ma obecne lub zaplanowane rejsy.";
+                TempData["AlertType"] = "danger";
+                return View(yachtSale);
             }
 
             if (ModelState.IsValid)

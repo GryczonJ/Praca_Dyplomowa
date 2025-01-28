@@ -158,12 +158,12 @@
 
                 <div class="form-group">
                     <label for="Message" class="control-label">Treść komentarza</label>
-                    <textarea name="Message" id="Message" class="form-control"></textarea>
+                    <textarea name="Message" id="Message" class="form-control" required></textarea>
                 </div>
 
                 <div class="form-group">
                     <label for="Rating" class="control-label">Ocena (1-5)</label>
-                    <input type="number" name="Rating" id="Rating" class="form-control" min="1" max="5" />
+                    <input type="number" name="Rating" id="Rating" class="form-control" min="1" max="5" required/>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Dodaj komentarz</button>
@@ -213,7 +213,7 @@
 
                                     <div class="form-group">
                                         <label for="message" class="control-label">Wiadomość</label>
-                                        <input id="message" name="message" class="form-control" />
+                                        <input id="message" name="message" class="form-control" required>/>
                                         <span class="text-danger"></span>
                                     </div>
 
