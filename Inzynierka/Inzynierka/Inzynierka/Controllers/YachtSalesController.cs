@@ -121,6 +121,113 @@ namespace Inzynierka.Controllers
             ViewData["YachtId"] = new SelectList(_context.Yachts, "Id", "name");
             return View();
         }*/
+        // Obsługa zakupu
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Buy(int id)
+        {
+            var yachtSale = await _context.YachtSale.FindAsync(id);
+
+            if (yachtSale == null)
+            {
+                return NotFound();
+            }
+
+            var loggedInUserId = GetLoggedInUserId(); // Funkcja pobierająca ID zalogowanego użytkownika
+
+            if (loggedInUserId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            if (yachtSale.BuyerUserId != null)
+            {
+                TempData["Message"] = "Ten jacht został już sprzedany.";
+                TempData["AlertType"] = "danger";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+
+            yachtSale.BuyerUserId = loggedInUserId.Value;
+            yachtSale.status = TransactionStatus.Pending; // Ustaw status na "Oczekujący"
+
+            _context.Update(yachtSale);
+            await _context.SaveChangesAsync();
+
+            TempData["Message"] = "Zakup został zainicjowany. Oczekuje na akceptację sprzedającego.";
+            TempData["AlertType"] = "success";
+
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        // Akceptacja zakupu przez właściciela
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Accept(int id)
+        {
+            var yachtSale = await _context.YachtSale.FindAsync(id);
+
+            if (yachtSale == null)
+            {
+                return NotFound();
+            }
+
+            if (yachtSale.status != TransactionStatus.Pending)
+            {
+                TempData["Message"] = "Ta transakcja nie jest już w stanie oczekiwania.";
+                TempData["AlertType"] = "warning";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+
+            yachtSale.status = TransactionStatus.Accepted;
+
+            // Ustaw nowego właściciela jachtu na kupującego
+            if (yachtSale.Yacht != null && yachtSale.BuyerUserId != null)
+            {
+                yachtSale.Yacht.OwnerId = (Guid)yachtSale.BuyerUserId;
+                _context.Update(yachtSale.Yacht);
+            }
+
+
+            _context.Update(yachtSale);
+            await _context.SaveChangesAsync();
+
+            TempData["Message"] = "Zakup został zaakceptowany.";
+            TempData["AlertType"] = "success";
+
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        // Odrzucenie zakupu
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Reject(int id)
+        {
+            var yachtSale = await _context.YachtSale.FindAsync(id);
+
+            if (yachtSale == null)
+            {
+                return NotFound();
+            }
+
+            if (yachtSale.status != TransactionStatus.Pending)
+            {
+                TempData["Message"] = "Ta transakcja nie jest już w stanie oczekiwania.";
+                TempData["AlertType"] = "warning";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+
+            yachtSale.status = TransactionStatus.Pending;
+            yachtSale.BuyerUserId = null; // Resetuj kupującego
+
+            _context.Update(yachtSale);
+            await _context.SaveChangesAsync();
+
+            TempData["Message"] = "Zakup został odrzucony.";
+            TempData["AlertType"] = "danger";
+
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
         public IActionResult Create()
         {
             // Pobranie ID zalogowanego użytkownika

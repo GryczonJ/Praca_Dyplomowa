@@ -136,14 +136,31 @@ namespace Inzynierka.Controllers
         {
             reports.date = DateTime.Now;
             reports.CreatorId = GetLoggedInUserId();
+            // Sprawdzenie, czy istnieje już zgłoszenie dla tych danych
+            bool alreadyReported = _context.Reports.Any(r =>
+                r.SuspectUserId == reports.SuspectUserId &&
+                r.SuspectCruiseId == reports.SuspectCruiseId &&
+                r.SuspectYachtId == reports.SuspectYachtId &&
+                r.SuspectYachtSaleId == reports.SuspectYachtSaleId &&
+                r.SuspectCharterId == reports.SuspectCharterId &&
+                r.SuspectCommentId == reports.SuspectCommentId &&
+                r.SuspectRoleId == reports.SuspectRoleId);
+            if (alreadyReported)
+            {
+                TempData["Message"] = "Zgłoszenie dla tych danych już istnieje!";
+                TempData["AlertType"] = "danger";
+                return Redirect(Request.Headers["Referer"].ToString());
+            }
             if (ModelState.IsValid)
             {
+                TempData["Message"] = "Zgłoszenie zostało pomyślnie utworzone!";
+                TempData["AlertType"] = "success";
                 _context.Add(reports);
                 await _context.SaveChangesAsync();
                 return Redirect(Request.Headers["Referer"].ToString());
                 /*return Redirect(returnUrl);
                 return View();*/
-                return RedirectToAction(nameof(Index));
+                /*return RedirectToAction(nameof(Index));*/
             }
             ViewData["DocumentVerificationId"] = new SelectList(_context.Roles, "Id", "Id", reports.DocumentVerificationId);
             ViewData["ModeratorId"] = new SelectList(_context.Users, "Id", "Id", reports.ModeratorId);
@@ -156,6 +173,7 @@ namespace Inzynierka.Controllers
             ViewData["SuspectYachtSaleId"] = new SelectList(_context.YachtSale, "Id", "currency", reports.SuspectYachtSaleId);
             return View(reports);
         }
+
         [Authorize(Roles = "Moderacja")]
         [HttpPost]
         [ValidateAntiForgeryToken]

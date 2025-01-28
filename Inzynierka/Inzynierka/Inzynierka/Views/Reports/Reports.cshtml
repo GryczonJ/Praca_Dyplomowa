@@ -12,7 +12,7 @@
             <th>@Html.DisplayNameFor(model => model.status)</th>
             <th>@Html.DisplayNameFor(model => model.date)</th>
             <th>@Html.DisplayNameFor(model => model.message)</th>
-            <th>@Html.DisplayNameFor(model => model.Moderator)</th>
+           @*  <th>@Html.DisplayNameFor(model => model.Moderator)</th> *@
             <th>Akcje</th>
         </tr>
     </thead>
@@ -23,9 +23,9 @@
                 <td>@Html.DisplayFor(modelItem => item.status)</td>
                 <td>@Html.DisplayFor(modelItem => item.date)</td>
                 <td>@Html.DisplayFor(modelItem => item.message)</td>
-                <td>@Html.DisplayFor(modelItem => item.Moderator.Id)</td>
+                @* <td>@Html.DisplayFor(modelItem => item.Moderator.Id)</td> *@
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">Szczegóły</a> |
+                    @* <a asp-action="Details" asp-route-id="@item.Id">Szczegóły</a> | *@
                    @*  <form asp-action="Banned" asp-controller="Reports" method="post" style="display:inline">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="userId" value="@item.SuspectUserId" />

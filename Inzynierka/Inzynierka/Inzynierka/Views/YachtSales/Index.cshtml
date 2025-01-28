@@ -32,18 +32,30 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var sale in Model.UserSales)
+            @if (Model.UserSales.Any())
+            {
+                @foreach (var sale in Model.UserSales)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => sale.Yacht.name)</td>
+                        <td>@Html.DisplayFor(modelItem => sale.price)</td>
+                        <td>@Html.DisplayFor(modelItem => sale.currency)</td>
+                        <td>@Html.DisplayFor(modelItem => sale.location)</td>
+                        <td>@Html.DisplayFor(modelItem => sale.notes)</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@sale.Id">Edytuj</a> |
+                            <a asp-action="Details" asp-route-id="@sale.Id">Szczegóły</a> |
+                            <a asp-action="Delete" asp-route-id="@sale.Id">Usuń</a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => sale.Yacht.name)</td>
-                    <td>@Html.DisplayFor(modelItem => sale.price)</td>
-                    <td>@Html.DisplayFor(modelItem => sale.currency)</td>
-                    <td>@Html.DisplayFor(modelItem => sale.location)</td>
-                    <td>@Html.DisplayFor(modelItem => sale.notes)</td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@sale.Id">Edytuj</a> |
-                        <a asp-action="Details" asp-route-id="@sale.Id">Szczegóły</a> |
-                        <a asp-action="Delete" asp-route-id="@sale.Id">Usuń</a>
+                    <td colspan="6" class="text-center">
+                        <strong>Brak dostępnych ofert sprzedaży jachtów.</strong><br />
+                        Sprawdź później lub <a asp-action="Create">dodaj swoją ofertę</a>!
                     </td>
                 </tr>
             }
@@ -63,15 +75,27 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var sale in Model.OtherSales)
+            @if (Model.OtherSales.Any())
+            {
+                @foreach (var sale in Model.OtherSales)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => sale.Yacht.name)</td>
+                        <td>@Html.DisplayFor(modelItem => sale.price)</td>
+                        <td>@Html.DisplayFor(modelItem => sale.currency)</td>
+                        <td>@Html.DisplayFor(modelItem => sale.location)</td>
+                        <td>@Html.DisplayFor(modelItem => sale.notes)</td>
+                        <td> <a asp-action="Details" asp-route-id="@sale.Id">Szczegóły</a> </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => sale.Yacht.name)</td>
-                    <td>@Html.DisplayFor(modelItem => sale.price)</td>
-                    <td>@Html.DisplayFor(modelItem => sale.currency)</td>
-                    <td>@Html.DisplayFor(modelItem => sale.location)</td>
-                    <td>@Html.DisplayFor(modelItem => sale.notes)</td>
-                    <td> <a asp-action="Details" asp-route-id="@sale.Id">Szczegóły</a> </td>
+                    <td colspan="6" class="text-center">
+                        <strong>Brak dostępnych ofert sprzedaży jachtów.</strong><br />
+                        Sprawdź później lub <a asp-action="Create">dodaj swoją ofertę</a>!
+                    </td>
                 </tr>
             }
         </tbody>
@@ -98,15 +122,27 @@ else
             </tr>
         </thead>
             <tbody>
-                @foreach (var sale in Model.OtherSales)
+                @if (Model.OtherSales.Any())
+                {
+                    @foreach (var sale in Model.OtherSales)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => sale.Yacht.name)</td>
+                            <td>@Html.DisplayFor(modelItem => sale.price)</td>
+                            <td>@Html.DisplayFor(modelItem => sale.currency)</td>
+                            <td>@Html.DisplayFor(modelItem => sale.location)</td>
+                            <td>@Html.DisplayFor(modelItem => sale.notes)</td>
+                            <td> <a asp-action="Details" asp-route-id="@sale.Id">Szczegóły</a> </td>
+                        </tr>
+                    }
+                }
+                else
                 {
                     <tr>
-                        <td>@Html.DisplayFor(modelItem => sale.Yacht.name)</td>
-                        <td>@Html.DisplayFor(modelItem => sale.price)</td>
-                        <td>@Html.DisplayFor(modelItem => sale.currency)</td>
-                        <td>@Html.DisplayFor(modelItem => sale.location)</td>
-                        <td>@Html.DisplayFor(modelItem => sale.notes)</td>
-                        <td> <a asp-action="Details" asp-route-id="@sale.Id">Szczegóły</a> </td>
+                        <td colspan="6" class="text-center">
+                            <strong>Brak dostępnych ofert sprzedaży jachtów.</strong><br />
+                            Sprawdź później lub <a asp-action="Create">dodaj swoją ofertę</a>!
+                        </td>
                     </tr>
                 }
             </tbody>

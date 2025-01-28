@@ -96,13 +96,29 @@ namespace Inzynierka.Controllers
              }*/
             try
             {
+                // Sprawdź, czy użytkownik już dodał komentarz dla danej strony (np. dla CharterId)
+                bool commentExists = _context.Comments.Any(c =>
+                    c.CreatorId == comments.CreatorId &&
+                    (
+                        c.CharterId == comments.CharterId ||
+                        c.CruisesId == comments.CruisesId ||
+                        c.YachtsId == comments.YachtsId ||
+                        c.YachtSaleId == comments.YachtSaleId
+                    )
+                );
+                if (commentExists)
+                {
+                    TempData["Message"] = "Już dodałeś komentarz dla tej strony.";
+                    TempData["AlertType"] = "warning"; // Alert typu "ostrzeżenie"
+                    return Redirect(Request.Headers["Referer"].ToString());
+                }
                 if (ModelState.IsValid)
                 {
                     _context.Add(comments);
                     await _context.SaveChangesAsync();
                     return Redirect(Request.Headers["Referer"].ToString()); // Powrót do strony poprzedniej
                 }
-                if(!ModelState.IsValid)
+                else
                 {
                     foreach (var state in ModelState)
                     {
@@ -115,9 +131,10 @@ namespace Inzynierka.Controllers
             }
             catch (Exception ex)
             {
-                // Dodaj komunikat o błędzie do ModelState
-                ModelState.AddModelError(string.Empty, $"Wystąpił błąd podczas dodawania komentarza: {ex.Message}");
-           }
+                // Obsługa wyjątków i ustawienie komunikatu o błędzie
+                TempData["Message"] = $"Wystąpił błąd podczas dodawania komentarza: {ex.Message}";
+                TempData["AlertType"] = "danger"; // Alert typu "błąd"
+            }
             ViewData["CharterId"] = new SelectList(_context.Charters, "Id", "currency", comments.CharterId);
             ViewData["CreatorId"] = new SelectList(_context.Users, "Id", "Id", comments.CreatorId);
             ViewData["CruisesId"] = new SelectList(_context.Cruises, "Id", "currency", comments.CruisesId);
@@ -177,20 +194,27 @@ namespace Inzynierka.Controllers
                     komentarz.Rating = comments.Rating;
                     _context.Update(komentarz);
                     await _context.SaveChangesAsync();
+                    // Komunikat o sukcesie
+                    TempData["Message"] = "Komentarz został pomyślnie zaktualizowany!";
+                    TempData["AlertType"] = "success"; // Typ alertu: sukces
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CommentsExists(comments.Id))
+                    TempData["Message"] = "Wystąpił błąd podczas aktualizacji komentarza.";
+                    TempData["AlertType"] = "danger"; // Typ alertu: błąd
+                  /*  if (!CommentsExists(comments.Id))
                     {
                         return NotFound();
                     }
                     else
                     {
                         throw;
-                    }
+                    }*/
                 }
                 return RedirectToAction(nameof(Index));
             }
+                TempData["Message"] = "Nie udało się zaktualizować komentarza. Sprawdź wprowadzone dane.";
+                TempData["AlertType"] = "warning"; // Typ alertu: ostrzeżenie
             ViewData["CharterId"] = new SelectList(_context.Charters, "Id", "currency", comments.CharterId);
             ViewData["CreatorId"] = new SelectList(_context.Users, "Id", "Id", comments.CreatorId);
             ViewData["CruisesId"] = new SelectList(_context.Cruises, "Id", "currency", comments.CruisesId);

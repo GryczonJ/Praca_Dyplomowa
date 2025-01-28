@@ -257,6 +257,14 @@ namespace Inzynierka.Controllers
                 ModelState.AddModelError(string.Empty, "Nie jesteś zalogowany jako właściciel. Proszę zalogować się.");
                 return View(cruises);
             }
+            var user1 = await _context.Users.FirstOrDefaultAsync(u => u.Id == ownerId);
+            if (user1.banned)
+            {
+                // Obsługa błędu: użytkownik jest zbanowany
+                TempData["Message"] = "Twoje konto zostało zablokowane. Nie możesz tworzyć nowych rejsów.";
+                TempData["AlertType"] = "danger";
+                return RedirectToAction("Index", "Home"); // Możesz zmienić na odpowiednią stronę
+            }
 
             ModelState.Clear();
             cruises.status = CruiseStatus.Planned;
@@ -264,6 +272,9 @@ namespace Inzynierka.Controllers
             {
                 _context.Add(cruises);
                 await _context.SaveChangesAsync();
+                // Sukces: rejs został utworzony
+                TempData["Message"] = "Rejs został pomyślnie utworzony.";
+                TempData["AlertType"] = "success";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -277,12 +288,16 @@ namespace Inzynierka.Controllers
         {
             if (id == null)
             {
+                TempData["Message"] = "Nie podano identyfikatora rejsu.";
+                TempData["AlertType"] = "danger";
                 return NotFound();
             }
 
             var cruises = await _context.Cruises.FindAsync(id);
             if (cruises == null)
             {
+                TempData["Message"] = "Rejs o podanym identyfikatorze nie został znaleziony.";
+                TempData["AlertType"] = "danger";
                 return NotFound();
             }
             // Pobranie zalogowanego użytkownika jako string

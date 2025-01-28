@@ -5,12 +5,13 @@
     bool ulubiony = ViewData["ulubiony"] != null && (bool)ViewData["ulubiony"];
     bool isOwner = ViewData["isOwner"] != null && (bool)ViewData["isOwner"];
     bool isLogged = ViewData["isLogged"] != null && (bool)ViewData["isLogged"];
+    bool isCaptain = User.IsInRole("Kapitan");
 }
 
 <h1>Szczegóły Czarterowania</h1>
 @if (User.Identity.IsAuthenticated)
 {
-    @if (!isOwner)
+    @if (!isOwner && isCaptain)
     {
         <a asp-controller="Reservations" asp-action="Create" asp-route-charterId="@Model.Id" class="btn btn-primary">Rezerwuj</a>
     }

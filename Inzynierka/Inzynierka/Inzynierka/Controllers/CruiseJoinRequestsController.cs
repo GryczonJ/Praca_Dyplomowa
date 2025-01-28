@@ -214,28 +214,59 @@ namespace Inzynierka.Controllers
                 var cruise = await _context.Cruises.Include(c => c.CruisesParticipants).FirstOrDefaultAsync(c => c.Id == cruiseId);
                 if (cruise == null)
                 {
-                    return NotFound("Rejs nie został znaleziony.");
+                    TempData["Message"] = "Rejs nie został znaleziony.";
+                    TempData["AlertType"] = "danger";
+                    return RedirectToAction(nameof(Index));
+                    /*return NotFound("Rejs nie został znaleziony.");*/
                 }
 
                 // Sprawdzanie, czy użytkownik istnieje
                 var user = await _context.Users.FindAsync(userId);
                 if (user == null)
                 {
-                    return NotFound("Użytkownik nie został znaleziony.");
+                    TempData["Message"] = "Użytkownik nie został znaleziony.";
+                    TempData["AlertType"] = "danger";
+                    return RedirectToAction(nameof(Index));
+                    /*return NotFound("Użytkownik nie został znaleziony.");*/
+                }
+                // Sprawdzanie, czy kapitan jest zbanowany
+                // Pobranie rejsu z kapitanem
+                var cruise1 = await _context.Cruises
+                    .Include(c => c.Capitan) // Dołączenie informacji o kapitanie
+                    .FirstOrDefaultAsync(c => c.Id == cruiseId);
+                if (cruise1.Capitan.banned)
+                {
+                    TempData["Message"] = "Kapitan przypisany do tego rejsu jest zbanowany.";
+                    TempData["AlertType"] = "danger";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                // Sprawdzanie, czy użytkownik jest zbanowany
+                if (user.banned)
+                {
+                    TempData["Message"] = "Użytkownik jest zbanowany i nie może brać udziału w rejsach.";
+                    TempData["AlertType"] = "danger";
+                    return RedirectToAction(nameof(Index));
                 }
 
                 // Sprawdzanie, czy użytkownik jest już uczestnikiem rejsu
                 var isAlreadyParticipant = await _context.CruisesParticipants.AnyAsync(cp => cp.UsersId == userId && cp.CruisesId == cruiseId);
                 if (isAlreadyParticipant)
                 {
-                    return BadRequest("Użytkownik jest już uczestnikiem rejsu.");
+                    TempData["Message"] = "Użytkownik jest już uczestnikiem rejsu.";
+                    TempData["AlertType"] = "warning";
+                    return RedirectToAction(nameof(Index));
+                    /*return BadRequest("Użytkownik jest już uczestnikiem rejsu.");*/
                 }
 
                 // Sprawdzanie limitu uczestników
                 var currentParticipantsCount = cruise.CruisesParticipants.Count;
                 if (currentParticipantsCount >= cruise.maxParticipants)
                 {
-                    return BadRequest("Liczba uczestników rejsu osiągnęła maksymalny limit.");
+                    TempData["Message"] = "Liczba uczestników rejsu osiągnęła maksymalny limit.";
+                    TempData["AlertType"] = "warning";
+                    return RedirectToAction(nameof(Index));
+                    /*return BadRequest("Liczba uczestników rejsu osiągnęła maksymalny limit.");*/
                 }
 
                 // Dodanie użytkownika do uczestników rejsu
@@ -258,10 +289,14 @@ namespace Inzynierka.Controllers
                     _context.Cruises.Update(cruise);
                     await _context.SaveChangesAsync();
                 }
+                TempData["Message"] = "Użytkownik został pomyślnie dodany do rejsu.";
+                TempData["AlertType"] = "success";
             }
             catch (Exception ex)
             {
                 // Możesz zalogować wyjątek lub rzucić dalej
+                TempData["Message"] = $"Wystąpił problem przy dodawaniu użytkownika do rejsu: {ex.Message}";
+                TempData["AlertType"] = "danger";
                 throw new InvalidOperationException($"Wystąpił problem przy dodawaniu użytkownika do rejsu: {ex.Message}", ex);
             }
 

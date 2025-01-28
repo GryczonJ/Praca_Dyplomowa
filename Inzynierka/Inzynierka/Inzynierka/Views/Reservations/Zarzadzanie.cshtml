@@ -18,7 +18,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.endDate)
             </th>
-           @* <th>
+          @*  <th>
                 @Html.DisplayNameFor(model => model.Status)
             </th>  *@
             <th>
@@ -31,40 +31,51 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.startDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.endDate)
-            </td>
-             @* <td>
-                @Html.DisplayFor(modelItem => item.Status.ToString())
-            </td> *@
-                @* <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().status)
-                </th> *@
+        @if (Model == null || !Model.Any())
+        {
+            <tr>
+                <td colspan="6" class="text-center">
+                    Brak rezerwacji do zarządzania.
+                </td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var item in Model) {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.startDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.endDate)
+                        </td>
+                    @*      <td>
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>  *@
+                            @* <th>
+                                @Html.DisplayNameFor(model => model.FirstOrDefault().status)
+                            </th> *@
 
-            <td>
-                @Html.DisplayFor(modelItem => item.Charter.currency)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    @if (item.Status == StatusReservation.Pending)
-                    {
-                        <form asp-action="AcceptReservation" method="post">
-                            <input type="hidden" name="id" value="@item.Id" />
-                            <button type="submit" class="btn btn-success">Akceptuj</button>
-                        </form>
-                    }
-            </td>
-        </tr>
-}
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Charter.currency)
+                        </td>
+                        <td>
+                             @Html.DisplayFor(modelItem => item.Charter.Owner.Email)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                @if (item.Status == StatusReservation.Pending)
+                                {
+                                    <form asp-action="AcceptReservation" method="post">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <button type="submit" class="btn btn-success">Akceptuj</button>
+                                    </form>
+                                }
+                        </td>
+                    </tr>
+            }
+        }
     </tbody>
 </table>

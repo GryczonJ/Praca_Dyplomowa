@@ -95,7 +95,7 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Co Robimy?</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Szeguły</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
+                <a asp-action="Delete" asp-route-id="@item.Id">Usuń</a>  | 
 
                     <form asp-action="Banned" asp-controller="Reports" method="post" style="display:inline">
                             @Html.AntiForgeryToken()

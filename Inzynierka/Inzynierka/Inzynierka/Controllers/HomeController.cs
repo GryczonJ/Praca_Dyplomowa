@@ -26,6 +26,7 @@ namespace Inzynierka.Controllers
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return Guid.TryParse(userIdString, out Guid userId) ? userId : null;
         }
+
         public IActionResult Index()
         {
             var userId = GetLoggedInUserId();

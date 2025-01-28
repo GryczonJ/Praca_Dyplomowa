@@ -35,7 +35,7 @@ namespace Inzynierka.Controllers
              var ahoyDbContext = _context.Charters.Include(c => c.Owner).Include(c => c.Yacht);
              return View(await ahoyDbContext.ToListAsync());
          }
- */
+         */
         public async Task<IActionResult> Index()
         {
             var loggedInUserId = GetLoggedInUserId();
@@ -114,8 +114,20 @@ namespace Inzynierka.Controllers
             if (loggedInUserId == null)
             {
                 // Jeśli użytkownik nie jest zalogowany, możesz wywołać wyjątek lub przekierować na stronę logowania
-                return RedirectToAction("Login", "Account");
+                TempData["Message"] = "Aby dodać czarter, musisz się zalogować.";
+                TempData["AlertType"] = "warning"; // Typ alertu: ostrzeżenie
+                return RedirectToAction(nameof(Index));
             }
+
+            var loggedInUser = await _context.Users.FindAsync(loggedInUserId);
+            if (loggedInUser?.banned == true)
+            {
+                // Komunikat o błędzie dla zbanowanego użytkownika
+                TempData["Message"] = "Twoje konto jest zbanowane. Nie możesz dodawać nowych czarterów.";
+                TempData["AlertType"] = "danger"; // Typ alertu: ostrzeżenie
+                return RedirectToAction(nameof(Index));
+            }
+
             // Ustaw właściciela na zalogowanego użytkownika
             charters.OwnerId = loggedInUserId.Value;
 
@@ -127,7 +139,11 @@ namespace Inzynierka.Controllers
             {
                 _context.Add(charters);
                 await _context.SaveChangesAsync();
+                // Ustaw komunikat o sukcesie
+                TempData["Message"] = "Charter został pomyślnie dodany!";
+                TempData["AlertType"] = "success"; // Typ alertu: sukces
                 return RedirectToAction(nameof(Index));
+
             }
             ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id", charters.OwnerId);
             ViewData["YachtId"] = new SelectList(_context.Yachts, "Id", "name", charters.YachtId);

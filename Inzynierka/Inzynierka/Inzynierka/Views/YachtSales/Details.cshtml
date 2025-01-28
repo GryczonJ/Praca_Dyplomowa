@@ -1,4 +1,5 @@
-﻿@model Inzynierka.Data.Tables.YachtSale
+﻿@using System.Security.Claims
+@model Inzynierka.Data.Tables.YachtSale
 
 @{
     ViewData["Title"] = "Szczegóły";
@@ -10,6 +11,35 @@
 <h1>Szczegóły Sprzedaży</h1>
 @if (User.Identity.IsAuthenticated)
 {
+    <div>
+       
+
+        @if (Model.BuyerUserId == null && !isOwner)
+        {
+            <form asp-action="Buy" method="post">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button class="btn btn-primary">Kup</button>
+            </form>
+        }
+        else
+        {
+            <p><strong>Status transakcji:</strong> @Model.status</p>
+            @if (isOwner)
+            {
+                <p><strong>Kontakt do Kupujący:</strong> @Model.BuyerUser.Email</p>
+                <form asp-action="Accept" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <button class="btn btn-success">Akceptuj</button>
+                </form>
+
+                <form asp-action="Reject" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <button class="btn btn-danger">Odrzuć</button>
+                </form>
+            }
+        }
+    </div>
+
     <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#message-form" aria-expanded="false" aria-controls="message-form">
         Zgłoś
     </button>
@@ -88,7 +118,7 @@
             @Html.DisplayNameFor(model => model.BuyerUser)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BuyerUser.Id)
+            @Html.DisplayFor(model => model.BuyerUser.Email)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Owner)
@@ -123,6 +153,10 @@
                     ❤️ Dodaj do ulubionych
                 </button>
             </form>
+        }
+        else if (!isOwner)
+        {
+            
         }
 
         @if (TempData["Message"] != null)
