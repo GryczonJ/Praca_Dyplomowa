@@ -32,7 +32,11 @@
                             <select id="RoleId_@userRole.UserId" name="roleId" class="form-control" required>
                                 @foreach (var role in Model.Roles)
                                 {
+                                    @if (role.Name != "Banned")
+                                    {
                                    <option value="@role.Id" selected="@(role.Id == userRole.RoleId ? "selected" : null)">@role.Name</option>
+                                
+                                    }
                                 }
                             </select>
                         </div>

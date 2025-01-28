@@ -17,53 +17,60 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @if (!Model.Any())
         {
             <tr>
-                <td>@Html.DisplayFor(modelItem => item.status)</td>
-                <td>@Html.DisplayFor(modelItem => item.date)</td>
-                <td>@Html.DisplayFor(modelItem => item.message)</td>
-                @* <td>@Html.DisplayFor(modelItem => item.Moderator.Id)</td> *@
-                <td>
-                    @* <a asp-action="Details" asp-route-id="@item.Id">Szczegóły</a> | *@
-                   @*  <form asp-action="Banned" asp-controller="Reports" method="post" style="display:inline">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="userId" value="@item.SuspectUserId" />
-                        <button type="submit" class="btn btn-danger btn-sm">Zbanuj</button>
-                    </form> *@
-                   @*  <form asp-action="Banned" asp-controller="Reports" method="post" style="display:inline">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="userId" value="@item.SuspectUserId" />
-
-                        <div class="form-group">
-                            <label for="reason" class="sr-only">Powód blokady</label>
-                            <input type="text" id="reason" name="reason" class="form-control form-control-sm" placeholder="Podaj powód blokady:" required />
-                        </div>
-
-                        <button type="submit" class="btn btn-danger btn-sm mt-2">Zbanuj</button>
-                    </form> *@
-                    <div class="container mt-3">
-                        <!-- Przycisk do pokazania formularza z powodem zbanowania -->
-                        <form asp-action="Banned" asp-controller="Reports" method="post" style="display:inline">
+                <td colspan="4" class="text-center">Brak raportów do wyświetlenia. Wszyscy są grzeczni 😜 </td>
+            </tr>
+        }else{
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.status)</td>
+                    <td>@Html.DisplayFor(modelItem => item.date)</td>
+                    <td>@Html.DisplayFor(modelItem => item.message)</td>
+                    @* <td>@Html.DisplayFor(modelItem => item.Moderator.Id)</td> *@
+                    <td>
+                        @* <a asp-action="Details" asp-route-id="@item.Id">Szczegóły</a> | *@
+                       @*  <form asp-action="Banned" asp-controller="Reports" method="post" style="display:inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="userId" value="@item.SuspectUserId" />
+                            <button type="submit" class="btn btn-danger btn-sm">Zbanuj</button>
+                        </form> *@
+                       @*  <form asp-action="Banned" asp-controller="Reports" method="post" style="display:inline">
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="userId" value="@item.SuspectUserId" />
 
-                            <button class="btn btn-danger btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#ban-reason-form-@item.SuspectUserId" aria-expanded="false" aria-controls="ban-reason-form-@item.SuspectUserId">
-                                Zbanuj
-                            </button>
-
-                            <!-- Ukryte pole tekstowe dla powodu blokady -->
-                            <div class="collapse mt-2" id="ban-reason-form-@item.SuspectUserId">
-                                <div class="form-group">
-                                    <label for="reason" class="control-label">Podaj powód blokady</label>
-                                    <input type="text" name="reason" class="form-control form-control-sm" placeholder="Powód blokady" required />
-                                </div>
-                                <button type="submit" class="btn btn-success btn-sm mt-2">Potwierdź</button>
+                            <div class="form-group">
+                                <label for="reason" class="sr-only">Powód blokady</label>
+                                <input type="text" id="reason" name="reason" class="form-control form-control-sm" placeholder="Podaj powód blokady:" required />
                             </div>
-                        </form>
-                    </div>
-                </td>
-            </tr>
+
+                            <button type="submit" class="btn btn-danger btn-sm mt-2">Zbanuj</button>
+                        </form> *@
+                        <div class="container mt-3">
+                            <!-- Przycisk do pokazania formularza z powodem zbanowania -->
+                            <form asp-action="Banned" asp-controller="Reports" method="post" style="display:inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="userId" value="@item.SuspectUserId" />
+
+                                <button class="btn btn-danger btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#ban-reason-form-@item.SuspectUserId" aria-expanded="false" aria-controls="ban-reason-form-@item.SuspectUserId">
+                                    Zbanuj
+                                </button>
+
+                                <!-- Ukryte pole tekstowe dla powodu blokady -->
+                                <div class="collapse mt-2" id="ban-reason-form-@item.SuspectUserId">
+                                    <div class="form-group">
+                                        <label for="reason" class="control-label">Podaj powód blokady</label>
+                                        <input type="text" name="reason" class="form-control form-control-sm" placeholder="Powód blokady" required />
+                                    </div>
+                                    <button type="submit" class="btn btn-success btn-sm mt-2">Potwierdź</button>
+                                </div>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
         }
     </tbody>
 </table>
