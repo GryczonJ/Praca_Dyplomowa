@@ -45,6 +45,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Cruises" asp-action="Index">Rejsy</a>
                         </li>
+                        @if (!User.Identity.IsAuthenticated)//isInRole)
+                        {
+                         <li class="nav-item">
+                              <a class="nav-link text-dark" asp-area="" asp-controller="Charters" asp-action="Index">Czarter Jachtów</a>
+                         </li>
+                        }
                        @if (User.Identity.IsAuthenticated)//isInRole)
                         {
                             <div class="dropdown">

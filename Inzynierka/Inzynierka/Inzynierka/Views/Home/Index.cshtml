@@ -14,7 +14,10 @@
         Dokończ rejestrację jeżeli jeszcze tego nie zrobiłeś 
     </a>
 } *@
-<p>Jeżeli chce mieć dostęp do większej ilości wunkcji wyśli dokument uprawnijący cię do strwowania jachtem na aders mail Ahoy@gmail.com</p>
+@if (User.Identity.IsAuthenticated)//isInRole)
+{
+    <p>Jeżeli chce mieć dostęp do większej ilości wunkcji wyśli dokument uprawnijący cię do strwowania jachtem na aders mail Ahoy@gmail.com</p>
+}
 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
     
     <ul class="navbar-nav flex-grow-1">
@@ -27,6 +30,11 @@
             <li class="nav-item">
                 <a class="nav-link text-dark" asp-area="" asp-controller="YachtSales" asp-action="Index">Sprzedarz Jachtów</a>
             </li>
+             
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Charters" asp-action="Index">Czarter Jachtów</a>
+            </li>
+             
 
     </ul>
 </div>
