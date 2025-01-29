@@ -9,6 +9,12 @@
 }
 
 <h1>Szczegóły Sprzedaży</h1>
+@if (Model.Owner.banned)
+{
+    <div style="color: red; font-weight: bold;">
+        ⚠️ Kapitan **{{ @Model.Owner.Email}}** został zbanowany! ⛔
+    </div>
+}
 @if (User.Identity.IsAuthenticated)
 {
     <div>
@@ -24,7 +30,7 @@
         else
         {
             <p><strong>Status transakcji:</strong> @Model.status</p>
-            @if (isOwner)
+            @if (isOwner && Model.BuyerUser!= null)
             {
                 <p><strong>Kontakt do Kupujący:</strong> @Model.BuyerUser.Email</p>
                 <form asp-action="Accept" method="post">
@@ -33,7 +39,7 @@
                 </form>
 
                 <form asp-action="Reject" method="post">
-                    <input type="hidden" name="id" value="@Model.Id" />
+                    <input type="hidden" name="id" value="@Model.Id"/>
                     <button class="btn btn-danger">Odrzuć</button>
                 </form>
             }

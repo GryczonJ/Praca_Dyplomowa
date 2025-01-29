@@ -6,6 +6,12 @@
 }
 
 <h1>Szczegóły Jachtu</h1>
+@if (Model.Owner.banned)
+{
+    <div style="color: red; font-weight: bold;">
+        ⚠️ Kapitan **{{ @Model.Owner.Email}}** został zbanowany! ⛔
+    </div>
+}
 @if (User.Identity.IsAuthenticated)
 {
     <div class="container mt-3">

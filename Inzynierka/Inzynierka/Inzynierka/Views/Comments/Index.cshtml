@@ -83,12 +83,12 @@
                     }
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Edit" asp-route-id="@item.Id">Edytowanie</a> |
+                @* <a asp-action="Details" asp-route-id="@item.Id">Details</a>  *@|
                 @* <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> *@
                     <form asp-action="Delete">
                         <input type="hidden" name="id" asp-for="@item.Id" />
-                        <input type="submit" value="Delete" class="btn btn-danger" />
+                        <input type="submit" value="Usuń" class="btn btn-danger" />
                         @* <a asp-action="Index">Back to List</a> *@
                     </form>
             </td>
