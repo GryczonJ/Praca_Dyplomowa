@@ -1,4 +1,5 @@
 ﻿@using System.Security.Claims
+@using Inzynierka.Data.Tables
 @model Inzynierka.Data.Tables.YachtSale
 
 @{
@@ -18,8 +19,6 @@
 @if (User.Identity.IsAuthenticated)
 {
     <div>
-       
-
         @if (Model.BuyerUserId == null && !isOwner)
         {
             <form asp-action="Buy" method="post">
@@ -30,7 +29,7 @@
         else
         {
             <p><strong>Status transakcji:</strong> @Model.status</p>
-            @if (isOwner && Model.BuyerUser!= null)
+            @if (isOwner && Model.BuyerUser != null && Model.status == TransactionStatus.Pending)
             {
                 <p><strong>Kontakt do Kupujący:</strong> @Model.BuyerUser.Email</p>
                 <form asp-action="Accept" method="post">
@@ -72,12 +71,12 @@
 <div>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+       @*  <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.saleDate)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.saleDate)
-        </dd>
+        </dd> *@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.price)
         </dt>

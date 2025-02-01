@@ -52,7 +52,7 @@ namespace Inzynierka.Controllers
             {
                 // Pobranie ofert sprzedaży użytkownika
                 userSales = await _context.YachtSale
-                    .Where(s => s.OwnerId == userIdGuid)
+                    .Where(s => s.OwnerId == userIdGuid && s.status != TransactionStatus.Accepted)
                     .Include(s => s.Yacht)
                     .Include(s => s.Owner)
                     .ToListAsync();
@@ -61,7 +61,7 @@ namespace Inzynierka.Controllers
 
             // Pobranie ofert sprzedaży innych użytkowników
             otherSales = await _context.YachtSale
-                .Where(s => s.OwnerId != userIdGuid)
+                .Where(s => s.OwnerId != userIdGuid && s.status != TransactionStatus.Accepted)
                 .Include(s => s.Yacht)
                 .Include(s => s.Owner)
                 .ToListAsync();
@@ -149,7 +149,14 @@ namespace Inzynierka.Controllers
 
             yachtSale.BuyerUserId = loggedInUserId.Value;
             yachtSale.status = TransactionStatus.Pending; // Ustaw status na "Oczekujący"
-
+            
+            // Zakładając, że posiadasz właściwość Yacht, która wskazuje na aktualnego właściciela jachtu
+            var yacht = await _context.Yachts.FindAsync(yachtSale.YachtId); // Wyszukiwanie jachtu
+            if (yacht != null)
+            {
+                yacht.OwnerId = loggedInUserId.Value; // Zmiana właściciela jachtu na nowego użytkownika
+                _context.Update(yacht); // Zaktualizowanie rekordu jachtu
+            }
             _context.Update(yachtSale);
             await _context.SaveChangesAsync();
 
