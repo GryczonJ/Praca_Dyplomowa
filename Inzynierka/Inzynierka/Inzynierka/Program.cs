@@ -102,4 +102,21 @@ using (var scope = app.Services.CreateScope())
     await RoleInitializer.CreateRoles(serviceProvider);
 }
 
+/*// Użyj sesji
+app.UseSession();
+
+// Middleware do sprawdzania wygasłej sesji
+app.Use(async (context, next) =>
+{
+    // Jeśli sesja jest pusta (np. użytkownik nie jest zalogowany), przekieruj na stronę główną
+    if (context.Session.GetString("UserSession") == null)
+    {
+        context.Response.Redirect("/Home/Index");
+    }
+    else
+    {
+        await next.Invoke();
+    }
+});*/
+
 app.Run();
