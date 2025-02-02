@@ -38,8 +38,8 @@ namespace Inzynierka.Data.Tables
         [Display(Name = "Maksymalna liczba uczestników")]
         public int maxParticipants { get; set; }
 
-        [Display(Name = "Zbanowany")]
-        public bool banned { get; set; } = false;
+/*        [Display(Name = "Zbanowany")]
+        public bool banned { get; set; } = false;*/
 
 
 

@@ -9,8 +9,8 @@ namespace Inzynierka.Data.Tables
         [Display(Name = "Link do obrazu")]
         public string link { get; set; }
 
-        [Display(Name = "Zbanowany")]
-        public bool banned { get; set; } = false;
+       /* [Display(Name = "Zbanowany")]
+        public bool banned { get; set; } = false;*/
 
         // foreing key
         [Display(Name = "Użytkownicy")]

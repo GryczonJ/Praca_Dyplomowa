@@ -30,9 +30,9 @@ namespace Inzynierka.Data.Tables
         
         [Display(Name = "Status")]
         public CharterStatus status { get; set; }
-
+/*
         [Display(Name = "Zbanowany")]
-        public bool banned { get; set; } = false;
+        public bool banned { get; set; } = false;*/
 
 
 

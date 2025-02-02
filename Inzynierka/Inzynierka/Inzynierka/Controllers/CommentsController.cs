@@ -9,6 +9,7 @@ using Inzynierka.Data;
 using Inzynierka.Data.Tables;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Inzynierka.Controllers
 {
@@ -96,22 +97,23 @@ namespace Inzynierka.Controllers
              }*/
             try
             {
-              /*  // Sprawdź, czy użytkownik już dodał komentarz dla danej strony (np. dla CharterId)
-                bool commentExists = _context.Comments.Any(c =>
-                    c.CreatorId == comments.CreatorId &&
-                    (
-                        c.CharterId == comments.CharterId ||
-                        c.CruisesId == comments.CruisesId ||
-                        c.YachtsId == comments.YachtsId ||
-                        c.YachtSaleId == comments.YachtSaleId
-                    )
-                );
-                if (commentExists)
-                {
-                    TempData["Message"] = "Już dodałeś komentarz dla tej strony.";
-                    TempData["AlertType"] = "warning"; // Alert typu "ostrzeżenie"
-                    return Redirect(Request.Headers["Referer"].ToString());
-                }*/
+                /*  // Sprawdź, czy użytkownik już dodał komentarz dla danej strony (np. dla CharterId)
+                  bool commentExists = _context.Comments.Any(c =>
+                      c.CreatorId == comments.CreatorId &&
+                      (
+                          c.CharterId == comments.CharterId ||
+                          c.CruisesId == comments.CruisesId ||
+                          c.YachtsId == comments.YachtsId ||
+                          c.YachtSaleId == comments.YachtSaleId
+                      )
+                  );
+                  if (commentExists)
+                  {
+                      TempData["Message"] = "Już dodałeś komentarz dla tej strony.";
+                      TempData["AlertType"] = "warning"; // Alert typu "ostrzeżenie"
+                      return Redirect(Request.Headers["Referer"].ToString());
+                  }*/
+                if (comments.Message == null) { comments.Message = ""; }
                 if (ModelState.IsValid)
                 {
                     _context.Add(comments);
