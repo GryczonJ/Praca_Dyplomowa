@@ -87,33 +87,10 @@ namespace Inzynierka.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Message,CreateDate,Rating,CreatorId,ProfileId,CharterId,CruisesId,YachtsId,YachtSaleId")] Comments comments)
         {
-            /* //ModelState.Clear();
-             if (ModelState.IsValid)
-             {
-                 _context.Add(comments);
-                 await _context.SaveChangesAsync();
-                 //return RedirectToAction(nameof(Index));
-                 return Redirect(Request.Headers["Referer"].ToString()); // Powrót do strony poprzedniej
-             }*/
             try
             {
-                /*  // Sprawdź, czy użytkownik już dodał komentarz dla danej strony (np. dla CharterId)
-                  bool commentExists = _context.Comments.Any(c =>
-                      c.CreatorId == comments.CreatorId &&
-                      (
-                          c.CharterId == comments.CharterId ||
-                          c.CruisesId == comments.CruisesId ||
-                          c.YachtsId == comments.YachtsId ||
-                          c.YachtSaleId == comments.YachtSaleId
-                      )
-                  );
-                  if (commentExists)
-                  {
-                      TempData["Message"] = "Już dodałeś komentarz dla tej strony.";
-                      TempData["AlertType"] = "warning"; // Alert typu "ostrzeżenie"
-                      return Redirect(Request.Headers["Referer"].ToString());
-                  }*/
                 if (comments.Message == null) { comments.Message = ""; }
+                if (comments.Rating == null) { comments.Rating = 1; }
                 if (ModelState.IsValid)
                 {
                     _context.Add(comments);
@@ -267,5 +244,7 @@ namespace Inzynierka.Controllers
         {
             return _context.Comments.Any(e => e.Id == id);
         }
+
+
     }
 }
