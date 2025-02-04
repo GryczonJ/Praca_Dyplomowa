@@ -157,11 +157,17 @@ namespace Inzynierka.Controllers
                              .FirstOrDefaultAsync(c => c.Id == id);
             if (id != comments.Id)
             {
-                return NotFound();
+                TempData["Message"] = "Edycja nie powiodła się: błędny identyfikator komentarza.";
+                TempData["AlertType"] = "danger";
+                return RedirectToAction("Index");
+                /*return NotFound();*/
             }
             else if (komentarz == null)
             {
-                return NotFound();
+                TempData["Message"] = "Edycja nie powiodła się: komentarz nie został znaleziony.";
+                TempData["AlertType"] = "warning";
+                return RedirectToAction("Index");
+               /* return NotFound();*/
             }
 
             if (ModelState.IsValid)
@@ -174,6 +180,7 @@ namespace Inzynierka.Controllers
                     _context.Update(komentarz);
                     await _context.SaveChangesAsync();
                     // Komunikat o sukcesie
+                   
                     TempData["Message"] = "Komentarz został pomyślnie zaktualizowany!";
                     TempData["AlertType"] = "success"; // Typ alertu: sukces
                 }
@@ -181,14 +188,6 @@ namespace Inzynierka.Controllers
                 {
                     TempData["Message"] = "Wystąpił błąd podczas aktualizacji komentarza.";
                     TempData["AlertType"] = "danger"; // Typ alertu: błąd
-                  /*  if (!CommentsExists(comments.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }*/
                 }
                 return RedirectToAction(nameof(Index));
             }

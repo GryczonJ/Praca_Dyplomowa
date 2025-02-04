@@ -67,7 +67,8 @@ builder.Services.AddRazorPages(); // Rejestracja us�ug Razor Pages
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 */
-
+// Rejestracja serwisów
+builder.Services.AddScoped<RoleInitializer>();
 
 var app = builder.Build();
 
@@ -98,8 +99,17 @@ app.MapRazorPages();
 
 using (var scope = app.Services.CreateScope())
 {
+    /*    var serviceProvider = scope.ServiceProvider;
+        await RoleInitializer.CreateRoles(serviceProvider);
+        await RoleInitializer.CreateRoles(serviceProvider);*/
     var serviceProvider = scope.ServiceProvider;
-    await RoleInitializer.CreateRoles(serviceProvider);
+
+    // Pobieranie instancji RoleInitializer z DI
+    var roleInitializer = serviceProvider.GetRequiredService<RoleInitializer>();
+
+    // Wywoływanie metody CreateRoles na instancji
+    await roleInitializer.CreateRoles(serviceProvider);
+    await roleInitializer.CreateRoles(serviceProvider);
 }
 
 /*// Użyj sesji
