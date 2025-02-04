@@ -28,6 +28,7 @@ namespace Tasty
     [TestClass]
     public class CommentsTest
     {
+
         private DbContextOptions<AhoyDbContext> GetDbContextOptions()
         {
             return new DbContextOptionsBuilder<AhoyDbContext>()
@@ -189,7 +190,7 @@ namespace Tasty
             httpContext.Request.Headers["Referer"] = "http://example.com/previous-page";
             controller.ControllerContext = new ControllerContext { HttpContext = httpContext };
 
-            // Przygotowujemy TempData
+            // Przygotowujemy TempDaTempDataDictionaryta
             controller.TempData = new TempDataDictionary(httpContext, Mock.Of<ITempDataProvider>());
             var updatedComment = new Comments
             {

@@ -130,14 +130,20 @@ namespace Inzynierka.Controllers
 
             if (yachtSale == null)
             {
-                return NotFound();
+                TempData["Message"] = "Jacht nie został znaleziony.";
+                TempData["AlertType"] = "danger";
+                return RedirectToAction("Index", "Home");
+                /*return NotFound();*/
             }
 
             var loggedInUserId = GetLoggedInUserId(); // Funkcja pobierająca ID zalogowanego użytkownika
 
             if (loggedInUserId == null)
             {
-                return RedirectToAction("Login", "Account");
+                /*return RedirectToAction("Login", "Account");*/
+                TempData["Message"] = "Musisz być zalogowany, aby dokonać zakupu.";
+                TempData["AlertType"] = "warning";
+                return RedirectToAction("Index", "Home");
             }
 
             if (yachtSale.BuyerUserId != null)
