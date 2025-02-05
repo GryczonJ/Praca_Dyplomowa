@@ -24,16 +24,21 @@ using ControllerContext = Microsoft.AspNetCore.Mvc.ControllerContext;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System.Security.Claims;
 using System.Net.Http;
+using Microsoft.Extensions.Options;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tasty
 {
     [TestClass]
     public class YachtSalesTest
     {
-        private DbContextOptions<AhoyDbContext> GetDbContextOptions()
+        private DbContextOptions<AhoyDbContext> options; // Przenieœ deklaracjê tutaj
+
+        [TestInitialize] // Inicjalizacja przed ka¿dym testem
+        public void Setup()
         {
-            return new DbContextOptionsBuilder<AhoyDbContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // Unikalna baza dla ka¿dego testu
+            options = new DbContextOptionsBuilder<AhoyDbContext>()
+                .UseInMemoryDatabase(databaseName: "TestDatabase")
                 .Options;
         }
 
@@ -517,6 +522,14 @@ namespace Tasty
             var updatedYachtSale = await context.YachtSale.FindAsync(1);
             Assert.AreEqual(TransactionStatus.Pending, updatedYachtSale.status);
             Assert.IsNull(updatedYachtSale.BuyerUserId); // Kupuj¹cy powinien zostaæ usuniêty
+        }
+        [TestCleanup] // Metoda czyszcz¹ca (uruchamiana po ka¿dym teœcie)
+        public void TearDown()
+        {
+            using (var context = new AhoyDbContext(options)) // U¿yj opcji z Setup
+            {
+                context.Database.EnsureDeleted(); // Usuñ bazê danych w pamiêci
+            }
         }
 
     }
