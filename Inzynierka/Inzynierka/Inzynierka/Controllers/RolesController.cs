@@ -107,7 +107,8 @@ namespace Inzynierka.Controllers
 
             // Pobranie ról zalogowanego użytkownika
             var loggedInUserRoles = await _context.UserRoles
-                .Where(ur => ur.UserId == userId)
+                /*.Where(ur => ur.UserId == userId)*/
+                .Where(ur => ur.UserId == loggedInUserId)
                 .Select(ur => ur.RoleId)
                 .ToListAsync();
 

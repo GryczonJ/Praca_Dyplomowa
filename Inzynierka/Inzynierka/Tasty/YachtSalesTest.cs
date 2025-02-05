@@ -523,6 +523,7 @@ namespace Tasty
             Assert.AreEqual(TransactionStatus.Pending, updatedYachtSale.status);
             Assert.IsNull(updatedYachtSale.BuyerUserId); // Kupuj¹cy powinien zostaæ usuniêty
         }
+
         [TestCleanup] // Metoda czyszcz¹ca (uruchamiana po ka¿dym teœcie)
         public void TearDown()
         {
