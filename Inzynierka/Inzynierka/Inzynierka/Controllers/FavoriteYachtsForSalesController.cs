@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Inzynierka.Controllers
 {
-    [Authorize(Roles = "User,Moderacja,Kapitan")]
+    [Authorize(Roles = "Banned,User,Moderacja,Kapitan")]
     public class FavoriteYachtsForSalesController : Controller
     {
         private readonly AhoyDbContext _context;

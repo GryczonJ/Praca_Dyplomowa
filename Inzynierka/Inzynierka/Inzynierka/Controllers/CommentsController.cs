@@ -13,7 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Inzynierka.Controllers
 {
-    [Authorize(Roles = "User,Moderacja,Kapitan")]
+    [Authorize(Roles = "Banned,User,Moderacja,Kapitan")]
     public class CommentsController : Controller
     {
         private readonly AhoyDbContext _context;

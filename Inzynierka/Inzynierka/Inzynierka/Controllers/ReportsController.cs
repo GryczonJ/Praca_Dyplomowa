@@ -197,13 +197,14 @@ namespace Inzynierka.Controllers
                 .Where(ur => ur.UserId == userId)
                 .Select(ur => ur.RoleId)
                 .ToListAsync();
+
             var moderatorRoleId = await _context.Roles
                 .Where(r => r.Name == "Moderacja")
                 .Select(r => r.Id)
                 .FirstOrDefaultAsync();
-
+            //bool isModerator = loggedInUserRoles.Contains(moderatorRoleId);
             // Pobranie ID zalogowanego użytkownika
-            if (userId == GetLoggedInUserId() || loggedInUserRoles.Contains(moderatorRoleId))
+            if (userId == GetLoggedInUserId() || !loggedInUserRoles.Contains(moderatorRoleId))
             {
                 return RedirectToAction("BannedUsers", "Reports");
             }
