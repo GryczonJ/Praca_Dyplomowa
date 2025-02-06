@@ -270,7 +270,6 @@ namespace Inzynierka.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,price,currency,location,notes,YachtId")] YachtSale yachtSale)
         {
-            //availabilityStatus
             // Pobranie zalogowanego użytkownika jako string
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
 

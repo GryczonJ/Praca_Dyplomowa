@@ -236,6 +236,9 @@ namespace Inzynierka.Controllers
         // POST: Cruises/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // Obsługa błędu: brak lub nieprawidłowy identyfikator użytkownika
+        //ModelState.AddModelError(string.Empty, "Nie można przypisać użytkownika jako właściciela.");
+        // Obsługa błędu: brak lub nieprawidłowy identyfikator użytkownika
         [Authorize(Roles = "Moderacja,Kapitan")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -251,10 +254,8 @@ namespace Inzynierka.Controllers
             }
             else
             {
-                // Obsługa błędu: brak lub nieprawidłowy identyfikator użytkownika
-                //ModelState.AddModelError(string.Empty, "Nie można przypisać użytkownika jako właściciela.");
-                // Obsługa błędu: brak lub nieprawidłowy identyfikator użytkownika
-                ModelState.AddModelError(string.Empty, "Nie jesteś zalogowany jako właściciel. Proszę zalogować się.");
+                TempData["Message"] = "Nie jesteś zalogowany jako właściciel. Proszę zalogować się.";
+                TempData["AlertType"] = "danger";
                 return View(cruises);
             }
             var user1 = await _context.Users.FirstOrDefaultAsync(u => u.Id == ownerId);
