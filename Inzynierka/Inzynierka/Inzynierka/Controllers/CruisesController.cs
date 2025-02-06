@@ -462,6 +462,7 @@ namespace Inzynierka.Controllers
             }
 
             var cruises = await _context.Cruises
+                .Include(c => c.Comments.Where(comment => !comment.Creator.banned)).ThenInclude(comment => comment.Creator)
                 .Include(c => c.Capitan)
                 .Include(c => c.Yacht)
                 .FirstOrDefaultAsync(m => m.Id == id);

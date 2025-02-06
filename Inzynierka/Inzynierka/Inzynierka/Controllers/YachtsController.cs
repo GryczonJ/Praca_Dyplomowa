@@ -89,7 +89,7 @@ namespace Inzynierka.Controllers
             var yachts = await _context.Yachts
                 .Include(y => y.Image)
                 .Include(y => y.Owner)
-                .Include(y => y.Comments)
+                .Include(c => c.Comments.Where(comment => !comment.Creator.banned)).ThenInclude(comment => comment.Creator)
                 .Include(y => y.Reports)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (yachts == null)

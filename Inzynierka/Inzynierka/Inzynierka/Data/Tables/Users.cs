@@ -43,9 +43,11 @@ namespace Inzynierka.Data.Tables
         [Display(Name = "Rejsy użytkownika")]
         public List<Cruises> Cruises { get; set; } = new List<Cruises>(); // One user can participate in many cruises Capitan ID
         [Display(Name = "Komentarze utworzone przez użytkownika")]
+
         public List<Comments> CommentsAsCreator { get; set; } = new List<Comments>(); // One user can have many comments>
         [Display(Name = "Komentarze użytkownika")]
         public List<Comments> CommentsAsProfile { get; set; } = new List<Comments>(); // One user can have many comments>
+
         [Display(Name = "Czartery użytkownika")]
         public List<Charters> Charters { get; set; } = new List<Charters>(); // One user can participate in many charters
         [Display(Name = "Wnioski o dołączenie do rejsu")]

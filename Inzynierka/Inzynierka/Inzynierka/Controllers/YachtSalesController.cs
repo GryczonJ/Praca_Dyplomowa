@@ -462,6 +462,7 @@ namespace Inzynierka.Controllers
             }
 
             var yachtSale = await _context.YachtSale
+                .Include(c => c.Comments.Where(comment => !comment.Creator.banned)).ThenInclude(comment => comment.Creator)
                 .Include(y => y.BuyerUser)
                 .Include(y => y.Owner)
                 .Include(y => y.Yacht)
