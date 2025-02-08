@@ -230,8 +230,16 @@ namespace Inzynierka.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var comments = await _context.Comments.FindAsync(id);
+            var report = await _context.Reports.FirstOrDefaultAsync(r => r.SuspectCommentId == id);
+            
+            if (report != null)
+            {
+                _context.Reports.Remove(report);
+            }
+
             if (comments != null)
             {
+                
                 _context.Comments.Remove(comments);
             }
 
