@@ -110,7 +110,13 @@
         @if (isOwner)
         {
             <a asp-action="Edit" asp-route-id="@Model.Id">Edytuj</a>
-            <a asp-action="Details" asp-route-id="@Model.Id">Szczegóły</a>
+            @* <a asp-action="Details" asp-route-id="@Model.Id">Szczegóły</a> *@
+        }
+        else
+        {
+            <a asp-controller="Reservations" asp-action="Create" asp-route-charterId="@Model.Id" class="btn btn-primary">
+                Dodaj rezerwację
+            </a>        
         }
         <a asp-action="Index">Powrót</a>
       

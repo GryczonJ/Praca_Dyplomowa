@@ -202,9 +202,9 @@ namespace Inzynierka.Controllers
                 .Where(r => r.Name == "Moderacja")
                 .Select(r => r.Id)
                 .FirstOrDefaultAsync();
-            //bool isModerator = loggedInUserRoles.Contains(moderatorRoleId);
+           // bool isModerator = loggedInUserRoles.Contains(moderatorRoleId);
             // Pobranie ID zalogowanego użytkownika
-            if (userId == GetLoggedInUserId() || !loggedInUserRoles.Contains(moderatorRoleId))
+            if (userId == GetLoggedInUserId() || loggedInUserRoles.Contains(moderatorRoleId))
             {
                 return RedirectToAction("BannedUsers", "Reports");
             }

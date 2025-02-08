@@ -209,7 +209,10 @@ namespace Tasty
             // Arrange
             var userId = Guid.NewGuid();  // Id u¿ytkownika, którego chcemy zbanowaæ
             var loggedInUserId = Guid.NewGuid();  // Id u¿ytkownika, który wykonuje akcjê (np. moderator)
+
             var bannedRoleId = Guid.NewGuid();
+            var UserRoleId = Guid.NewGuid();
+            var ModeratorRoleId = Guid.NewGuid();
 
             var user = new Users { Id = userId, firstName = "Jan", lastName = "Kowalski", banned = false };
             _context.Users.Add(user);
@@ -219,8 +222,16 @@ namespace Tasty
             _context.Users.Add(loggedInUser);
             await _context.SaveChangesAsync();
 
+            _context.UserRoles.Add(new IdentityUserRole<Guid> { UserId = userId, RoleId = bannedRoleId });
+            _context.UserRoles.Add(new IdentityUserRole<Guid> { UserId = loggedInUserId, RoleId = ModeratorRoleId });
+            await _context.SaveChangesAsync();
+
             var bannedRole = new Roles { Id = bannedRoleId, Name = "Banned" };
+            var userRole = new Roles { Id = UserRoleId, Name = "User" };
+            var ModeratorRole = new Roles { Id = ModeratorRoleId, Name = "Moderacja" };
             _context.Roles.Add(bannedRole);
+            _context.Roles.Add(userRole);
+            _context.Roles.Add(ModeratorRole);
             await _context.SaveChangesAsync();
 
             // Przygotowanie HttpContext dla zalogowanego u¿ytkownika
@@ -238,7 +249,7 @@ namespace Tasty
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
             httpContext.User = claimsPrincipal;  // Zalogowany u¿ytkownik
 
-            httpContext.Items["UserId"] = loggedInUserId; // Symulacja u¿ytkownika wykonuj¹cego akcjê
+            //httpContext.Items["UserId"] = loggedInUserId; // Symulacja u¿ytkownika wykonuj¹cego akcjê
 
 
             // Act

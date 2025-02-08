@@ -45,7 +45,7 @@ namespace Inzynierka.Controllers
 
             // Pobierz rezerwacje, które należą do zalogowanego użytkownika
             var userReservations = _context.Resservation
-                .Include(r => r.Charter) // Załaduj dane o czarterze
+                .Include(r => r.Charter).ThenInclude(c => c.Owner) // Załaduj dane o czarterze
                 .Include(r => r.User)
                 .Where(r => r.UserId == userId); // Filtrowanie rezerwacji po UserId
 
@@ -78,7 +78,7 @@ namespace Inzynierka.Controllers
             }
 
             var reservation = await _context.Resservation
-                .Include(r => r.Charter)
+                .Include(r => r.Charter).ThenInclude(c => c.Owner) // Załaduj dane o właścicielu czarteru
                 .Include(r => r.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (reservation == null)

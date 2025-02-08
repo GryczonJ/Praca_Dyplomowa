@@ -57,7 +57,9 @@
                             </th> *@
 
                         <td>
-                            @Html.DisplayFor(modelItem => item.Charter.currency)
+                        <a asp-controller="Charters" asp-action="Details" asp-route-id="@item.CharterId" class="btn btn-primary">
+                            @Html.DisplayFor(modelItem => item.Charter.description)
+                        </a>
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Charter.Owner.Email)
@@ -82,7 +84,7 @@
                                 } *@
                                 <form asp-action="Delete">
                                     <input type="hidden" name="id" asp-for="@item.Id" />
-                                    <input type="submit" value="Usuń" class="btn btn-danger" /> |
+                                    <input type="submit" value="Rezynguj" class="btn btn-danger" /> |
                                     <a asp-action="Index">Powrót</a>
                                 </form>
                         </td>
