@@ -61,7 +61,7 @@ namespace Inzynierka.Controllers
 
             // Pobranie ofert sprzedaży innych użytkowników
             otherSales = await _context.YachtSale
-                .Where(s => s.OwnerId != userIdGuid && s.status != TransactionStatus.Accepted)
+                .Where(s => s.OwnerId != userIdGuid && !s.Owner.banned && s.status != TransactionStatus.Accepted)
                 .Include(s => s.Yacht)
                 .Include(s => s.Owner)
                 .ToListAsync();

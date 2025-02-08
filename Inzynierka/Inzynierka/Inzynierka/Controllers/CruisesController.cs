@@ -52,7 +52,7 @@ namespace Inzynierka.Controllers
                 otherCruises = await _context.Cruises
                     .Include(c => c.Capitan)
                     .Include(c => c.Yacht)
-                    .Where(c => c.CapitanId != userId)
+                    .Where(c => c.CapitanId != userId && !c.Capitan.banned)
                     .ToListAsync();
                 isLogged = true;
             }
@@ -62,6 +62,7 @@ namespace Inzynierka.Controllers
                 otherCruises = await _context.Cruises
                     .Include(c => c.Capitan)
                     .Include(c => c.Yacht)
+                    .Where(c => !c.Capitan.banned)
                     .ToListAsync();
             }
             ViewData["isLogged"] = isLogged;
@@ -171,7 +172,8 @@ namespace Inzynierka.Controllers
                 .Include(c => c.Yacht)
                 .Include(c => c.CruisesParticipants)
                 .Include(c => c.CruiseJoinRequests)
-                .Include(c => c.Comments)
+                //.Include(c => c.Comments)
+                .Include(c => c.Comments.Where(comment => !comment.Creator.banned)).ThenInclude(comment => comment.Creator)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (cruises == null)

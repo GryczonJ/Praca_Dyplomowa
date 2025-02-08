@@ -44,6 +44,7 @@ namespace Inzynierka.Controllers
             var charters = await _context.Charters
              .Include(c => c.Owner)
              .Include(c => c.Yacht)
+             .Where(c => !c.Owner.banned)
              .ToListAsync();
 
             var myCharters = isLogged

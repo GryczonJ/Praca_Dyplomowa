@@ -58,9 +58,9 @@ namespace Inzynierka.Controllers
 
              // Pobranie jachtów innych użytkowników
              otherYachts = await _context.Yachts
-                 .Where(y => y.OwnerId != userIdGuid)
                  .Include(y => y.Image)
                  .Include(y => y.Owner) // Dodanie Ownera
+                 .Where(y => y.OwnerId != userIdGuid && !y.Owner.banned)
                  .ToListAsync();
 
              // Przekazanie danych do modelu widoku
@@ -260,6 +260,7 @@ namespace Inzynierka.Controllers
             }
 
             var yachts = await _context.Yachts
+                .Include(c => c.Comments.Where(comment => !comment.Creator.banned)).ThenInclude(comment => comment.Creator)
                 .Include(y => y.Image)
                 .Include(y => y.Owner)
                 .FirstOrDefaultAsync(m => m.Id == id);
