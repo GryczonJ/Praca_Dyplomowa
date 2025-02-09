@@ -111,9 +111,6 @@ namespace Inzynierka.Migrations
                     b.Property<int?>("YachtsId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("banned")
-                        .HasColumnType("bit");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CharterId");
@@ -905,7 +902,7 @@ namespace Inzynierka.Migrations
                     b.HasOne("Inzynierka.Data.Tables.Yachts", "Yacht")
                         .WithMany("Cruises")
                         .HasForeignKey("YachtId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Capitan");
 

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Inzynierka.Migrations
 {
     /// <inheritdoc />
-    public partial class data1 : Migration
+    public partial class Migracja_1_1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -99,12 +99,13 @@ namespace Inzynierka.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    age = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    age = table.Column<DateOnly>(type: "date", nullable: true),
                     firstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     lastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     surName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    aboutMe = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    aboutMe = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     banned = table.Column<bool>(type: "bit", nullable: false),
+                    reasonBan = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Public = table.Column<bool>(type: "bit", nullable: false),
                     PhotosId = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -153,7 +154,7 @@ namespace Inzynierka.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     message = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     ReadDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -175,13 +176,13 @@ namespace Inzynierka.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    startDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    endDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    startDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    endDate = table.Column<DateOnly>(type: "date", nullable: false),
                     price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     location = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     currency = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
-                    status = table.Column<int>(type: "int", maxLength: 50, nullable: false),
+                    status = table.Column<int>(type: "int", nullable: false),
                     YachtId = table.Column<int>(type: "int", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -201,9 +202,9 @@ namespace Inzynierka.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    startDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    endDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    startDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    endDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     CharterId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -230,7 +231,7 @@ namespace Inzynierka.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Message = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Rating = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    Rating = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProfileId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CharterId = table.Column<int>(type: "int", nullable: true),
@@ -294,11 +295,11 @@ namespace Inzynierka.Migrations
                     name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     destination = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    start_date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    end_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    start_date = table.Column<DateOnly>(type: "date", nullable: false),
+                    end_date = table.Column<DateOnly>(type: "date", nullable: false),
                     price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     currency = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
-                    status = table.Column<int>(type: "int", maxLength: 50, nullable: true),
+                    status = table.Column<int>(type: "int", nullable: true),
                     maxParticipants = table.Column<int>(type: "int", nullable: false),
                     YachtId = table.Column<int>(type: "int", nullable: true),
                     CapitanId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -399,7 +400,7 @@ namespace Inzynierka.Migrations
                     type = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     manufacturer = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     model = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    year = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    year = table.Column<DateOnly>(type: "date", nullable: false),
                     length = table.Column<double>(type: "float", nullable: false),
                     width = table.Column<double>(type: "float", nullable: false),
                     crew = table.Column<int>(type: "int", nullable: false),
@@ -433,7 +434,7 @@ namespace Inzynierka.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    saleDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    saleDate = table.Column<DateOnly>(type: "date", nullable: false),
                     price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     currency = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
                     location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
@@ -469,19 +470,20 @@ namespace Inzynierka.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    status = table.Column<int>(type: "int", nullable: false),
                     date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     message = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    note = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    ModeratorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SuspectUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SuspectCruiseId = table.Column<int>(type: "int", nullable: false),
-                    SuspectYachtId = table.Column<int>(type: "int", nullable: false),
-                    DocumentVerificationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SuspectYachtSaleId = table.Column<int>(type: "int", nullable: false),
-                    SuspectCharterId = table.Column<int>(type: "int", nullable: false),
-                    SuspectCommentId = table.Column<int>(type: "int", nullable: false),
-                    SuspectRoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    note = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    ModeratorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SuspectUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SuspectCruiseId = table.Column<int>(type: "int", nullable: true),
+                    SuspectYachtId = table.Column<int>(type: "int", nullable: true),
+                    DocumentVerificationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SuspectYachtSaleId = table.Column<int>(type: "int", nullable: true),
+                    SuspectCharterId = table.Column<int>(type: "int", nullable: true),
+                    SuspectCommentId = table.Column<int>(type: "int", nullable: true),
+                    SuspectRoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -497,6 +499,11 @@ namespace Inzynierka.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id");
                     table.ForeignKey(
+                        name: "FK_Reports_AspNetUsers_CreatorId",
+                        column: x => x.CreatorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Reports_AspNetUsers_ModeratorId",
                         column: x => x.ModeratorId,
                         principalTable: "AspNetUsers",
@@ -510,7 +517,8 @@ namespace Inzynierka.Migrations
                         name: "FK_Reports_Charters_SuspectCharterId",
                         column: x => x.SuspectCharterId,
                         principalTable: "Charters",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Reports_Comments_SuspectCommentId",
                         column: x => x.SuspectCommentId,
@@ -520,7 +528,8 @@ namespace Inzynierka.Migrations
                         name: "FK_Reports_Cruises_SuspectCruiseId",
                         column: x => x.SuspectCruiseId,
                         principalTable: "Cruises",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Reports_YachtSale_SuspectYachtSaleId",
                         column: x => x.SuspectYachtSaleId,
@@ -668,6 +677,11 @@ namespace Inzynierka.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Reports_CreatorId",
+                table: "Reports",
+                column: "CreatorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reports_DocumentVerificationId",
                 table: "Reports",
                 column: "DocumentVerificationId");
@@ -783,7 +797,8 @@ namespace Inzynierka.Migrations
                 table: "Charters",
                 column: "YachtId",
                 principalTable: "Yachts",
-                principalColumn: "Id");
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Comments_Cruises_CruisesId",
@@ -804,7 +819,8 @@ namespace Inzynierka.Migrations
                 table: "Comments",
                 column: "YachtsId",
                 principalTable: "Yachts",
-                principalColumn: "Id");
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_CruiseJoinRequest_Cruises_CruiseId",
@@ -818,8 +834,7 @@ namespace Inzynierka.Migrations
                 table: "Cruises",
                 column: "YachtId",
                 principalTable: "Yachts",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_FavoriteYachtsForSale_YachtSale_YachtSaleId",
